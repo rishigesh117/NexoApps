@@ -1,41 +1,46 @@
 /**
- * Cloud Sync Engine Service
+ * Cloud Sync Core Service
  * NexoApps Platform - Phase 5C
  */
 
-const crypto = require('crypto');
-
 class CloudSyncService {
   constructor() {
-    this.sessions = [];
-    this.history = [
-      { id: 'sh-1', userId: 'usr-1', action: 'Full Account Sync', details: 'Synchronized favorites, collections, reviews, and notifications across 2 devices.', status: 'success', createdAt: new Date(Date.now() - 3600000).toISOString() },
-      { id: 'sh-2', userId: 'usr-1', action: 'Incremental Sync', details: 'Synced 3 new collection items and 1 review update.', status: 'success', createdAt: new Date(Date.now() - 1800000).toISOString() },
-      { id: 'sh-3', userId: 'usr-1', action: 'Preference Sync', details: 'Theme and notification settings synchronized.', status: 'success', createdAt: new Date().toISOString() },
+    this.syncHistory = [
+      {
+        id: 'sh-101',
+        userId: 'usr-1',
+        deviceId: 'dev-1',
+        action: 'Account Preferences Synced',
+        details: 'Theme, notifications, and collection playlists synchronized.',
+        createdAt: new Date().toISOString(),
+      },
+      {
+        id: 'sh-102',
+        userId: 'usr-1',
+        deviceId: 'dev-2',
+        action: 'Cross-Device Download History Sync',
+        details: 'Batlytics Cricket Scoring App install state verified across devices.',
+        createdAt: new Date().toISOString(),
+      },
     ];
   }
 
-  startSync(userId, syncType = 'incremental', deviceId = null) {
+  startSync(userId, syncType = 'incremental') {
     const session = {
-      id: `sync-${Date.now()}-${crypto.randomBytes(3).toString('hex')}`,
-      userId,
-      deviceId,
+      id: `sync-${Date.now()}`,
+      userId: userId || 'usr-1',
+      status: 'Completed',
+      itemsSynced: 18,
       syncType,
-      status: 'completed',
-      itemsSynced: syncType === 'full' ? 42 : 8,
-      itemsTotal: syncType === 'full' ? 42 : 8,
-      startedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
       completedAt: new Date().toISOString(),
     };
-    this.sessions.unshift(session);
 
-    this.history.unshift({
+    this.syncHistory.unshift({
       id: `sh-${Date.now()}`,
-      userId,
-      deviceId,
-      action: `${syncType.charAt(0).toUpperCase() + syncType.slice(1)} Sync`,
-      details: `${session.itemsSynced} items synchronized successfully.`,
-      status: 'success',
+      userId: userId || 'usr-1',
+      action: `${syncType === 'full' ? 'Full' : 'Incremental'} Cloud Synchronization`,
+      details: `Successfully synchronized 18 user state entities across cloud nodes.`,
       createdAt: new Date().toISOString(),
     });
 
@@ -43,17 +48,18 @@ class CloudSyncService {
   }
 
   getSyncStatus(userId) {
-    const latest = this.sessions.find((s) => s.userId === userId);
     return {
-      lastSynced: latest?.completedAt || new Date().toISOString(),
-      status: latest?.status || 'completed',
+      lastSyncedAt: new Date().toISOString(),
       pendingChanges: 0,
-      activeSessions: this.sessions.filter((s) => s.userId === userId && s.status === 'in_progress').length,
+      status: 'In Sync',
+      syncProgress: 100,
+      storageUsedMb: 14.8,
+      storageLimitMb: 1024,
     };
   }
 
   getSyncHistory(userId) {
-    return this.history.filter((h) => h.userId === userId || h.userId === 'usr-1');
+    return this.syncHistory;
   }
 }
 

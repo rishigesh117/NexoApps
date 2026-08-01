@@ -6,44 +6,28 @@
 class OfflineSyncService {
   constructor() {
     this.queue = [];
-    this.conflicts = [];
   }
 
-  enqueueChange(userId, change) {
-    const entry = {
+  enqueueChange(userId, actionType, payload) {
+    const item = {
       id: `off-${Date.now()}`,
       userId,
-      deviceId: change.deviceId || null,
-      entityType: change.entityType,
-      entityId: change.entityId,
-      action: change.action,
-      payload: change.payload || {},
+      actionType,
+      payload,
       synced: false,
       createdAt: new Date().toISOString(),
     };
-    this.queue.push(entry);
-    return entry;
+    this.queue.push(item);
+    return item;
   }
 
-  getPendingChanges(userId) {
-    return this.queue.filter((q) => q.userId === userId && !q.synced);
-  }
-
-  syncAll(userId) {
-    const pending = this.getPendingChanges(userId);
-    pending.forEach((p) => { p.synced = true; });
-    return { syncedCount: pending.length, timestamp: new Date().toISOString() };
-  }
-
-  getConflicts(userId) {
-    return this.conflicts.filter((c) => c.userId === userId && c.resolution === 'pending');
-  }
-
-  resolveConflict(conflictId, resolution) {
-    const conflict = this.conflicts.find((c) => c.id === conflictId);
-    if (!conflict) throw new Error('Conflict not found');
-    conflict.resolution = resolution;
-    return conflict;
+  processQueue(userId) {
+    const userItems = this.queue.filter((i) => i.userId === userId && !i.synced);
+    userItems.forEach((i) => (i.synced = true));
+    return {
+      processedCount: userItems.length,
+      timestamp: new Date().toISOString(),
+    };
   }
 }
 

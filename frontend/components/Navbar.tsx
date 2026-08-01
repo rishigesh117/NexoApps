@@ -23,6 +23,7 @@ export const Navbar: React.FC = () => {
     { name: 'Recommended', href: '/recommended' },
     { name: 'Collections', href: '/collections' },
     { name: 'Categories', href: '/categories' },
+    { name: 'Cloud Sync', href: '/cloud' },
     { name: 'Help', href: '/help' },
     { name: 'Support', href: '/support' },
   ];

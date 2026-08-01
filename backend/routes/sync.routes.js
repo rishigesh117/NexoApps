@@ -6,9 +6,10 @@
 const express = require('express');
 const router = express.Router();
 const syncController = require('../controllers/sync.controller');
+const { optionalAuthToken } = require('../middleware/auth.middleware');
 
-router.post('/start', syncController.startSync);
-router.get('/status', syncController.getSyncStatus);
-router.get('/history', syncController.getSyncHistory);
+router.post('/start', optionalAuthToken, syncController.startSync);
+router.get('/status', optionalAuthToken, syncController.getSyncStatus);
+router.get('/history', optionalAuthToken, syncController.getSyncHistory);
 
 module.exports = router;

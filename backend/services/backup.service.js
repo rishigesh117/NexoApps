@@ -3,64 +3,58 @@
  * NexoApps Platform - Phase 5C
  */
 
-const crypto = require('crypto');
-
 class BackupService {
   constructor() {
     this.backups = [
       {
-        id: 'bkp-auto-001',
+        id: 'bkp-1001',
         userId: 'usr-1',
-        backupName: 'NexoApps Auto-Backup v1 — Full Account',
-        backupSizeBytes: 2457600,
-        encryptionHash: crypto.randomBytes(32).toString('hex'),
-        includes: ['favorites', 'collections', 'reviews', 'preferences', 'notifications', 'downloads'],
-        status: 'verified',
-        version: 1,
-        createdAt: new Date(Date.now() - 86400000 * 7).toISOString(),
+        backupName: 'Full Account Snapshot v1.0.0-rc1',
+        version: 'v1.0.0',
+        sizeBytes: 15520000,
+        encryptionHash: 'sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
+        isAutoBackup: true,
+        createdAt: new Date(Date.now() - 86400000).toISOString(),
       },
       {
-        id: 'bkp-auto-002',
+        id: 'bkp-1002',
         userId: 'usr-1',
-        backupName: 'NexoApps Auto-Backup v2 — Incremental',
-        backupSizeBytes: 512000,
-        encryptionHash: crypto.randomBytes(32).toString('hex'),
-        includes: ['favorites', 'collections', 'preferences'],
-        status: 'completed',
-        version: 2,
-        createdAt: new Date(Date.now() - 86400000).toISOString(),
+        backupName: 'Pre-Phase 5C Migration Backup',
+        version: 'v1.0.0',
+        sizeBytes: 14200000,
+        encryptionHash: 'sha256:8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4',
+        isAutoBackup: false,
+        createdAt: new Date(Date.now() - 259200000).toISOString(),
       },
     ];
   }
 
   getBackups(userId) {
-    return this.backups.filter((b) => b.userId === userId || b.userId === 'usr-1');
+    return this.backups;
   }
 
-  createBackup(userId, name, includes = []) {
-    const backup = {
+  createBackup(userId, backupName = 'Manual Cloud Snapshot') {
+    const newBackup = {
       id: `bkp-${Date.now()}`,
-      userId,
-      backupName: name || `NexoApps Backup — ${new Date().toLocaleDateString()}`,
-      backupSizeBytes: Math.floor(Math.random() * 5000000) + 500000,
-      encryptionHash: crypto.randomBytes(32).toString('hex'),
-      includes: includes.length > 0 ? includes : ['favorites', 'collections', 'reviews', 'preferences'],
-      status: 'completed',
-      version: this.backups.length + 1,
+      userId: userId || 'usr-1',
+      backupName,
+      version: 'v1.0.0',
+      sizeBytes: Math.floor(14000000 + Math.random() * 2000000),
+      encryptionHash: `sha256:${Math.random().toString(36).substring(2)}${Math.random().toString(36).substring(2)}`,
+      isAutoBackup: false,
       createdAt: new Date().toISOString(),
     };
-    this.backups.unshift(backup);
-    return backup;
+    this.backups.unshift(newBackup);
+    return newBackup;
   }
 
   restoreBackup(backupId) {
     const backup = this.backups.find((b) => b.id === backupId);
-    if (!backup) throw new Error('Backup not found');
+    if (!backup) throw new Error('Backup snapshot not found');
     return {
-      success: true,
-      restoredBackup: backup,
+      restored: true,
+      backup,
       restoredAt: new Date().toISOString(),
-      itemsRestored: backup.includes.length,
     };
   }
 }

@@ -29,6 +29,10 @@ const analyticsRoutes = require('./analytics.routes');
 const assistantRoutes = require('./assistant.routes');
 const supportRoutes = require('./support.routes');
 const automationRoutes = require('./automation.routes');
+const syncRoutes = require('./sync.routes');
+const backupRoutes = require('./backup.routes');
+const deviceRoutes = require('./device.routes');
+const preferencesRoutes = require('./preferences.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -54,5 +58,10 @@ router.use('/analytics', analyticsRoutes);
 router.use('/assistant', assistantRoutes);
 router.use('/support', supportRoutes);
 router.use('/automation', automationRoutes);
+
+router.use('/sync', syncRoutes);
+router.use('/backup', backupRoutes);
+router.use('/devices', deviceRoutes);
+router.use('/preferences', preferencesRoutes);
 
 module.exports = router;

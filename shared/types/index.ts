@@ -645,17 +645,17 @@ export interface IssueReport {
   createdAt: string;
 }
 
-// Phase 5C Cloud Sync & Multi-Device Interfaces
+// Phase 5C Cloud Sync, Multi-Device & Backup Interfaces
 export interface UserDevice {
   id: string;
   userId: string;
   deviceName: string;
-  deviceType: 'phone' | 'tablet' | 'desktop' | 'laptop' | 'chromebook' | 'other';
+  deviceType: 'Android Phone' | 'Android Tablet' | 'Desktop Browser' | 'Chromebook' | 'iOS Browser';
+  os: string;
   browser: string;
-  operatingSystem: string;
-  ipAddress?: string;
-  isCurrent: boolean;
-  lastActive: string;
+  ipAddress: string;
+  isCurrentDevice: boolean;
+  lastActiveAt: string;
   createdAt: string;
 }
 
@@ -663,57 +663,76 @@ export interface SyncSession {
   id: string;
   userId: string;
   deviceId?: string;
-  syncType: 'full' | 'incremental' | 'preferences' | 'offline_merge';
-  status: 'pending' | 'in_progress' | 'completed' | 'failed';
+  status: 'Pending' | 'Syncing' | 'Completed' | 'Failed';
   itemsSynced: number;
-  itemsTotal: number;
-  startedAt: string;
-  completedAt?: string;
+  syncType: 'full' | 'incremental';
+  createdAt: string;
+  completedAt: string;
 }
 
 export interface CloudBackup {
   id: string;
   userId: string;
   backupName: string;
-  backupSizeBytes: number;
-  encryptionHash?: string;
-  includes: string[];
-  status: 'creating' | 'completed' | 'failed' | 'restoring' | 'verified';
-  version: number;
+  version: string;
+  sizeBytes: number;
+  encryptionHash: string;
+  isAutoBackup: boolean;
   createdAt: string;
 }
 
-export interface SyncHistoryEntry {
+export interface SyncHistory {
   id: string;
   userId: string;
   deviceId?: string;
   action: string;
   details: string;
-  status: string;
   createdAt: string;
 }
 
 export interface UserPreference {
-  id: string;
   userId: string;
-  theme: 'dark' | 'light' | 'system';
+  theme: 'dark' | 'light';
   language: string;
-  notificationsEnabled: boolean;
-  autoSync: boolean;
+  emailNotifications: boolean;
+  pushNotifications: boolean;
   autoBackup: boolean;
-  dashboardLayout: Record<string, any>;
+  syncFavorites: boolean;
+  syncCollections: boolean;
   updatedAt: string;
 }
 
 export interface OfflineChange {
   id: string;
   userId: string;
-  deviceId?: string;
-  entityType: string;
-  entityId: string;
-  action: 'create' | 'update' | 'delete';
-  payload: Record<string, any>;
+  actionType: string;
+  payload: any;
   synced: boolean;
+  createdAt: string;
+}
+
+export interface NotificationSync {
+  id: string;
+  userId: string;
+  notificationId: string;
+  readOnDeviceId?: string;
+  syncedAt: string;
+}
+
+export interface DownloadSync {
+  id: string;
+  userId: string;
+  appId: string;
+  deviceId?: string;
+  downloadedAt: string;
+}
+
+export interface RecentActivity {
+  id: string;
+  userId: string;
+  deviceName: string;
+  activityType: string;
+  description: string;
   createdAt: string;
 }
 
@@ -721,20 +740,12 @@ export interface SyncConflict {
   id: string;
   userId: string;
   entityType: string;
-  entityId: string;
-  localValue: Record<string, any>;
-  remoteValue: Record<string, any>;
-  resolution: 'pending' | 'local_wins' | 'remote_wins' | 'manual_merge';
+  localVersion: any;
+  cloudVersion: any;
+  resolved: boolean;
   createdAt: string;
 }
 
-export interface RecentActivity {
-  id: string;
-  userId: string;
-  activityType: string;
-  title: string;
-  description?: string;
-  deviceId?: string;
-  createdAt: string;
-}
+
+
 

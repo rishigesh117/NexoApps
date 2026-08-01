@@ -1,41 +1,33 @@
 /**
- * User Preferences Sync Service
+ * Preferences Synchronization Service
  * NexoApps Platform - Phase 5C
  */
 
 class PreferencesService {
   constructor() {
     this.preferences = new Map();
-    this.preferences.set('usr-1', {
-      id: 'pref-1',
-      userId: 'usr-1',
-      theme: 'dark',
-      language: 'en',
-      notificationsEnabled: true,
-      autoSync: true,
-      autoBackup: false,
-      dashboardLayout: { sidebar: 'expanded', density: 'comfortable' },
-      updatedAt: new Date().toISOString(),
-    });
   }
 
   getPreferences(userId) {
-    return this.preferences.get(userId) || {
-      id: `pref-${Date.now()}`,
-      userId,
-      theme: 'dark',
-      language: 'en',
-      notificationsEnabled: true,
-      autoSync: true,
-      autoBackup: false,
-      dashboardLayout: {},
-      updatedAt: new Date().toISOString(),
-    };
+    if (!this.preferences.has(userId)) {
+      this.preferences.set(userId, {
+        userId,
+        theme: 'dark',
+        language: 'en',
+        emailNotifications: true,
+        pushNotifications: true,
+        autoBackup: true,
+        syncFavorites: true,
+        syncCollections: true,
+        updatedAt: new Date().toISOString(),
+      });
+    }
+    return this.preferences.get(userId);
   }
 
-  updatePreferences(userId, updates) {
+  updatePreferences(userId, patch) {
     const current = this.getPreferences(userId);
-    const updated = { ...current, ...updates, updatedAt: new Date().toISOString() };
+    const updated = { ...current, ...patch, updatedAt: new Date().toISOString() };
     this.preferences.set(userId, updated);
     return updated;
   }
