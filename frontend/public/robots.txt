@@ -1,0 +1,13 @@
+# robots.txt for NexoApps Platform
+User-agent: *
+Allow: /
+Allow: /apps
+Allow: /community
+Allow: /trending
+Allow: /recommended
+Allow: /collections
+Allow: /developer/
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://nexoapps.com/sitemap.xml

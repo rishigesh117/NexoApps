@@ -1,0 +1,22 @@
+{
+  "name": "nexoapps-platform",
+  "version": "1.0.0",
+  "description": "NexoApps - Scalable App Store Platform Foundation",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "start:backend": "cd backend && npm start"
+  },
+  "keywords": [
+    "app-store",
+    "nexoapps",
+    "batlytics",
+    "nextjs",
+    "express",
+    "postgresql"
+  ],
+  "author": "NexoApps Owner",
+  "license": "ISC"
+}
