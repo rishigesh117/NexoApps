@@ -746,6 +746,139 @@ export interface SyncConflict {
   createdAt: string;
 }
 
+// Phase 5D Enterprise Workspace Interfaces
+export type WorkspaceRole = 'owner' | 'admin' | 'pm' | 'developer' | 'reviewer' | 'viewer';
+
+export type WorkspacePermission =
+  | '*'
+  | 'manage_members'
+  | 'manage_projects'
+  | 'manage_api_keys'
+  | 'upload_apks'
+  | 'view_analytics'
+  | 'review_submissions'
+  | 'view_audit'
+  | 'view_projects';
+
+export interface Organization {
+  id: string;
+  name: string;
+  slug: string;
+  ownerId: string;
+  description?: string;
+  websiteUrl?: string;
+  country?: string;
+  logoUrl?: string;
+  bannerUrl?: string;
+  status: 'Active' | 'Verified' | 'Suspended';
+  isVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+  membersCount?: number;
+  projectsCount?: number;
+}
+
+export interface OrganizationMember {
+  id: string;
+  organizationId: string;
+  userId: string;
+  username: string;
+  email: string;
+  role: WorkspaceRole;
+  avatarUrl?: string;
+  joinedAt: string;
+}
+
+export interface OrganizationInvitation {
+  id: string;
+  organizationId: string;
+  organizationName?: string;
+  email: string;
+  role: WorkspaceRole;
+  invitedBy: string;
+  status: 'Pending' | 'Accepted' | 'Rejected' | 'Expired';
+  token: string;
+  createdAt: string;
+  expiresAt: string;
+}
+
+export interface OrganizationProject {
+  id: string;
+  organizationId: string;
+  name: string;
+  slug: string;
+  description?: string;
+  status: 'Planning' | 'Active' | 'Review' | 'Completed' | 'Archived';
+  category: string;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+  membersCount?: number;
+  filesCount?: number;
+}
+
+export interface ProjectActivity {
+  id: string;
+  organizationId: string;
+  projectId?: string;
+  actorId?: string;
+  actorName: string;
+  actionType: string;
+  description: string;
+  createdAt: string;
+}
+
+export interface ProjectComment {
+  id: string;
+  projectId: string;
+  authorId?: string;
+  authorName: string;
+  commentText: string;
+  createdAt: string;
+}
+
+export interface ProjectFile {
+  id: string;
+  projectId: string;
+  fileName: string;
+  fileSizeBytes: number;
+  fileType: string;
+  uploadedBy?: string;
+  uploadedAt: string;
+}
+
+export interface ProjectAuditLog {
+  id: string;
+  organizationId: string;
+  actorId?: string;
+  action: string;
+  ipAddress?: string;
+  details?: string;
+  createdAt: string;
+}
+
+export interface ProjectApiKey {
+  id: string;
+  organizationId: string;
+  keyName: string;
+  apiKey: string;
+  permissions: string[];
+  createdBy?: string;
+  lastUsedAt?: string;
+  createdAt: string;
+}
+
+export interface OrganizationNotification {
+  id: string;
+  organizationId: string;
+  userId?: string;
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: string;
+}
+
+
 
 
 

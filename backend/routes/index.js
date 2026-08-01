@@ -33,6 +33,9 @@ const syncRoutes = require('./sync.routes');
 const backupRoutes = require('./backup.routes');
 const deviceRoutes = require('./device.routes');
 const preferencesRoutes = require('./preferences.routes');
+const organizationRoutes = require('./organization.routes');
+const workspaceRoutes = require('./workspace.routes');
+const projectRoutes = require('./project.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -63,5 +66,9 @@ router.use('/sync', syncRoutes);
 router.use('/backup', backupRoutes);
 router.use('/devices', deviceRoutes);
 router.use('/preferences', preferencesRoutes);
+
+router.use('/organizations', organizationRoutes);
+router.use('/workspace', workspaceRoutes);
+router.use('/projects', projectRoutes);
 
 module.exports = router;
