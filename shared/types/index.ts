@@ -878,6 +878,105 @@ export interface OrganizationNotification {
   createdAt: string;
 }
 
+// Phase 5E Enterprise DevOps, Production Scaling & Operations Interfaces
+export interface AuditLogEntry {
+  id: string;
+  actorId?: string;
+  actorEmail?: string;
+  actorRole?: string;
+  actionType: string;
+  resource?: string;
+  details?: string;
+  ipAddress?: string;
+  userAgent?: string;
+  createdAt: string;
+}
+
+export interface SystemEventEntry {
+  id: string;
+  eventName: string;
+  severity: 'INFO' | 'WARNING' | 'ERROR' | 'CRITICAL';
+  sourceService: string;
+  message: string;
+  payload?: any;
+  createdAt: string;
+}
+
+export interface SecurityEventEntry {
+  id: string;
+  userId?: string;
+  eventType: string;
+  ipAddress: string;
+  location: string;
+  blocked: boolean;
+  createdAt: string;
+}
+
+export interface LoginHistoryEntry {
+  id: string;
+  userId: string;
+  ipAddress?: string;
+  deviceName?: string;
+  browser?: string;
+  os?: string;
+  loginAt: string;
+}
+
+export interface ApiUsageLogEntry {
+  id: string;
+  endpoint: string;
+  method: string;
+  statusCode: number;
+  responseTimeMs: number;
+  userId?: string;
+  createdAt: string;
+}
+
+export interface ServerMetrics {
+  cpuUsagePercent: number;
+  memoryUsagePercent: number;
+  diskUsagePercent: number;
+  postgresPoolActive: number;
+  postgresPoolIdle: number;
+  redisConnected: boolean;
+  averageLatencyMs: number;
+  requestsPerSec: number;
+  errorRatePercent: number;
+  activeUsers: number;
+  onlineUsers: number;
+  queueLength: number;
+  workerStatus: 'HEALTHY' | 'DEGRADED' | 'DOWN';
+}
+
+export interface JobSchedule {
+  id: string;
+  jobName: string;
+  cronExpression: string;
+  lastRunAt?: string;
+  nextRunAt: string;
+  status: 'ACTIVE' | 'PAUSED' | 'FAILED';
+  runCount: number;
+}
+
+export interface DeploymentEntry {
+  id: string;
+  environment: 'Development' | 'Testing' | 'Staging' | 'Production';
+  version: string;
+  commitHash: string;
+  deployedBy: string;
+  status: 'SUCCESS' | 'FAILED' | 'BUILDING' | 'ROLLED_BACK';
+  deployedAt: string;
+}
+
+export interface NotificationQueueStatus {
+  emailQueueCount: number;
+  pushQueueCount: number;
+  retryQueueCount: number;
+  deadLetterQueueCount: number;
+  workersActive: number;
+}
+
+
 
 
 

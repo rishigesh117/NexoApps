@@ -36,6 +36,9 @@ const preferencesRoutes = require('./preferences.routes');
 const organizationRoutes = require('./organization.routes');
 const workspaceRoutes = require('./workspace.routes');
 const projectRoutes = require('./project.routes');
+const operationsRoutes = require('./operations.routes');
+const auditRoutes = require('./audit.routes');
+const deploymentRoutes = require('./deployment.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -70,5 +73,9 @@ router.use('/preferences', preferencesRoutes);
 router.use('/organizations', organizationRoutes);
 router.use('/workspace', workspaceRoutes);
 router.use('/projects', projectRoutes);
+
+router.use('/operations', operationsRoutes);
+router.use('/audit', auditRoutes);
+router.use('/deployments', deploymentRoutes);
 
 module.exports = router;

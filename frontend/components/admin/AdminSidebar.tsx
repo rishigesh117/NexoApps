@@ -15,6 +15,10 @@ import {
   Bot,
   BarChart3,
   Building2,
+  Terminal,
+  Clock,
+  Server,
+  Shield,
 } from 'lucide-react';
 
 export const AdminSidebar: React.FC = () => {
@@ -25,6 +29,12 @@ export const AdminSidebar: React.FC = () => {
     { href: '/admin/testing', label: 'Testing Dashboard', icon: <Activity className="w-4 h-4 text-amber-400" /> },
     { href: '/admin/submissions', label: 'Submission Queue', icon: <ShieldCheck className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/upload', label: 'Owner Upload Portal', icon: <Rocket className="w-4 h-4 text-brand-cyan" /> },
+    { href: '/admin/operations', label: 'Operations Console', icon: <Activity className="w-4 h-4 text-brand-cyan" /> },
+    { href: '/admin/system', label: 'System Telemetry', icon: <Server className="w-4 h-4 text-brand-violet" /> },
+    { href: '/admin/audit', label: 'Audit Logs', icon: <Shield className="w-4 h-4 text-emerald-400" /> },
+    { href: '/admin/logs', label: 'System Log Stream', icon: <Terminal className="w-4 h-4 text-amber-400" /> },
+    { href: '/admin/deployments', label: 'Deployments', icon: <Rocket className="w-4 h-4 text-brand-cyan" /> },
+    { href: '/admin/jobs', label: 'Job Scheduler', icon: <Clock className="w-4 h-4 text-amber-400" /> },
     { href: '/admin/organizations', label: 'Organizations', icon: <Building2 className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/apps', label: 'App Management', icon: <Grid className="w-4 h-4" /> },
     { href: '/admin/users', label: 'Users & Roles', icon: <Users className="w-4 h-4" /> },
