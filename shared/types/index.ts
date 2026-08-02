@@ -2365,3 +2365,48 @@ export interface RestoreHistory {
   completedAt?: string;
   details?: string;
 }
+
+// ─── Phase 7E — Version 4.0 LTS Release & System Diagnostics ───
+
+export interface LTSHealthStatus {
+  version: string;
+  isLTS: boolean;
+  status: string;
+  uptimeSeconds: number;
+  securityChecksPassed: number;
+  securityChecksTotal: number;
+  activeModules: number;
+  databaseStatus: string;
+  lastDiagnosticAt: string;
+}
+
+export interface SecurityAuditEntry {
+  id: string;
+  tenantId?: string;
+  eventType: string;
+  severity: string;
+  actorId?: string;
+  ipAddress?: string;
+  userAgent?: string;
+  resourceTarget?: string;
+  status: string;
+  details?: string;
+  timestamp: string;
+}
+
+export interface SystemConfig {
+  id: string;
+  configKey: string;
+  configValue: string;
+  description?: string;
+  updatedAt: string;
+}
+
+export interface PerformanceMetric {
+  id: string;
+  metricName: string;
+  metricValue: number;
+  unit: string;
+  moduleName: string;
+  timestamp: string;
+}
