@@ -60,6 +60,10 @@ const platformSearchRoutes = require('./platform_search.routes');
 const platformActivityRoutes = require('./activity.routes');
 const platformOSRoutes = require('./platform.routes');
 const automationRulesRoutes = require('./automation_rules.routes');
+const tenantRoutes = require('./tenant.routes');
+const billingRoutes = require('./billing.routes');
+const invoiceRoutes = require('./invoice.routes');
+const saasSubscriptionRoutes = require('./saas_subscription.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -124,5 +128,10 @@ router.use('/platform-search', platformSearchRoutes);
 router.use('/activity', platformActivityRoutes);
 router.use('/platform', platformOSRoutes);
 router.use('/automation-rules', automationRulesRoutes);
+
+router.use('/tenant', tenantRoutes);
+router.use('/billing', billingRoutes);
+router.use('/invoices', invoiceRoutes);
+router.use('/tenant-subscriptions', saasSubscriptionRoutes);
 
 module.exports = router;

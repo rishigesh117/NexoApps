@@ -1561,6 +1561,160 @@ export interface SystemAnnouncement {
   createdAt: string;
 }
 
+// Phase 7A Enterprise SaaS Platform Interfaces
+export interface Tenant {
+  id: string;
+  ownerUserId: string;
+  name: string;
+  slug: string;
+  planTier: 'FREE' | 'STARTER' | 'PROFESSIONAL' | 'ENTERPRISE';
+  status: 'ACTIVE' | 'SUSPENDED';
+  createdAt: string;
+  membersCount?: number;
+}
+
+export interface TenantMember {
+  id: string;
+  tenantId: string;
+  userId: string;
+  userName?: string;
+  userEmail?: string;
+  role: 'OWNER' | 'ADMIN' | 'MEMBER' | 'BILLING';
+  createdAt: string;
+}
+
+export interface TenantRole {
+  id: string;
+  tenantId: string;
+  roleName: string;
+  permissions: string[];
+}
+
+export interface TenantDomain {
+  id: string;
+  tenantId: string;
+  domainName: string;
+  isVerified: boolean;
+  isPrimary: boolean;
+  createdAt: string;
+}
+
+export interface TenantBranding {
+  id: string;
+  tenantId: string;
+  logoUrl: string;
+  faviconUrl: string;
+  primaryColor: string;
+  accentColor: string;
+  companyName: string;
+  supportEmail: string;
+  createdAt: string;
+}
+
+export interface SubscriptionPlan {
+  id: string;
+  name: string;
+  slug: string;
+  priceMonthly: number;
+  priceYearly: number;
+  storageGb: number;
+  apiRequestsPerMonth: number;
+  maxMembers: number;
+  features: string[];
+  isActive: boolean;
+}
+
+export interface TenantSubscription {
+  id: string;
+  tenantId: string;
+  planId: string;
+  planName?: string;
+  status: 'ACTIVE' | 'CANCELLED' | 'PAST_DUE';
+  billingCycle: 'MONTHLY' | 'YEARLY';
+  currentPeriodEnd: string;
+  createdAt: string;
+}
+
+export interface Invoice {
+  id: string;
+  tenantId: string;
+  tenantName?: string;
+  invoiceNumber: string;
+  amountDue: number;
+  amountPaid: number;
+  status: 'PAID' | 'PENDING' | 'FAILED';
+  pdfUrl?: string;
+  createdAt: string;
+}
+
+export interface InvoiceItem {
+  id: string;
+  invoiceId: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  amount: number;
+}
+
+export interface PaymentMethod {
+  id: string;
+  tenantId: string;
+  brand: string;
+  last4: string;
+  expMonth: number;
+  expYear: number;
+  isDefault: boolean;
+  createdAt: string;
+}
+
+export interface PaymentTransaction {
+  id: string;
+  tenantId: string;
+  tenantName?: string;
+  amount: number;
+  currency: string;
+  status: 'SUCCEEDED' | 'FAILED';
+  createdAt: string;
+}
+
+export interface Coupon {
+  id: string;
+  code: string;
+  discountPercent: number;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface UsageRecord {
+  id: string;
+  tenantId: string;
+  metricName: 'STORAGE' | 'BANDWIDTH' | 'API_REQUESTS';
+  quantityUsed: number;
+  recordedAt: string;
+}
+
+export interface TenantStorage {
+  id: string;
+  tenantId: string;
+  usedMb: number;
+  limitMb: number;
+}
+
+export interface TenantApiLimit {
+  id: string;
+  tenantId: string;
+  requestsThisMonth: number;
+  monthlyLimit: number;
+}
+
+export interface TenantIntegration {
+  id: string;
+  tenantId: string;
+  integrationName: string;
+  isConnected: boolean;
+}
+
+
 
 
 

@@ -14,7 +14,6 @@ import {
   Activity,
   Bot,
   BarChart3,
-  Building2,
   Terminal,
   Clock,
   Server,
@@ -29,6 +28,9 @@ import {
   Key,
   Cpu,
   Store,
+  Building2,
+  CreditCard,
+  Sparkles,
 } from 'lucide-react';
 
 export const AdminSidebar: React.FC = () => {
@@ -37,6 +39,10 @@ export const AdminSidebar: React.FC = () => {
   const navItems = [
     { href: '/admin', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
     { href: '/admin/platform', label: 'Unified OS Console', icon: <Cpu className="w-4 h-4 text-emerald-400" /> },
+    { href: '/admin/tenants', label: 'SaaS Tenants', icon: <Building2 className="w-4 h-4 text-brand-cyan" /> },
+    { href: '/admin/billing', label: 'SaaS Billing', icon: <CreditCard className="w-4 h-4 text-emerald-400" /> },
+    { href: '/admin/plans', label: 'Plans Manager', icon: <Sparkles className="w-4 h-4 text-rose-400" /> },
+    { href: '/admin/payments', label: 'Payment Ledger', icon: <CreditCard className="w-4 h-4 text-amber-400" /> },
     { href: '/admin/testing', label: 'Testing Dashboard', icon: <Activity className="w-4 h-4 text-amber-400" /> },
     { href: '/admin/submissions', label: 'Submission Queue', icon: <ShieldCheck className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/upload', label: 'Owner Upload Portal', icon: <Rocket className="w-4 h-4 text-brand-cyan" /> },
