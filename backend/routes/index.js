@@ -69,6 +69,11 @@ const oauthRoutes = require('./oauth.routes');
 const webhookRoutes = require('./webhook.routes');
 const integrationRoutes = require('./integration.routes');
 const developerApiRoutes = require('./developer_api.routes');
+const etlRoutes = require('./etl.routes');
+const analyticsV2Routes = require('./analytics_v2.routes');
+const reportsRoutes = require('./reports.routes');
+const dashboardBuilderRoutes = require('./dashboard_builder.routes');
+const predictionRoutes = require('./prediction.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -144,5 +149,11 @@ router.use('/oauth', oauthRoutes);
 router.use('/webhooks', webhookRoutes);
 router.use('/integrations', integrationRoutes);
 router.use('/developer-api', developerApiRoutes);
+
+router.use('/etl', etlRoutes);
+router.use('/analytics-v2', analyticsV2Routes);
+router.use('/reports', reportsRoutes);
+router.use('/dashboard-builder', dashboardBuilderRoutes);
+router.use('/predictions', predictionRoutes);
 
 module.exports = router;

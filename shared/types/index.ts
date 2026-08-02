@@ -1473,10 +1473,20 @@ export interface ActivityFeedItem {
 
 export interface DashboardWidget {
   id: string;
-  widgetKey: string;
-  title: string;
-  category: string;
-  description: string;
+  widgetKey?: string;
+  dashboardId?: string;
+  widgetType?: string;
+  title?: string;
+  category?: string;
+  description?: string;
+  dataSource?: string;
+  queryConfig?: any;
+  visualizationConfig?: any;
+  positionX?: number;
+  positionY?: number;
+  width?: number;
+  height?: number;
+  createdAt?: string;
 }
 
 export interface WidgetLayout {
@@ -1862,9 +1872,251 @@ export interface IntegrationFailure {
   occurredAt: string;
 }
 
+// ─── Phase 7C — Enterprise Data Platform (Version 3.2) ───
+
+export interface DataSource {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  sourceType: string;
+  connectionString?: string;
+  schemaDefinition?: string;
+  status: string;
+  lastSyncedAt?: string;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DataConnector {
+  id: string;
+  dataSourceId: string;
+  connectorType: string;
+  config?: any;
+  authMethod: string;
+  pollingIntervalSeconds: number;
+  isActive: boolean;
+  lastHealthCheck?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ETLJob {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  sourceId?: string;
+  destinationId?: string;
+  transformationConfig?: any;
+  scheduleCron?: string;
+  status: string;
+  lastRunAt?: string;
+  nextRunAt?: string;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ETLRun {
+  id: string;
+  jobId: string;
+  status: string;
+  rowsProcessed: number;
+  rowsFailed: number;
+  errorMessage?: string;
+  startedAt: string;
+  completedAt?: string;
+  durationMs: number;
+}
+
+export interface DataPipeline {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  pipelineConfig?: any;
+  stages?: any;
+  status: string;
+  scheduleCron?: string;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WarehouseTable {
+  id: string;
+  tenantId?: string;
+  tableName: string;
+  schemaDefinition?: string;
+  rowCount: number;
+  sizeBytes: number;
+  lastUpdatedAt?: string;
+  createdAt: string;
+}
+
+export interface WarehouseSnapshot {
+  id: string;
+  tableId: string;
+  snapshotName?: string;
+  rowCount: number;
+  sizeBytes: number;
+  createdAt: string;
+}
+
+export interface Report {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  reportType: string;
+  queryConfig?: any;
+  visualizationConfig?: any;
+  filters?: any;
+  isPublic: boolean;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ScheduledReport {
+  id: string;
+  reportId: string;
+  scheduleCron: string;
+  recipients?: string;
+  format: string;
+  isActive: boolean;
+  lastSentAt?: string;
+  nextSendAt?: string;
+  createdAt: string;
+}
+
+export interface ReportExport {
+  id: string;
+  reportId: string;
+  format: string;
+  fileUrl?: string;
+  fileSize: number;
+  exportedBy?: string;
+  createdAt: string;
+}
+
+export interface DashboardTemplate {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  layoutConfig?: any;
+  theme: string;
+  isDefault: boolean;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 
+export interface KPIMetric {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  metricType: string;
+  currentValue: number;
+  targetValue: number;
+  unit: string;
+  trend: string;
+  dataSourceId?: string;
+  refreshIntervalSeconds: number;
+  lastRefreshedAt?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
+export interface AnalyticsModel {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  modelType: string;
+  algorithm: string;
+  trainingConfig?: any;
+  accuracy: number;
+  status: string;
+  lastTrainedAt?: string;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PredictionJob {
+  id: string;
+  modelId: string;
+  inputData?: any;
+  status: string;
+  startedAt?: string;
+  completedAt?: string;
+  createdBy?: string;
+  createdAt: string;
+}
+
+export interface PredictionResult {
+  id: string;
+  jobId: string;
+  predictionOutput?: any;
+  confidence: number;
+  metadata?: any;
+  createdAt: string;
+}
+
+export interface ExecutiveDashboard {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  layoutConfig?: any;
+  kpiIds?: string;
+  widgetIds?: string;
+  isDefault: boolean;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AuditReport {
+  id: string;
+  tenantId?: string;
+  reportName: string;
+  reportType: string;
+  data?: any;
+  generatedBy?: string;
+  createdAt: string;
+}
+
+export interface DataQualityLog {
+  id: string;
+  tableId?: string;
+  checkType: string;
+  status: string;
+  issuesFound: number;
+  details?: string;
+  checkedAt: string;
+}
+
+export interface DatasetCatalog {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  schemaDefinition?: string;
+  tags?: string;
+  rowCount: number;
+  sizeBytes: number;
+  owner?: string;
+  accessLevel: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 
 

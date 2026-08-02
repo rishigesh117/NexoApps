@@ -1,0 +1,90 @@
+import React from 'react';
+import Head from 'next/head';
+import { motion } from 'framer-motion';
+import { Zap, CheckCircle, Loader2, Clock, ArrowRight, FileText } from 'lucide-react';
+import { Navbar } from '../../components/Navbar';
+
+export default function PredictionsPage() {
+  const jobs = [
+    { id: '1', model: 'Churn Predictor', input: 'Enterprise segment, 30d window', status: 'completed', confidence: 92, result: 'Low churn risk — 18% probability', startedAt: '1 hr ago' },
+    { id: '2', model: 'Revenue Forecaster', input: '6-month forecast horizon', status: 'completed', confidence: 88, result: 'Q3: $890K, Q4: $1.05M (+18% growth)', startedAt: '2 hr ago' },
+    { id: '3', model: 'Anomaly Detector', input: '24h traffic window', status: 'running', confidence: 0, result: 'Analyzing...', startedAt: 'Just now' },
+  ];
+
+  const audits = [
+    { id: '1', name: 'Q2 Compliance Report', type: 'compliance', generatedBy: 'system', createdAt: 'Jul 1, 2026' },
+    { id: '2', name: 'Data Access Audit', type: 'security', generatedBy: 'admin', createdAt: 'Jul 28, 2026' },
+  ];
+
+  const statusBadge = (s: string) => {
+    if (s === 'completed') return <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold"><CheckCircle className="w-3 h-3" /> Completed</span>;
+    if (s === 'running') return <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 text-[10px] font-bold"><Loader2 className="w-3 h-3 animate-spin" /> Running</span>;
+    return <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-100 text-text-muted text-[10px] font-bold"><Clock className="w-3 h-3" /> Pending</span>;
+  };
+
+  return (
+    <>
+      <Head>
+        <title>Predictive Analytics | NexoApps Data Platform</title>
+        <meta name="description" content="Run prediction jobs, view confidence scores, and generate audit reports." />
+      </Head>
+      <Navbar />
+      <main className="min-h-screen bg-background text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h1 className="text-3xl font-display font-bold mb-2">Predictive Analytics</h1>
+          <p className="text-text-secondary mb-10">Prediction jobs with confidence scoring and audit reports.</p>
+
+          {/* Prediction Jobs */}
+          <h2 className="text-xl font-bold mb-4">Prediction Jobs</h2>
+          <div className="space-y-3 mb-12">
+            {jobs.map((job, i) => (
+              <motion.div key={job.id} initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.07 }} className="glass-panel rounded-2xl p-5 border border-white/10">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/20 to-emerald-500/20 flex items-center justify-center">
+                    <Zap className="w-5 h-5 text-teal-400" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <h3 className="font-bold text-white">{job.model}</h3>
+                      {statusBadge(job.status)}
+                    </div>
+                    <p className="text-xs text-text-muted">Input: {job.input}</p>
+                  </div>
+                  {job.confidence > 0 && (
+                    <div className="hidden md:block text-center">
+                      <p className="text-lg font-bold text-teal-400">{job.confidence}%</p>
+                      <p className="text-[10px] text-text-muted">Confidence</p>
+                    </div>
+                  )}
+                  <div className="hidden md:block max-w-xs">
+                    <div className="flex items-center gap-1 text-xs text-text-secondary">
+                      <ArrowRight className="w-3 h-3 text-teal-400" />
+                      <span>{job.result}</span>
+                    </div>
+                  </div>
+                  <span className="text-xs text-text-muted whitespace-nowrap">{job.startedAt}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Audit Reports */}
+          <h2 className="text-xl font-bold mb-4">Audit Reports</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {audits.map((a, i) => (
+              <motion.div key={a.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 + i * 0.06 }} className="glass-panel rounded-2xl p-5 border border-white/10">
+                <div className="flex items-center gap-3">
+                  <FileText className="w-5 h-5 text-amber-400" />
+                  <div className="flex-1">
+                    <h3 className="font-bold text-white">{a.name}</h3>
+                    <p className="text-xs text-text-muted">{a.type} • Generated by {a.generatedBy} • {a.createdAt}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </main>
+    </>
+  );
+}
