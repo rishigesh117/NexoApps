@@ -81,6 +81,9 @@ const agentWorkspaceRoutes = require('./agent_workspace.routes');
 const agentExecutionRoutes = require('./agent_execution.routes');
 const agentMemoryRoutes = require('./agent_memory.routes');
 const agentMetricsRoutes = require('./agent_metrics.routes');
+const deploymentRuntimeRoutes = require('./deployment_runtime.routes');
+const runtimeMonitorRoutes = require('./runtime_monitor.routes');
+const runtimeBackupRoutes = require('./runtime_backup.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -171,5 +174,9 @@ router.use('/agent-workspace', agentWorkspaceRoutes);
 router.use('/agent-execution', agentExecutionRoutes);
 router.use('/agent-memory', agentMemoryRoutes);
 router.use('/agent-metrics', agentMetricsRoutes);
+
+router.use('/runtime-deployment', deploymentRuntimeRoutes);
+router.use('/runtime-monitor', runtimeMonitorRoutes);
+router.use('/runtime-backup', runtimeBackupRoutes);
 
 module.exports = router;

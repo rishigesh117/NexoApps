@@ -2526,3 +2526,117 @@ export interface AgentMetric {
   metricValue: number;
   timestamp: string;
 }
+
+// ─── Phase 8B — AI Runtime Engine & Serverless Execution Platform (Version 5.1) ───
+
+export interface RuntimeEnvironment {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  isolationLevel: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RuntimeSession {
+  id: string;
+  environmentId: string;
+  sessionToken?: string;
+  status: string;
+  startedAt: string;
+  endedAt?: string;
+}
+
+export interface RuntimeInstance {
+  id: string;
+  environmentId: string;
+  instanceName: string;
+  instanceType: string;
+  status: string;
+  memoryLimitMb: number;
+  cpuCores: number;
+  createdAt: string;
+}
+
+export interface RuntimeDeployment {
+  id: string;
+  environmentId: string;
+  deploymentName: string;
+  artifactUrl?: string;
+  status: string;
+  replicas: number;
+  createdBy?: string;
+  createdAt: string;
+}
+
+export interface RuntimeLog {
+  id: string;
+  instanceId: string;
+  logLevel: string;
+  message: string;
+  timestamp: string;
+}
+
+export interface RuntimeMetric {
+  id: string;
+  instanceId: string;
+  cpuUsagePercent: number;
+  memoryUsageMb: number;
+  networkInBytes: number;
+  networkOutBytes: number;
+  timestamp: string;
+}
+
+export interface RuntimeVariable {
+  id: string;
+  environmentId: string;
+  varKey: string;
+  varValue?: string;
+  isSecret: boolean;
+  createdAt: string;
+}
+
+export interface RuntimeSecret {
+  id: string;
+  environmentId: string;
+  secretName: string;
+  encryptedValue: string;
+  version: number;
+  createdAt: string;
+}
+
+export interface RuntimeSnapshot {
+  id: string;
+  instanceId: string;
+  snapshotName: string;
+  sizeBytes: number;
+  createdAt: string;
+}
+
+export interface RuntimeJob {
+  id: string;
+  environmentId: string;
+  jobName: string;
+  command: string;
+  status: string;
+  executedAt: string;
+}
+
+export interface RuntimeTemplate {
+  id: string;
+  templateName: string;
+  description?: string;
+  baseImage: string;
+  createdAt: string;
+}
+
+export interface RuntimeScalingPolicy {
+  id: string;
+  deploymentId: string;
+  minReplicas: number;
+  maxReplicas: number;
+  targetCpuPercent: number;
+  createdAt: string;
+}

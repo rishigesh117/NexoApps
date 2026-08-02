@@ -23,6 +23,7 @@ export const Navbar: React.FC = () => {
     { name: 'Data Platform', href: '/data-platform' },
     { name: 'v4.0 LTS', href: '/lts' },
     { name: 'Agent Cloud', href: '/agent-cloud' },
+    { name: 'AI Runtime', href: '/runtime' },
     { name: 'Apps', href: '/apps' },
     { name: 'Marketplace', href: '/marketplace' },
     { name: 'AI Platform', href: '/ai-platform' },
