@@ -976,6 +976,113 @@ export interface NotificationQueueStatus {
   workersActive: number;
 }
 
+// Phase 6A AI Application Builder Interfaces
+export interface AIProject {
+  id: string;
+  userId: string;
+  name: string;
+  slug: string;
+  description?: string;
+  framework: string;
+  language: string;
+  styling: string;
+  status: 'Draft' | 'Generating' | 'Completed' | 'Archived';
+  promptUsed?: string;
+  createdAt: string;
+  updatedAt: string;
+  filesCount?: number;
+}
+
+export interface AITemplate {
+  id: string;
+  title: string;
+  slug: string;
+  category: string;
+  description: string;
+  previewUrl?: string;
+  icon: string;
+  starsCount: number;
+  downloadsCount: number;
+  createdAt: string;
+}
+
+export interface AIGenerationJob {
+  id: string;
+  projectId: string;
+  userId: string;
+  prompt: string;
+  status: 'Pending' | 'Processing' | 'Completed' | 'Failed';
+  progressPercent: number;
+  filesGeneratedCount: number;
+  createdAt: string;
+  completedAt?: string;
+}
+
+export interface AIWorkflow {
+  id: string;
+  userId: string;
+  name: string;
+  triggerType: string;
+  actions: any[];
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface GeneratedFile {
+  id: string;
+  projectId: string;
+  filePath: string;
+  fileType: string;
+  content: string;
+  sizeBytes: number;
+  createdAt: string;
+}
+
+export interface PromptHistory {
+  id: string;
+  userId: string;
+  projectId?: string;
+  promptText: string;
+  responseSummary?: string;
+  tokensUsed: number;
+  createdAt: string;
+}
+
+export interface ExportPackage {
+  id: string;
+  projectId: string;
+  userId: string;
+  exportFormat: 'ZIP' | 'Next.js' | 'React' | 'Node.js';
+  downloadUrl: string;
+  sizeBytes: number;
+  createdAt: string;
+}
+
+export interface BuilderComponent {
+  id: string;
+  name: string;
+  category: 'Layout' | 'Form' | 'Card' | 'Data' | 'Navigation';
+  description: string;
+  codeSnippet: string;
+  icon: string;
+}
+
+export interface BuilderPage {
+  id: string;
+  name: string;
+  routePath: string;
+  componentsCount: number;
+}
+
+export interface BuilderStats {
+  totalProjects: number;
+  totalTemplates: number;
+  generatedFilesCount: number;
+  activeWorkflows: number;
+  exportsCount: number;
+}
+
+
 
 
 
