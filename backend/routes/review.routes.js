@@ -1,24 +1,16 @@
 /**
  * Review Routes
- * NexoApps Platform - Phase 3D
+ * NexoApps Platform - Phase 6B (Version 2.2)
  */
 
 const express = require('express');
 const router = express.Router();
 const reviewController = require('../controllers/review.controller');
-const authenticateToken = require('../middleware/auth.middleware');
 const { optionalAuthToken } = require('../middleware/auth.middleware');
 
-// Public route with optional auth context
-router.get('/apps/:slug/reviews', optionalAuthToken, reviewController.getAppReviews);
-
-// Protected routes (User authentication required)
-router.post('/apps/:slug/reviews', authenticateToken, reviewController.createReview);
-router.patch('/:id', authenticateToken, reviewController.updateReview);
-router.delete('/:id', authenticateToken, reviewController.deleteReview);
-router.post('/:id/like', authenticateToken, reviewController.toggleLike);
-
-// User profile review history
-router.get('/user/me', authenticateToken, reviewController.getUserReviews);
+router.get('/', optionalAuthToken, reviewController.getReviews);
+router.post('/', optionalAuthToken, reviewController.createReview);
+router.get('/docs', optionalAuthToken, reviewController.getDocs);
+router.post('/docs', optionalAuthToken, reviewController.generateDoc);
 
 module.exports = router;

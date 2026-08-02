@@ -20,6 +20,9 @@ import {
   Server,
   Shield,
   Wand2,
+  CalendarDays,
+  FileCheck,
+  BookOpen,
 } from 'lucide-react';
 
 export const AdminSidebar: React.FC = () => {
@@ -30,6 +33,10 @@ export const AdminSidebar: React.FC = () => {
     { href: '/admin/testing', label: 'Testing Dashboard', icon: <Activity className="w-4 h-4 text-amber-400" /> },
     { href: '/admin/submissions', label: 'Submission Queue', icon: <ShieldCheck className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/upload', label: 'Owner Upload Portal', icon: <Rocket className="w-4 h-4 text-brand-cyan" /> },
+    { href: '/admin/agents', label: 'AI Agents Console', icon: <Bot className="w-4 h-4 text-brand-cyan" /> },
+    { href: '/admin/planner', label: 'Sprint Planner', icon: <CalendarDays className="w-4 h-4 text-amber-400" /> },
+    { href: '/agents/reviews', label: 'Code Review', icon: <FileCheck className="w-4 h-4 text-rose-400" /> },
+    { href: '/agents/documentation', label: 'Documentation Generator', icon: <BookOpen className="w-4 h-4 text-brand-cyan" /> },
     { href: '/builder', label: 'AI Builder Console', icon: <Wand2 className="w-4 h-4 text-brand-cyan" /> },
     { href: '/admin/operations', label: 'Operations Console', icon: <Activity className="w-4 h-4 text-brand-cyan" /> },
     { href: '/admin/system', label: 'System Telemetry', icon: <Server className="w-4 h-4 text-brand-violet" /> },

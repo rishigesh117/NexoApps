@@ -42,6 +42,10 @@ const deploymentRoutes = require('./deployment.routes');
 const builderRoutes = require('./builder.routes');
 const templateRoutes = require('./template.routes');
 const workflowRoutes = require('./workflow.routes');
+const agentRoutes = require('./agent.routes');
+const plannerRoutes = require('./planner.routes');
+const sprintRoutes = require('./sprint.routes');
+const codeReviewRoutes = require('./review.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -84,5 +88,10 @@ router.use('/deployments', deploymentRoutes);
 router.use('/builder', builderRoutes);
 router.use('/templates', templateRoutes);
 router.use('/workflows', workflowRoutes);
+
+router.use('/agents', agentRoutes);
+router.use('/planner', plannerRoutes);
+router.use('/sprints', sprintRoutes);
+router.use('/code-reviews', codeReviewRoutes);
 
 module.exports = router;

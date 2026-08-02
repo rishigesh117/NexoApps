@@ -1082,6 +1082,128 @@ export interface BuilderStats {
   exportsCount: number;
 }
 
+// Phase 6B Autonomous AI Agents Interfaces
+export interface AIAgent {
+  id: string;
+  name: string;
+  role: 'Software Engineer' | 'Project Planner' | 'QA Lead' | 'Code Reviewer' | 'Tech Writer';
+  avatar: string;
+  description: string;
+  capabilities: string[];
+  status: 'Active' | 'Busy' | 'Idle' | 'Offline';
+  createdAt: string;
+}
+
+export interface AgentTask {
+  id: string;
+  agentId: string;
+  taskTitle: string;
+  description?: string;
+  status: 'Pending' | 'In Progress' | 'Completed' | 'Failed';
+  priority: 'Low' | 'Medium' | 'High' | 'Urgent';
+  createdAt: string;
+}
+
+export interface AgentSession {
+  id: string;
+  agentId: string;
+  userId: string;
+  sessionTitle: string;
+  messages: Array<{ sender: 'user' | 'agent'; text: string; timestamp: string }>;
+  createdAt: string;
+}
+
+export interface AgentMemory {
+  id: string;
+  agentId: string;
+  memoryKey: string;
+  memoryValue: string;
+  importanceScore: number;
+  createdAt: string;
+}
+
+export interface ProjectPlan {
+  id: string;
+  userId: string;
+  projectName: string;
+  targetDeadline?: string;
+  summary: string;
+  requirements: string[];
+  status: 'Active' | 'Completed' | 'Archived';
+  createdAt: string;
+}
+
+export interface DevelopmentTask {
+  id: string;
+  planId: string;
+  title: string;
+  assignedAgentId?: string;
+  category: 'Frontend' | 'Backend' | 'Database' | 'DevOps' | 'QA';
+  status: 'Backlog' | 'To Do' | 'In Progress' | 'Code Review' | 'Done';
+  estimatedHours: number;
+  createdAt: string;
+}
+
+export interface SprintBoard {
+  id: string;
+  name: string;
+  sprintGoal: string;
+  startDate: string;
+  endDate: string;
+  status: 'Active' | 'Completed' | 'Planned';
+  createdAt: string;
+}
+
+export interface SprintTask {
+  id: string;
+  sprintId: string;
+  taskTitle: string;
+  assignedTo: string;
+  status: 'To Do' | 'In Progress' | 'In Review' | 'Done';
+  points: number;
+  createdAt: string;
+}
+
+export interface BugReport {
+  id: string;
+  filePath: string;
+  severity: 'Low' | 'Medium' | 'High' | 'Critical';
+  issueTitle: string;
+  description: string;
+  suggestedFix?: string;
+  detectedByAgentId?: string;
+  createdAt: string;
+}
+
+export interface CodeReview {
+  id: string;
+  reviewerAgentId: string;
+  pullRequestTitle: string;
+  qualityScore: number;
+  status: 'Approved' | 'Changes Requested' | 'Pending';
+  comments: string[];
+  createdAt: string;
+}
+
+export interface DocumentationRecord {
+  id: string;
+  docTitle: string;
+  docType: 'README' | 'Architecture' | 'API Reference' | 'User Manual';
+  content: string;
+  generatedByAgentId?: string;
+  createdAt: string;
+}
+
+export interface AgentStatistics {
+  totalAgents: number;
+  activeSessions: number;
+  bugsDetectedCount: number;
+  reviewsCompletedCount: number;
+  docsGeneratedCount: number;
+  sprintsActiveCount: number;
+}
+
+
 
 
 

@@ -1,157 +1,59 @@
 /**
- * Review Controller Layer
- * NexoApps Platform - Phase 3D
+ * Code Review & Bug Scanner Controller
+ * NexoApps Platform - Phase 6B (Version 2.2)
  */
 
-const reviewService = require('../services/review.service');
+const codeReviewService = require('../services/code_review.service');
+const bugDetectionService = require('../services/bug_detection.service');
+const documentationService = require('../services/documentation.service');
 
-class ReviewController {
-  // GET /api/v1/apps/:slug/reviews
-  getAppReviews(req, res) {
-    try {
-      const { slug } = req.params;
-      const { rating, verifiedOnly, sort, search, page, limit } = req.query;
-      const currentUserId = req.user ? req.user.id : null;
-
-      const result = reviewService.getReviewsByAppSlug(slug, {
-        rating,
-        verifiedOnly,
-        sort,
-        search,
-        currentUserId,
-        page,
-        limit,
-      });
-
-      const stats = reviewService.getRatingDistribution(slug);
-
-      return res.status(200).json({
-        success: true,
-        data: {
-          reviews: result.reviews,
-          stats,
-          pagination: {
-            total: result.total,
-            page: result.page,
-            limit: result.limit,
-          },
-        },
-      });
-    } catch (error) {
-      return res.status(400).json({
-        success: false,
-        error: error.message,
-      });
-    }
+exports.getReviews = async (req, res, next) => {
+  try {
+    const reviews = codeReviewService.getReviews();
+    const bugs = bugDetectionService.getBugs();
+    return res.status(200).json({
+      success: true,
+      data: { reviews, bugs },
+    });
+  } catch (err) {
+    next(err);
   }
+};
 
-  // POST /api/v1/apps/:slug/reviews
-  createReview(req, res) {
-    try {
-      const { slug } = req.params;
-      const userId = req.user.id;
-      const userName = req.user.username || req.user.name;
-      const userAvatar = req.user.profileImage || req.user.avatarUrl;
-
-      const review = reviewService.createReview(
-        userId,
-        userName,
-        userAvatar,
-        slug,
-        req.body
-      );
-
-      return res.status(201).json({
-        success: true,
-        message: 'Review posted successfully!',
-        data: review,
-      });
-    } catch (error) {
-      return res.status(400).json({
-        success: false,
-        error: error.message,
-      });
-    }
+exports.createReview = async (req, res, next) => {
+  try {
+    const { pullRequestTitle } = req.body;
+    const review = codeReviewService.createReview(pullRequestTitle);
+    return res.status(201).json({
+      success: true,
+      data: review,
+    });
+  } catch (err) {
+    next(err);
   }
+};
 
-  // PATCH /api/v1/reviews/:id
-  updateReview(req, res) {
-    try {
-      const { id } = req.params;
-      const userId = req.user.id;
-
-      const updated = reviewService.updateReview(userId, id, req.body);
-
-      return res.status(200).json({
-        success: true,
-        message: 'Review updated successfully',
-        data: updated,
-      });
-    } catch (error) {
-      return res.status(400).json({
-        success: false,
-        error: error.message,
-      });
-    }
+exports.getDocs = async (req, res, next) => {
+  try {
+    const docs = documentationService.getDocs();
+    return res.status(200).json({
+      success: true,
+      data: docs,
+    });
+  } catch (err) {
+    next(err);
   }
+};
 
-  // DELETE /api/v1/reviews/:id
-  deleteReview(req, res) {
-    try {
-      const { id } = req.params;
-      const userId = req.user.id;
-
-      const result = reviewService.deleteReview(userId, id);
-
-      return res.status(200).json({
-        success: true,
-        message: result.message,
-      });
-    } catch (error) {
-      return res.status(400).json({
-        success: false,
-        error: error.message,
-      });
-    }
+exports.generateDoc = async (req, res, next) => {
+  try {
+    const { docTitle, docType } = req.body;
+    const doc = documentationService.generateDoc(docTitle, docType);
+    return res.status(201).json({
+      success: true,
+      data: doc,
+    });
+  } catch (err) {
+    next(err);
   }
-
-  // POST /api/v1/reviews/:id/like
-  toggleLike(req, res) {
-    try {
-      const { id } = req.params;
-      const userId = req.user.id;
-
-      const result = reviewService.toggleLikeReview(userId, id);
-
-      return res.status(200).json({
-        success: true,
-        data: result,
-      });
-    } catch (error) {
-      return res.status(400).json({
-        success: false,
-        error: error.message,
-      });
-    }
-  }
-
-  // GET /api/v1/users/me/reviews
-  getUserReviews(req, res) {
-    try {
-      const userId = req.user.id;
-      const reviews = reviewService.getUserReviews(userId);
-
-      return res.status(200).json({
-        success: true,
-        data: reviews,
-      });
-    } catch (error) {
-      return res.status(400).json({
-        success: false,
-        error: error.message,
-      });
-    }
-  }
-}
-
-module.exports = new ReviewController();
+};

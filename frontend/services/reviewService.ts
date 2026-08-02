@@ -1,11 +1,11 @@
 /**
  * Review Service Layer
- * NexoApps Platform - Phase 3D
+ * NexoApps Platform - Storefront App Reviews & AI Code Reviews (v2.2)
  */
 
 import { fetchApi } from './apiClient';
 import { AuthService } from './authService';
-import { Review, RatingDistributionData, ReviewSortOption } from '../types';
+import { Review, RatingDistributionData, ReviewSortOption, CodeReview, BugReport, DocumentationRecord } from '../types';
 
 export interface GetReviewsParams {
   rating?: number;
@@ -150,3 +150,23 @@ export const reviewService = {
     }
   },
 };
+
+// Phase 6B AI Code Reviews & Documentation Functions
+export async function getCodeReviews(): Promise<{ reviews: CodeReview[]; bugs: BugReport[] }> {
+  const res = await fetchApi<{ success: boolean; data: { reviews: CodeReview[]; bugs: BugReport[] } }>('/code-reviews');
+  return res.data || { reviews: [], bugs: [] };
+}
+
+export async function getDocs(): Promise<DocumentationRecord[]> {
+  const res = await fetchApi<{ success: boolean; data: DocumentationRecord[] }>('/code-reviews/docs');
+  return res.data || [];
+}
+
+export async function generateDoc(docTitle: string, docType: string): Promise<DocumentationRecord> {
+  const res = await fetchApi<{ success: boolean; data: DocumentationRecord }>('/code-reviews/docs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ docTitle, docType }),
+  });
+  return res.data;
+}
