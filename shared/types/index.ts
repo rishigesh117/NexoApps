@@ -1203,6 +1203,128 @@ export interface AgentStatistics {
   sprintsActiveCount: number;
 }
 
+// Phase 6C Enterprise AI Deployment Interfaces
+export interface AIModel {
+  id: string;
+  userId: string;
+  name: string;
+  slug: string;
+  taskType: 'LLM' | 'Computer Vision' | 'Audio' | 'Tabular';
+  framework: string;
+  description: string;
+  license: string;
+  isPublic: boolean;
+  createdAt: string;
+  versionsCount?: number;
+}
+
+export interface ModelVersion {
+  id: string;
+  modelId: string;
+  version: string;
+  artifactPath: string;
+  parametersCount: string;
+  status: 'Active' | 'Archived';
+  createdAt: string;
+}
+
+export interface Deployment {
+  id: string;
+  modelId: string;
+  versionId: string;
+  environment: 'Development' | 'Staging' | 'Production';
+  status: 'RUNNING' | 'STOPPED' | 'STARTING' | 'FAILED';
+  replicas: number;
+  endpointUrl: string;
+  createdAt: string;
+  modelName?: string;
+}
+
+export interface InferenceRequest {
+  id: string;
+  deploymentId: string;
+  promptTokens: number;
+  completionTokens: number;
+  latencyMs: number;
+  statusCode: number;
+  createdAt: string;
+}
+
+export interface Dataset {
+  id: string;
+  userId: string;
+  name: string;
+  category: string;
+  description: string;
+  fileFormat: string;
+  sizeMb: number;
+  createdAt: string;
+}
+
+export interface DatasetVersion {
+  id: string;
+  datasetId: string;
+  version: string;
+  recordsCount: number;
+  downloadUrl: string;
+  createdAt: string;
+}
+
+export interface Experiment {
+  id: string;
+  userId: string;
+  name: string;
+  objective: string;
+  status: 'Completed' | 'Running';
+  createdAt: string;
+}
+
+export interface ExperimentRun {
+  id: string;
+  experimentId: string;
+  modelName: string;
+  promptVariant: string;
+  accuracyScore: number;
+  latencyMs: number;
+  createdAt: string;
+}
+
+export interface ModelMetric {
+  id: string;
+  modelId: string;
+  metricName: string;
+  metricValue: number;
+  recordedAt: string;
+}
+
+export interface RuntimeLog {
+  id: string;
+  serviceName: string;
+  cpuPercent: number;
+  memoryPercent: number;
+  gpuPercent: number;
+  requestsPerSec: number;
+  timestamp: string;
+}
+
+export interface EndpointKey {
+  id: string;
+  userId: string;
+  keyName: string;
+  apiKey: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface DeploymentHistory {
+  id: string;
+  deploymentId: string;
+  eventType: string;
+  details: string;
+  createdAt: string;
+}
+
+
 
 
 

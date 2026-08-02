@@ -23,6 +23,11 @@ import {
   CalendarDays,
   FileCheck,
   BookOpen,
+  Boxes,
+  Database,
+  FlaskConical,
+  Key,
+  Cpu,
 } from 'lucide-react';
 
 export const AdminSidebar: React.FC = () => {
@@ -33,6 +38,12 @@ export const AdminSidebar: React.FC = () => {
     { href: '/admin/testing', label: 'Testing Dashboard', icon: <Activity className="w-4 h-4 text-amber-400" /> },
     { href: '/admin/submissions', label: 'Submission Queue', icon: <ShieldCheck className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/upload', label: 'Owner Upload Portal', icon: <Rocket className="w-4 h-4 text-brand-cyan" /> },
+    { href: '/admin/models', label: 'AI Models Registry', icon: <Boxes className="w-4 h-4 text-brand-violet" /> },
+    { href: '/ai-platform/deployments', label: 'Model Deployments', icon: <Rocket className="w-4 h-4 text-emerald-400" /> },
+    { href: '/admin/runtime', label: 'AI Runtime Telemetry', icon: <Cpu className="w-4 h-4 text-brand-cyan" /> },
+    { href: '/ai-platform/datasets', label: 'Datasets Library', icon: <Database className="w-4 h-4 text-amber-400" /> },
+    { href: '/ai-platform/experiments', label: 'Experiments', icon: <FlaskConical className="w-4 h-4 text-rose-400" /> },
+    { href: '/ai-platform/endpoints', label: 'Endpoints & API Keys', icon: <Key className="w-4 h-4 text-amber-400" /> },
     { href: '/admin/agents', label: 'AI Agents Console', icon: <Bot className="w-4 h-4 text-brand-cyan" /> },
     { href: '/admin/planner', label: 'Sprint Planner', icon: <CalendarDays className="w-4 h-4 text-amber-400" /> },
     { href: '/agents/reviews', label: 'Code Review', icon: <FileCheck className="w-4 h-4 text-rose-400" /> },

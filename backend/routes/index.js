@@ -46,6 +46,11 @@ const agentRoutes = require('./agent.routes');
 const plannerRoutes = require('./planner.routes');
 const sprintRoutes = require('./sprint.routes');
 const codeReviewRoutes = require('./review.routes');
+const modelRoutes = require('./model.routes');
+const aiDeploymentRoutes = require('./ai_deployment.routes');
+const datasetRoutes = require('./dataset.routes');
+const experimentRoutes = require('./experiment.routes');
+const runtimeRoutes = require('./runtime.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -93,5 +98,11 @@ router.use('/agents', agentRoutes);
 router.use('/planner', plannerRoutes);
 router.use('/sprints', sprintRoutes);
 router.use('/code-reviews', codeReviewRoutes);
+
+router.use('/models', modelRoutes);
+router.use('/ai-deployments', aiDeploymentRoutes);
+router.use('/datasets', datasetRoutes);
+router.use('/experiments', experimentRoutes);
+router.use('/runtime', runtimeRoutes);
 
 module.exports = router;
