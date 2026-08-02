@@ -2118,11 +2118,250 @@ export interface DatasetCatalog {
   updatedAt: string;
 }
 
+// ─── Phase 7D — Enterprise AI Cloud & Workflow Orchestration (Version 3.3) ───
 
+export interface WorkflowTemplate {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  category: string;
+  definition?: any;
+  version: string;
+  isActive: boolean;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
+export interface WorkflowInstance {
+  id: string;
+  templateId: string;
+  tenantId?: string;
+  name: string;
+  status: string;
+  triggerType: string;
+  triggerConfig?: any;
+  environment: string;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
+export interface WorkflowStep {
+  id: string;
+  workflowId: string;
+  stepKey: string;
+  name: string;
+  stepType: string;
+  config?: any;
+  positionX: number;
+  positionY: number;
+  nextStepKeys?: string[];
+  createdAt: string;
+}
 
+export interface WorkflowRun {
+  id: string;
+  workflowId: string;
+  status: string;
+  startedAt: string;
+  completedAt?: string;
+  durationMs: number;
+  triggeredBy?: string;
+  inputPayload?: any;
+  outputPayload?: any;
+  errorMessage?: string;
+}
 
+export interface WorkflowLog {
+  id: string;
+  runId: string;
+  stepId?: string;
+  logLevel: string;
+  message: string;
+  timestamp: string;
+}
 
+export interface AutomationJob {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  jobType: string;
+  eventPattern?: string;
+  actionTarget?: string;
+  actionPayload?: any;
+  status: string;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
+export interface JobSchedule {
+  id: string;
+  jobId: string;
+  cronExpression: string;
+  timezone: string;
+  isEnabled: boolean;
+  lastExecutedAt?: string;
+  nextExecutionAt?: string;
+  createdAt: string;
+}
 
+export interface MessageQueue {
+  id: string;
+  tenantId?: string;
+  queueName: string;
+  queueType: string;
+  messageTtlSeconds: number;
+  maxRetries: number;
+  deadLetterQueueId?: string;
+  createdAt: string;
+}
+
+export interface QueueMessage {
+  id: string;
+  queueId: string;
+  payload: any;
+  status: string;
+  retryCount: number;
+  availableAt: string;
+  createdAt: string;
+}
+
+export interface TaskWorker {
+  id: string;
+  workerName: string;
+  nodeId?: string;
+  status: string;
+  concurrency: number;
+  currentTasksCount: number;
+  lastHeartbeat: string;
+  createdAt: string;
+}
+
+export interface WorkerStatus {
+  id: string;
+  workerId: string;
+  cpuPercent: number;
+  memoryPercent: number;
+  activeJobs: number;
+  timestamp: string;
+}
+
+export interface EnvironmentProfile {
+  id: string;
+  tenantId?: string;
+  name: string;
+  environmentType: string;
+  description?: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EnvironmentVariable {
+  id: string;
+  profileId: string;
+  varKey: string;
+  varValue?: string;
+  isSensitive: boolean;
+  createdAt: string;
+}
+
+export interface Secret {
+  id: string;
+  tenantId?: string;
+  secretName: string;
+  secretType: string;
+  encryptedValue: string;
+  version: number;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DeploymentTarget {
+  id: string;
+  tenantId?: string;
+  name: string;
+  targetType: string;
+  connectionConfig?: any;
+  status: string;
+  createdAt: string;
+}
+
+export interface DeploymentJob {
+  id: string;
+  targetId: string;
+  tenantId?: string;
+  name: string;
+  buildArtifact?: string;
+  status: string;
+  startedAt?: string;
+  completedAt?: string;
+  createdBy?: string;
+  createdAt: string;
+}
+
+export interface DeploymentLog {
+  id: string;
+  deploymentId: string;
+  logLevel: string;
+  message: string;
+  timestamp: string;
+}
+
+export interface CloudCluster {
+  id: string;
+  tenantId?: string;
+  clusterName: string;
+  provider: string;
+  region: string;
+  status: string;
+  nodeCount: number;
+  createdAt: string;
+}
+
+export interface ClusterNode {
+  id: string;
+  clusterId: string;
+  nodeName: string;
+  ipAddress?: string;
+  nodeType: string;
+  status: string;
+  cpuCores: number;
+  ramGb: number;
+  createdAt: string;
+}
+
+export interface SystemBackup {
+  id: string;
+  tenantId?: string;
+  backupName: string;
+  backupType: string;
+  storageLocation: string;
+  sizeBytes: number;
+  status: string;
+  createdAt: string;
+}
+
+export interface BackupHistory {
+  id: string;
+  backupId: string;
+  status: string;
+  startedAt: string;
+  completedAt?: string;
+  errorMessage?: string;
+}
+
+export interface RestoreHistory {
+  id: string;
+  backupId: string;
+  restoredBy?: string;
+  status: string;
+  startedAt: string;
+  completedAt?: string;
+  details?: string;
+}

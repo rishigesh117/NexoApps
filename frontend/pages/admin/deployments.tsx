@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AdminLayout } from '../../components/admin/AdminLayout';
 import { DeploymentHistory } from '../../components/operations/DeploymentHistory';
+import { DeploymentPipeline } from '../../components/cloud/DeploymentPipeline';
 import { getDeployments } from '../../services/deploymentService';
 import { DeploymentEntry } from '../../types';
 import { Rocket } from 'lucide-react';
@@ -23,6 +24,8 @@ export default function AdminDeploymentsPage() {
             Inspect GitHub Actions production deployments, staging rollouts, and rollback status.
           </p>
         </div>
+
+        <DeploymentPipeline />
 
         <DeploymentHistory deployments={deployments} />
       </div>

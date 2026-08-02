@@ -74,6 +74,8 @@ const analyticsV2Routes = require('./analytics_v2.routes');
 const reportsRoutes = require('./reports.routes');
 const dashboardBuilderRoutes = require('./dashboard_builder.routes');
 const predictionRoutes = require('./prediction.routes');
+const deploymentV2Routes = require('./deployment_v2.routes');
+const environmentRoutes = require('./environment.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -155,5 +157,8 @@ router.use('/analytics-v2', analyticsV2Routes);
 router.use('/reports', reportsRoutes);
 router.use('/dashboard-builder', dashboardBuilderRoutes);
 router.use('/predictions', predictionRoutes);
+router.use('/cloud', deploymentV2Routes);
+router.use('/environments', environmentRoutes);
+router.use('/backups', backupRoutes);
 
 module.exports = router;
