@@ -19,6 +19,7 @@ export const Navbar: React.FC = () => {
     { name: 'Home', href: '/' },
     { name: 'Dashboard', href: '/dashboard' },
     { name: 'Tenant SaaS', href: '/tenant' },
+    { name: 'Developer API', href: '/developer/api' },
     { name: 'Apps', href: '/apps' },
     { name: 'Marketplace', href: '/marketplace' },
     { name: 'AI Platform', href: '/ai-platform' },

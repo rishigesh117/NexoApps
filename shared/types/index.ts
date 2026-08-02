@@ -1714,6 +1714,155 @@ export interface TenantIntegration {
   isConnected: boolean;
 }
 
+// Phase 7B Enterprise Integrations & API Gateway Interfaces
+export interface ApiClient {
+  id: string;
+  userId: string;
+  clientName: string;
+  clientId: string;
+  createdAt: string;
+}
+
+export interface ApiToken {
+  id: string;
+  clientId: string;
+  tokenHash: string;
+  expiresAt: string;
+  createdAt: string;
+}
+
+export interface ApiScope {
+  id: string;
+  name: string;
+  description: string;
+}
+
+export interface OAuthApplication {
+  id: string;
+  developerId: string;
+  name: string;
+  clientId: string;
+  clientSecret?: string;
+  redirectUris: string[];
+  createdAt: string;
+}
+
+export interface OAuthAuthorization {
+  id: string;
+  userId: string;
+  applicationId: string;
+  scopes: string[];
+  createdAt: string;
+}
+
+export interface OAuthToken {
+  id: string;
+  authorizationId: string;
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: string;
+}
+
+export interface Webhook {
+  id: string;
+  userId: string;
+  targetUrl: string;
+  events: string[];
+  secret: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface WebhookDelivery {
+  id: string;
+  webhookId: string;
+  eventType: string;
+  statusCode: number;
+  responseBody?: string;
+  deliveredAt: string;
+}
+
+export interface IntegrationProvider {
+  id: string;
+  name: string;
+  category: 'SAAS' | 'AUTH' | 'COMMUNICATION' | 'PAYMENT' | 'CRM';
+  logoUrl?: string;
+  description: string;
+  isActive: boolean;
+}
+
+export interface IntegrationAccount {
+  id: string;
+  userId: string;
+  providerId: string;
+  providerName?: string;
+  status: 'CONNECTED' | 'DISCONNECTED';
+  connectedAt: string;
+}
+
+export interface IntegrationLog {
+  id: string;
+  accountId: string;
+  action: string;
+  status: 'SUCCESS' | 'FAILED';
+  details?: string;
+  timestamp: string;
+}
+
+export interface ApiUsageStatistic {
+  id: string;
+  userId: string;
+  endpoint: string;
+  requestCount: number;
+  recordedDate: string;
+}
+
+export interface ApiRateLimit {
+  id: string;
+  tierName: string;
+  requestsPerMinute: number;
+  requestsPerDay: number;
+}
+
+export interface SdkDownload {
+  id: string;
+  language: 'NODEJS' | 'PYTHON' | 'GO' | 'JAVA';
+  version: string;
+  downloadCount: number;
+}
+
+export interface DeveloperApplication {
+  id: string;
+  userId: string;
+  name: string;
+  description: string;
+  createdAt: string;
+}
+
+export interface DeveloperApiKey {
+  id: string;
+  applicationId: string;
+  apiKey: string;
+  name: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface IntegrationEvent {
+  id: string;
+  eventType: string;
+  payload: any;
+  createdAt: string;
+}
+
+export interface IntegrationFailure {
+  id: string;
+  providerName: string;
+  errorMessage: string;
+  occurredAt: string;
+}
+
+
 
 
 

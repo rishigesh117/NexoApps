@@ -64,6 +64,11 @@ const tenantRoutes = require('./tenant.routes');
 const billingRoutes = require('./billing.routes');
 const invoiceRoutes = require('./invoice.routes');
 const saasSubscriptionRoutes = require('./saas_subscription.routes');
+const apiGatewayRoutes = require('./api_gateway.routes');
+const oauthRoutes = require('./oauth.routes');
+const webhookRoutes = require('./webhook.routes');
+const integrationRoutes = require('./integration.routes');
+const developerApiRoutes = require('./developer_api.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -133,5 +138,11 @@ router.use('/tenant', tenantRoutes);
 router.use('/billing', billingRoutes);
 router.use('/invoices', invoiceRoutes);
 router.use('/tenant-subscriptions', saasSubscriptionRoutes);
+
+router.use('/gateway', apiGatewayRoutes);
+router.use('/oauth', oauthRoutes);
+router.use('/webhooks', webhookRoutes);
+router.use('/integrations', integrationRoutes);
+router.use('/developer-api', developerApiRoutes);
 
 module.exports = router;

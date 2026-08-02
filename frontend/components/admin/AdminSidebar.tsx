@@ -31,6 +31,8 @@ import {
   Building2,
   CreditCard,
   Sparkles,
+  Globe,
+  Webhook,
 } from 'lucide-react';
 
 export const AdminSidebar: React.FC = () => {
@@ -39,6 +41,10 @@ export const AdminSidebar: React.FC = () => {
   const navItems = [
     { href: '/admin', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
     { href: '/admin/platform', label: 'Unified OS Console', icon: <Cpu className="w-4 h-4 text-emerald-400" /> },
+    { href: '/admin/integrations', label: 'Integrations Console', icon: <Globe className="w-4 h-4 text-emerald-400" /> },
+    { href: '/admin/api', label: 'API Gateway Admin', icon: <Cpu className="w-4 h-4 text-brand-cyan" /> },
+    { href: '/admin/webhooks', label: 'Webhooks Monitor', icon: <Webhook className="w-4 h-4 text-amber-400" /> },
+    { href: '/admin/oauth', label: 'OAuth Applications', icon: <Shield className="w-4 h-4 text-brand-violet" /> },
     { href: '/admin/tenants', label: 'SaaS Tenants', icon: <Building2 className="w-4 h-4 text-brand-cyan" /> },
     { href: '/admin/billing', label: 'SaaS Billing', icon: <CreditCard className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/plans', label: 'Plans Manager', icon: <Sparkles className="w-4 h-4 text-rose-400" /> },
