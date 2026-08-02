@@ -1324,6 +1324,131 @@ export interface DeploymentHistory {
   createdAt: string;
 }
 
+// Phase 6D AI Marketplace Interfaces
+export interface CreatorProfile {
+  id: string;
+  userId: string;
+  username: string;
+  displayName: string;
+  bio: string;
+  avatarUrl: string;
+  website?: string;
+  isVerified: boolean;
+  totalEarnings: number;
+  createdAt: string;
+  followersCount?: number;
+}
+
+export interface MarketplaceItem {
+  id: string;
+  creatorId: string;
+  creatorName?: string;
+  creatorUsername?: string;
+  title: string;
+  slug: string;
+  type: 'AGENT' | 'MODEL' | 'TEMPLATE' | 'WORKFLOW' | 'PROMPT_PACK';
+  shortDescription: string;
+  fullDescription: string;
+  price: number;
+  pricingModel: 'FREE' | 'ONE_TIME' | 'SUBSCRIPTION';
+  ratingAvg: number;
+  downloadsCount: number;
+  isFeatured: boolean;
+  createdAt: string;
+}
+
+export interface MarketplaceVersion {
+  id: string;
+  itemId: string;
+  version: string;
+  changelog: string;
+  downloadUrl: string;
+  createdAt: string;
+}
+
+export interface MarketplaceReview {
+  id: string;
+  itemId: string;
+  userId: string;
+  userName?: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+}
+
+export interface MarketplaceRating {
+  itemId: string;
+  ratingAvg: number;
+  totalRatings: number;
+}
+
+export interface MarketplaceDownload {
+  id: string;
+  itemId: string;
+  userId: string;
+  version: string;
+  downloadedAt: string;
+}
+
+export interface MarketplaceCollection {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  coverImage: string;
+  createdAt: string;
+  itemsCount?: number;
+}
+
+export interface CreatorFollower {
+  id: string;
+  creatorId: string;
+  followerUserId: string;
+  createdAt: string;
+}
+
+export interface License {
+  id: string;
+  itemId: string;
+  licenseType: string;
+  termsUrl: string;
+  createdAt: string;
+}
+
+export interface Subscription {
+  id: string;
+  userId: string;
+  itemId: string;
+  status: 'ACTIVE' | 'CANCELLED';
+  billingCycle: 'MONTHLY' | 'YEARLY';
+  amount: number;
+  currentPeriodEnd: string;
+  createdAt: string;
+}
+
+export interface PurchaseHistory {
+  id: string;
+  userId: string;
+  itemId: string;
+  amount: number;
+  purchasedAt: string;
+}
+
+export interface VerificationRequest {
+  id: string;
+  creatorId: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  submittedAt: string;
+}
+
+export interface MarketplaceStatistics {
+  totalItems: number;
+  totalDownloads: number;
+  totalCreators: number;
+  activeSubscriptions: number;
+}
+
+
 
 
 

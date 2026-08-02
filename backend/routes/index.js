@@ -51,6 +51,10 @@ const aiDeploymentRoutes = require('./ai_deployment.routes');
 const datasetRoutes = require('./dataset.routes');
 const experimentRoutes = require('./experiment.routes');
 const runtimeRoutes = require('./runtime.routes');
+const marketplaceRoutes = require('./marketplace.routes');
+const creatorRoutes = require('./creator.routes');
+const licenseRoutes = require('./license.routes');
+const subscriptionRoutes = require('./subscription.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -104,5 +108,10 @@ router.use('/ai-deployments', aiDeploymentRoutes);
 router.use('/datasets', datasetRoutes);
 router.use('/experiments', experimentRoutes);
 router.use('/runtime', runtimeRoutes);
+
+router.use('/marketplace', marketplaceRoutes);
+router.use('/creators', creatorRoutes);
+router.use('/licenses', licenseRoutes);
+router.use('/subscriptions', subscriptionRoutes);
 
 module.exports = router;

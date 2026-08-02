@@ -28,6 +28,7 @@ import {
   FlaskConical,
   Key,
   Cpu,
+  Store,
 } from 'lucide-react';
 
 export const AdminSidebar: React.FC = () => {
@@ -38,6 +39,7 @@ export const AdminSidebar: React.FC = () => {
     { href: '/admin/testing', label: 'Testing Dashboard', icon: <Activity className="w-4 h-4 text-amber-400" /> },
     { href: '/admin/submissions', label: 'Submission Queue', icon: <ShieldCheck className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/upload', label: 'Owner Upload Portal', icon: <Rocket className="w-4 h-4 text-brand-cyan" /> },
+    { href: '/admin/marketplace', label: 'AI Marketplace Admin', icon: <Store className="w-4 h-4 text-brand-cyan" /> },
     { href: '/admin/models', label: 'AI Models Registry', icon: <Boxes className="w-4 h-4 text-brand-violet" /> },
     { href: '/ai-platform/deployments', label: 'Model Deployments', icon: <Rocket className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/runtime', label: 'AI Runtime Telemetry', icon: <Cpu className="w-4 h-4 text-brand-cyan" /> },
