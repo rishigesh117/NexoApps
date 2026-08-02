@@ -2410,3 +2410,119 @@ export interface PerformanceMetric {
   moduleName: string;
   timestamp: string;
 }
+
+// ─── Phase 8A — AI Operating Cloud & Multi-Agent Workspace (Version 5.0) ───
+
+export interface AgentWorkspace {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  environment: string;
+  status: string;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkspaceAgent {
+  id: string;
+  workspaceId: string;
+  agentName: string;
+  role: string;
+  modelName: string;
+  temperature: number;
+  status: string;
+  capabilities?: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AgentCapability {
+  id: string;
+  agentId: string;
+  capabilityName: string;
+  config?: any;
+  isEnabled: boolean;
+  createdAt: string;
+}
+
+export interface AgentTool {
+  id: string;
+  toolName: string;
+  description?: string;
+  parameterSchema?: any;
+  executionHandler?: string;
+  isSystem: boolean;
+  createdAt: string;
+}
+
+export interface AgentConversation {
+  id: string;
+  sessionId: string;
+  agentId: string;
+  role: string;
+  messageText: string;
+  timestamp: string;
+}
+
+export interface AgentSharedMemory {
+  id: string;
+  workspaceId: string;
+  memoryKey: string;
+  memoryValue?: any;
+  memoryType: string;
+  accessLevel: string;
+  createdByAgentId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AgentExecution {
+  id: string;
+  agentId: string;
+  executionType: string;
+  inputPayload?: any;
+  outputPayload?: any;
+  status: string;
+  durationMs: number;
+  timestamp: string;
+}
+
+export interface AgentSchedule {
+  id: string;
+  agentId: string;
+  cronExpression: string;
+  taskDefinition?: string;
+  isEnabled: boolean;
+  lastRunAt?: string;
+  nextRunAt?: string;
+  createdAt: string;
+}
+
+export interface AgentNotification {
+  id: string;
+  agentId: string;
+  notificationType: string;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface AgentTemplate {
+  id: string;
+  name: string;
+  description?: string;
+  role: string;
+  defaultCapabilities?: string[];
+  isOfficial: boolean;
+  createdAt: string;
+}
+
+export interface AgentMetric {
+  id: string;
+  agentId: string;
+  metricKey: string;
+  metricValue: number;
+  timestamp: string;
+}

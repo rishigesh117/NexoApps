@@ -48,6 +48,7 @@ export const AdminSidebar: React.FC = () => {
     { href: '/admin/oauth', label: 'OAuth Applications', icon: <Shield className="w-4 h-4 text-brand-violet" /> },
     { href: '/admin/data-platform', label: 'Data Platform Console', icon: <Database className="w-4 h-4 text-blue-400" /> },
     { href: '/admin/lts', label: 'v4.0 LTS Center', icon: <ShieldCheck className="w-4 h-4 text-emerald-400" /> },
+    { href: '/admin/agent-cloud', label: 'Agent Cloud Console', icon: <Bot className="w-4 h-4 text-brand-cyan" /> },
     { href: '/admin/cloud', label: 'Enterprise Cloud Console', icon: <Server className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/workflows', label: 'Workflow Operations', icon: <Layers className="w-4 h-4 text-brand-cyan" /> },
     { href: '/admin/clusters', label: 'Cluster Management', icon: <Boxes className="w-4 h-4 text-amber-400" /> },

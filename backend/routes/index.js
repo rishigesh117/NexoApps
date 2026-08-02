@@ -77,6 +77,10 @@ const predictionRoutes = require('./prediction.routes');
 const deploymentV2Routes = require('./deployment_v2.routes');
 const environmentRoutes = require('./environment.routes');
 const ltsRoutes = require('./lts.routes');
+const agentWorkspaceRoutes = require('./agent_workspace.routes');
+const agentExecutionRoutes = require('./agent_execution.routes');
+const agentMemoryRoutes = require('./agent_memory.routes');
+const agentMetricsRoutes = require('./agent_metrics.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -162,5 +166,10 @@ router.use('/cloud', deploymentV2Routes);
 router.use('/environments', environmentRoutes);
 router.use('/backups', backupRoutes);
 router.use('/lts', ltsRoutes);
+
+router.use('/agent-workspace', agentWorkspaceRoutes);
+router.use('/agent-execution', agentExecutionRoutes);
+router.use('/agent-memory', agentMemoryRoutes);
+router.use('/agent-metrics', agentMetricsRoutes);
 
 module.exports = router;
