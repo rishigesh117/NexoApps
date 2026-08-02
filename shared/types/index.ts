@@ -1448,6 +1448,120 @@ export interface MarketplaceStatistics {
   activeSubscriptions: number;
 }
 
+// Phase 6E Unified AI OS Interfaces
+export interface PlatformNotification {
+  id: string;
+  userId: string;
+  title: string;
+  message: string;
+  type: 'INFO' | 'SUCCESS' | 'WARNING' | 'ERROR';
+  module: string;
+  link?: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface ActivityFeedItem {
+  id: string;
+  userId: string;
+  module: 'BUILDER' | 'AGENTS' | 'PLATFORM' | 'MARKETPLACE' | 'WORKSPACE';
+  action: string;
+  description: string;
+  metadata?: Record<string, any>;
+  createdAt: string;
+}
+
+export interface DashboardWidget {
+  id: string;
+  widgetKey: string;
+  title: string;
+  category: string;
+  description: string;
+}
+
+export interface WidgetLayout {
+  id: string;
+  userId: string;
+  layoutConfig: Array<{ i: string; x: number; y: number; w: number; h: number }>;
+  createdAt: string;
+}
+
+export interface SavedSearch {
+  id: string;
+  userId: string;
+  query: string;
+  createdAt: string;
+}
+
+export interface CommandHistory {
+  id: string;
+  userId: string;
+  command: string;
+  executedAt: string;
+}
+
+export interface PlatformShortcut {
+  id: string;
+  userId: string;
+  shortcutKey: string;
+  targetUrl: string;
+  createdAt: string;
+}
+
+export interface DashboardSettings {
+  id: string;
+  userId: string;
+  theme: string;
+  compactMode: boolean;
+  createdAt: string;
+}
+
+export interface AutomationRule {
+  id: string;
+  userId: string;
+  name: string;
+  triggerEvent: string;
+  actionTarget: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface PlatformEvent {
+  id: string;
+  eventName: string;
+  payload: Record<string, any>;
+  createdAt: string;
+}
+
+export interface GlobalSearchResult {
+  id: string;
+  title: string;
+  category: string;
+  url: string;
+  keywords?: string;
+}
+
+export interface PlatformHealth {
+  status: 'HEALTHY' | 'DEGRADED' | 'DOWN';
+  uptimeSeconds: number;
+  cpuLoad: number;
+  memoryUsagePercent: number;
+  gpuUsagePercent: number;
+  activeDeployments: number;
+  activeAgentsCount: number;
+  requestsPerSec: number;
+}
+
+export interface SystemAnnouncement {
+  id: string;
+  title: string;
+  message: string;
+  priority: 'NORMAL' | 'HIGH' | 'URGENT';
+  isActive: boolean;
+  createdAt: string;
+}
+
+
 
 
 

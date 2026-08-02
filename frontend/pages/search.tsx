@@ -1,107 +1,81 @@
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { SEOHead } from '../components/SEOHead';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
-import { GlobalSearch } from '../components/ai/GlobalSearch';
-import { SearchFilters } from '../components/ai/SearchFilters';
-import { SearchResultsGrid } from '../components/ai/SearchResultsGrid';
-import { fetchApi } from '../services/apiClient';
-import { AISearchResult } from '../types';
+import { PlatformSidebar } from '../components/platform/PlatformSidebar';
+import { searchPlatform } from '../services/platformSearchService';
+import { GlobalSearchResult } from '../types';
+import { Search, Sparkles, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
-export default function SearchPage() {
-  const router = useRouter();
-  const { q, category } = router.query;
+export default function UniversalSearchPage() {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<GlobalSearchResult[]>([]);
 
-  const [query, setQuery] = useState<string>((q as string) || '');
-  const [selectedCategory, setSelectedCategory] = useState<string>((category as string) || 'All');
-  const [sort, setSort] = useState<string>('relevance');
-  const [rating, setRating] = useState<string>('');
-
-  const [searchResult, setSearchResult] = useState<AISearchResult>({
-    apps: [],
-    developers: [],
-    collections: [],
-    suggestions: [],
-    trending: [],
-    total: 0,
-  });
-  const [isLoading, setIsLoading] = useState(true);
-
-  const performSearch = async (searchTerm: string, cat: string = selectedCategory, s: string = sort) => {
-    setIsLoading(true);
+  const handleSearch = async (q: string) => {
+    setQuery(q);
     try {
-      const params = new URLSearchParams();
-      if (searchTerm) params.append('q', searchTerm);
-      if (cat && cat !== 'All') params.append('category', cat);
-      if (s) params.append('sort', s);
-
-      const res = await fetchApi<{ success: boolean; data: AISearchResult }>(`/search?${params.toString()}`);
-      setSearchResult(res.data);
+      const res = await searchPlatform(q);
+      setResults(res);
     } catch {
-      setSearchResult({
-        apps: [],
-        developers: [],
-        collections: [],
-        suggestions: [],
-        trending: [],
-        total: 0,
-      });
-    } finally {
-      setIsLoading(false);
+      setResults([]);
     }
   };
 
   useEffect(() => {
-    const qStr = (q as string) || '';
-    setQuery(qStr);
-    performSearch(qStr, (category as string) || 'All', sort);
-  }, [q, category, sort]);
+    handleSearch('');
+  }, []);
 
   return (
     <>
       <SEOHead
-        title="Global AI Search & Intelligence | NexoApps"
-        description="Search applications, developer studios, category collections, and AI utilities on NexoApps."
+        title="Universal Cross-Platform Search | NexoApps AI OS"
+        description="Search across AI Builder projects, autonomous agents, models, marketplace assets, and workspace docs."
       />
 
       <div className="min-h-screen bg-slate-950 text-white flex flex-col font-sans antialiased">
         <Navbar />
 
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 text-left">
-          {/* AI Search Header */}
-          <div className="glass-panel p-6 sm:p-10 rounded-3xl border border-white/10 space-y-6 shadow-2xl">
-            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight">
-              Global Platform AI Search Engine
-            </h1>
-            <GlobalSearch
-              initialQuery={query}
-              onSearch={(newQ) => {
-                setQuery(newQ);
-                performSearch(newQ);
-              }}
-              popularSearches={searchResult.trending}
-            />
+        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8 text-left">
+          <PlatformSidebar />
+
+          <div className="flex-1 space-y-8 min-w-0">
+            <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 shadow-2xl space-y-4">
+              <h1 className="text-2xl font-black text-white flex items-center gap-2">
+                <Search className="w-6 h-6 text-brand-violet" /> Universal Cross-Platform Search Engine
+              </h1>
+
+              <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full px-5 py-3 focus-within:border-brand-cyan transition-all">
+                <Search className="w-5 h-5 text-text-muted" />
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  placeholder="Search agents, models, starter templates, docs, deployments..."
+                  className="flex-1 bg-transparent text-white text-xs sm:text-sm focus:outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {results.map((r) => (
+                <Link
+                  key={r.id}
+                  href={r.url}
+                  className="glass-panel p-5 rounded-3xl border border-white/10 hover:border-brand-cyan/40 transition-all flex items-center justify-between gap-4 block shadow-2xl"
+                >
+                  <div className="space-y-1">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-brand-cyan/20 text-brand-cyan">
+                      {r.category}
+                    </span>
+                    <h4 className="font-extrabold text-white text-sm">{r.title}</h4>
+                    <p className="text-xs font-mono text-text-muted">{r.url}</p>
+                  </div>
+                  <ArrowRight className="w-4 h-4 text-brand-cyan shrink-0" />
+                </Link>
+              ))}
+            </div>
           </div>
-
-          {/* Search Filters Bar */}
-          <SearchFilters
-            category={selectedCategory}
-            sort={sort}
-            rating={rating}
-            onCategoryChange={(cat) => {
-              setSelectedCategory(cat);
-              performSearch(query, cat, sort);
-            }}
-            onSortChange={(s) => {
-              setSort(s);
-              performSearch(query, selectedCategory, s);
-            }}
-            onRatingChange={setRating}
-          />
-
-          {/* Search Results Grid */}
-          <SearchResultsGrid result={searchResult} />
         </main>
 
         <Footer />

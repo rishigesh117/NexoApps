@@ -55,6 +55,11 @@ const marketplaceRoutes = require('./marketplace.routes');
 const creatorRoutes = require('./creator.routes');
 const licenseRoutes = require('./license.routes');
 const subscriptionRoutes = require('./subscription.routes');
+const platformDashboardRoutes = require('./dashboard.routes');
+const platformSearchRoutes = require('./platform_search.routes');
+const platformActivityRoutes = require('./activity.routes');
+const platformOSRoutes = require('./platform.routes');
+const automationRulesRoutes = require('./automation_rules.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -113,5 +118,11 @@ router.use('/marketplace', marketplaceRoutes);
 router.use('/creators', creatorRoutes);
 router.use('/licenses', licenseRoutes);
 router.use('/subscriptions', subscriptionRoutes);
+
+router.use('/dashboard', platformDashboardRoutes);
+router.use('/platform-search', platformSearchRoutes);
+router.use('/activity', platformActivityRoutes);
+router.use('/platform', platformOSRoutes);
+router.use('/automation-rules', automationRulesRoutes);
 
 module.exports = router;

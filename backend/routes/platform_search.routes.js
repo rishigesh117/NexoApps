@@ -1,13 +1,13 @@
 /**
- * Dashboard Routes
+ * Universal Search Routes
  * NexoApps Platform - Phase 6E (Version 2.5)
  */
 
 const express = require('express');
 const router = express.Router();
-const dashboardController = require('../controllers/dashboard.controller');
+const platformSearchController = require('../controllers/platform_search.controller');
 const { optionalAuthToken } = require('../middleware/auth.middleware');
 
-router.get('/', optionalAuthToken, dashboardController.getDashboardData);
+router.get('/', optionalAuthToken, platformSearchController.search);
 
 module.exports = router;

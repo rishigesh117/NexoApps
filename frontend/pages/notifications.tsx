@@ -2,130 +2,66 @@ import React, { useState, useEffect } from 'react';
 import { SEOHead } from '../components/SEOHead';
 import { Navbar } from '../components/Navbar';
 import { Footer } from '../components/Footer';
-import { communityService } from '../services/communityService';
-import { NotificationItem } from '../types';
-import { useAuth } from '../context/AuthContext';
-import { Bell, CheckCircle2, Rocket, ShieldCheck, Star, Download, UserPlus, AlertTriangle } from 'lucide-react';
+import { PlatformSidebar } from '../components/platform/PlatformSidebar';
+import { getPlatformNotifications } from '../services/notificationService';
+import { PlatformNotification } from '../types';
+import { Bell, CheckCircle2, Info } from 'lucide-react';
 import Link from 'next/link';
 
 export default function NotificationsPage() {
-  const { isAuthenticated } = useAuth();
-  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
-
-  const fetchNotifications = async () => {
-    if (!isAuthenticated) return;
-    try {
-      const res = await communityService.getNotifications();
-      setNotifications(res.notifications || []);
-      setUnreadCount(res.unreadCount || 0);
-    } catch {
-      setNotifications([]);
-    }
-  };
+  const [notifications, setNotifications] = useState<PlatformNotification[]>([]);
 
   useEffect(() => {
-    fetchNotifications();
-  }, [isAuthenticated]);
-
-  const handleMarkAllRead = async () => {
-    try {
-      await communityService.markNotificationsRead();
-      setUnreadCount(0);
-      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
-    } catch {}
-  };
-
-  const getNotifIcon = (type: string) => {
-    switch (type) {
-      case 'developer_published':
-      case 'app_updated':
-        return <Rocket className="w-5 h-5 text-emerald-400" />;
-      case 'app_featured':
-        return <ShieldCheck className="w-5 h-5 text-brand-cyan" />;
-      case 'review_reply':
-        return <Star className="w-5 h-5 text-amber-400 fill-amber-400" />;
-      case 'download_completed':
-        return <Download className="w-5 h-5 text-brand-blue" />;
-      case 'developer_followed':
-        return <UserPlus className="w-5 h-5 text-brand-violet" />;
-      default:
-        return <AlertTriangle className="w-5 h-5 text-amber-400" />;
-    }
-  };
+    getPlatformNotifications().then((data) => setNotifications(data)).catch(() => {});
+  }, []);
 
   return (
     <>
       <SEOHead
-        title="Notifications Center | NexoApps"
-        description="Stay updated with developer releases, app updates, wishlist alerts, and platform announcements."
+        title="Notification Center | NexoApps AI OS"
+        description="Unified notification center for model deployment alerts, marketplace sales, and agent notifications."
       />
 
       <div className="min-h-screen bg-slate-950 text-white flex flex-col font-sans antialiased">
         <Navbar />
 
-        <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6 text-left">
-          <div className="glass-panel p-6 rounded-3xl border border-white/10 flex items-center justify-between shadow-2xl">
-            <div>
+        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8 text-left">
+          <PlatformSidebar />
+
+          <div className="flex-1 space-y-8 min-w-0">
+            <div className="glass-panel p-6 rounded-3xl border border-white/10 shadow-2xl space-y-2">
               <h1 className="text-2xl font-black text-white flex items-center gap-2">
-                <Bell className="w-6 h-6 text-brand-cyan" /> Notifications Center
+                <Bell className="w-6 h-6 text-rose-400" /> Platform Notification Center
               </h1>
               <p className="text-xs text-text-secondary">
-                Track developer releases, version updates, wishlist alerts, and review replies.
+                Real-time alerts, agent task completions, model health status, and creator earnings.
               </p>
             </div>
 
-            {unreadCount > 0 && (
-              <button
-                type="button"
-                onClick={handleMarkAllRead}
-                className="px-4 py-2 rounded-full text-xs font-bold text-brand-cyan bg-brand-cyan/20 border border-brand-cyan/30 hover:bg-brand-cyan/30 transition-all"
-              >
-                Mark All as Read
-              </button>
-            )}
-          </div>
-
-          {!isAuthenticated ? (
-            <div className="glass-panel p-12 rounded-3xl border border-white/10 text-center space-y-4">
-              <p className="text-xs text-text-muted">Please log in to view your personalized notification stream.</p>
-            </div>
-          ) : notifications.length === 0 ? (
-            <div className="glass-panel p-12 rounded-3xl border border-white/10 text-center space-y-4">
-              <p className="text-xs text-text-muted">No notifications in your stream.</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {notifications.map((item) => (
-                <div
-                  key={item.id}
-                  className={`glass-card p-5 rounded-3xl border transition-all flex items-start justify-between gap-4 text-xs ${
-                    !item.read ? 'bg-brand-cyan/10 border-brand-cyan/30 shadow-glow-cyan' : 'border-white/10 opacity-85'
-                  }`}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="p-2.5 rounded-2xl bg-white/10 shrink-0">{getNotifIcon(item.type)}</div>
-                    <div className="space-y-1">
-                      <h4 className="font-bold text-white text-sm">{item.title}</h4>
-                      <p className="text-text-secondary leading-relaxed text-xs">{item.message}</p>
-                      <span className="text-[10px] text-text-muted block font-mono pt-1">
-                        {new Date(item.createdAt).toLocaleString()}
+            <div className="space-y-4">
+              {notifications.map((n) => (
+                <div key={n.id} className="glass-panel p-5 rounded-3xl border border-white/10 flex items-center justify-between gap-4 shadow-2xl">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-cyan/20 text-brand-cyan">
+                        {n.module}
                       </span>
+                      <h4 className="font-extrabold text-white text-xs">{n.title}</h4>
                     </div>
+                    <p className="text-xs text-text-secondary">{n.message}</p>
                   </div>
-
-                  {item.link && (
+                  {n.link && (
                     <Link
-                      href={item.link}
-                      className="px-4 py-2 rounded-full text-xs font-bold text-slate-950 bg-gradient-to-r from-brand-cyan to-brand-violet hover:shadow-glow-cyan shrink-0 transition-all"
+                      href={n.link}
+                      className="px-4 py-1.5 rounded-full text-xs font-bold bg-white/10 hover:bg-white/20 text-white transition-all shrink-0"
                     >
-                      View Link
+                      View Details
                     </Link>
                   )}
                 </div>
               ))}
             </div>
-          )}
+          </div>
         </main>
 
         <Footer />

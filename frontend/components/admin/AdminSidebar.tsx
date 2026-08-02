@@ -36,6 +36,7 @@ export const AdminSidebar: React.FC = () => {
 
   const navItems = [
     { href: '/admin', label: 'Dashboard', icon: <LayoutDashboard className="w-4 h-4" /> },
+    { href: '/admin/platform', label: 'Unified OS Console', icon: <Cpu className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/testing', label: 'Testing Dashboard', icon: <Activity className="w-4 h-4 text-amber-400" /> },
     { href: '/admin/submissions', label: 'Submission Queue', icon: <ShieldCheck className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/upload', label: 'Owner Upload Portal', icon: <Rocket className="w-4 h-4 text-brand-cyan" /> },

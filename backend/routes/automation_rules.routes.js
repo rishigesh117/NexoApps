@@ -1,13 +1,13 @@
 /**
- * Dashboard Routes
+ * Automation Rules Routes
  * NexoApps Platform - Phase 6E (Version 2.5)
  */
 
 const express = require('express');
 const router = express.Router();
-const dashboardController = require('../controllers/dashboard.controller');
+const platformAutomationController = require('../controllers/platform_automation.controller');
 const { optionalAuthToken } = require('../middleware/auth.middleware');
 
-router.get('/', optionalAuthToken, dashboardController.getDashboardData);
+router.get('/', optionalAuthToken, platformAutomationController.getRules);
 
 module.exports = router;
