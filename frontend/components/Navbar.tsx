@@ -25,6 +25,7 @@ export const Navbar: React.FC = () => {
     { name: 'Agent Cloud', href: '/agent-cloud' },
     { name: 'AI Runtime', href: '/runtime' },
     { name: 'Knowledge Cloud', href: '/knowledge' },
+    { name: 'Enterprise AI', href: '/enterprise' },
     { name: 'Apps', href: '/apps' },
     { name: 'Marketplace', href: '/marketplace' },
     { name: 'AI Platform', href: '/ai-platform' },

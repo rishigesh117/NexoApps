@@ -2775,3 +2775,144 @@ export interface KnowledgeStatistic {
   avgSearchLatencyMs: number;
   timestamp: string;
 }
+
+// ─── Phase 8D — Autonomous AI Enterprise (Version 5.3) ───
+
+export interface Department {
+  id: string;
+  tenantId?: string;
+  name: string;
+  code: string;
+  headEmployeeId?: string;
+  budgetAllocated: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DigitalEmployee {
+  id: string;
+  departmentId: string;
+  employeeName: string;
+  roleTitle: string;
+  aiModel: string;
+  autonomyLevel: string;
+  status: string;
+  tasksCompleted: number;
+  createdAt: string;
+}
+
+export interface EmployeeRole {
+  id: string;
+  roleName: string;
+  description?: string;
+  permissionsJson?: any;
+  createdAt: string;
+}
+
+export interface EmployeeSkill {
+  id: string;
+  employeeId: string;
+  skillName: string;
+  proficiencyLevel: number;
+  createdAt: string;
+}
+
+export interface BusinessProcess {
+  id: string;
+  tenantId?: string;
+  processName: string;
+  description?: string;
+  ownerDepartmentId?: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProcessInstance {
+  id: string;
+  processId: string;
+  triggerSource: string;
+  status: string;
+  startedAt: string;
+  completedAt?: string;
+}
+
+export interface ApprovalWorkflow {
+  id: string;
+  name: string;
+  processId: string;
+  stepCount: number;
+  createdAt: string;
+}
+
+export interface ApprovalRequest {
+  id: string;
+  workflowId: string;
+  requesterId: string;
+  approverId: string;
+  status: string;
+  details?: string;
+  requestedAt: string;
+  resolvedAt?: string;
+}
+
+export interface DecisionRecord {
+  id: string;
+  processInstanceId: string;
+  deciderId: string;
+  decisionOutcome: string;
+  confidenceScore: number;
+  rationale?: string;
+  decidedAt: string;
+}
+
+export interface EnterpriseTask {
+  id: string;
+  processInstanceId: string;
+  assignedEmployeeId?: string;
+  taskName: string;
+  status: string;
+  priority: number;
+  createdAt: string;
+}
+
+export interface AutomationTemplate {
+  id: string;
+  name: string;
+  category: string;
+  configJson?: any;
+  createdAt: string;
+}
+
+export interface BusinessRule {
+  id: string;
+  ruleName: string;
+  conditionExpression: string;
+  actionType: string;
+  isEnabled: boolean;
+  createdAt: string;
+}
+
+export interface RuleExecution {
+  id: string;
+  ruleId: string;
+  result: string;
+  executedAt: string;
+}
+
+export interface EnterpriseDashboard {
+  id: string;
+  tenantId?: string;
+  title: string;
+  layoutJson?: any;
+  createdAt: string;
+}
+
+export interface OrganizationMetric {
+  id: string;
+  metricName: string;
+  metricValue: number;
+  departmentId?: string;
+  timestamp: string;
+}

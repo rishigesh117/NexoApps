@@ -1,6 +1,8 @@
 import { fetchApi } from './apiClient';
 import { Organization, OrganizationMember, OrganizationInvitation } from '../types';
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
+
 export async function getOrganizations(): Promise<Organization[]> {
   const res = await fetchApi<{ success: boolean; data: Organization[] }>('/organizations');
   return res.data || [];
@@ -33,3 +35,12 @@ export async function inviteOrganizationMember(orgId: string, email: string, rol
   });
   return res.data;
 }
+
+// ─── Phase 8D Extensions ───
+
+export const organizationService = {
+  async getMetrics(departmentId: string = 'all') {
+    const res = await fetch(`${API_BASE}/enterprise/metrics/${departmentId}`);
+    return res.json();
+  },
+};

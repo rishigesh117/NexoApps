@@ -88,6 +88,10 @@ const knowledgeRoutes = require('./knowledge.routes');
 const ragRoutes = require('./rag.routes');
 const connectorRoutes = require('./connector.routes');
 const memoryRoutes = require('./memory.routes');
+const enterpriseRoutes = require('./enterprise.routes');
+const approvalRoutes = require('./approval.routes');
+const businessProcessRoutes = require('./business_process.routes');
+const automationCenterRoutes = require('./automation_center.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -187,5 +191,10 @@ router.use('/knowledge', knowledgeRoutes);
 router.use('/rag', ragRoutes);
 router.use('/connectors', connectorRoutes);
 router.use('/memory', memoryRoutes);
+
+router.use('/enterprise', enterpriseRoutes);
+router.use('/approvals', approvalRoutes);
+router.use('/business-process', businessProcessRoutes);
+router.use('/automation-center', automationCenterRoutes);
 
 module.exports = router;
