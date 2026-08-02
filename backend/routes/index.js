@@ -92,6 +92,11 @@ const enterpriseRoutes = require('./enterprise.routes');
 const approvalRoutes = require('./approval.routes');
 const businessProcessRoutes = require('./business_process.routes');
 const automationCenterRoutes = require('./automation_center.routes');
+const globalAIRoutes = require('./global_ai.routes');
+const reasoningRoutes = require('./reasoning.routes');
+const governanceRoutes = require('./governance.routes');
+const observabilityRoutes = require('./observability.routes');
+const releaseRoutes = require('./release.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -196,5 +201,11 @@ router.use('/enterprise', enterpriseRoutes);
 router.use('/approvals', approvalRoutes);
 router.use('/business-process', businessProcessRoutes);
 router.use('/automation-center', automationCenterRoutes);
+
+router.use('/global-ai', globalAIRoutes);
+router.use('/reasoning', reasoningRoutes);
+router.use('/governance', governanceRoutes);
+router.use('/observability', observabilityRoutes);
+router.use('/releases', releaseRoutes);
 
 module.exports = router;

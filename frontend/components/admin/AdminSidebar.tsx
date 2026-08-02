@@ -36,6 +36,7 @@ import {
   Layers,
   Link2,
   BrainCircuit,
+  Radio,
 } from 'lucide-react';
 
 export const AdminSidebar: React.FC = () => {
@@ -62,6 +63,11 @@ export const AdminSidebar: React.FC = () => {
     { href: '/admin/business-processes', label: 'Business Processes', icon: <Layers className="w-4 h-4 text-violet-400" /> },
     { href: '/enterprise/approvals', label: 'Approval Center', icon: <Clock className="w-4 h-4 text-amber-400" /> },
     { href: '/admin/organization', label: 'Organization Dashboard', icon: <Activity className="w-4 h-4 text-blue-400" /> },
+    { href: '/admin/super-platform', label: 'Super Platform Console', icon: <Sparkles className="w-4 h-4 text-emerald-400" /> },
+    { href: '/super-platform/clusters', label: 'Global AI Network', icon: <Globe className="w-4 h-4 text-brand-cyan" /> },
+    { href: '/admin/governance', label: 'AI Governance', icon: <ShieldCheck className="w-4 h-4 text-emerald-400" /> },
+    { href: '/admin/observability', label: 'Platform Observability', icon: <Radio className="w-4 h-4 text-amber-400" /> },
+    { href: '/admin/releases', label: 'Release Center v5.4', icon: <Sparkles className="w-4 h-4 text-violet-400" /> },
     { href: '/admin/cloud', label: 'Enterprise Cloud Console', icon: <Server className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/workflows', label: 'Workflow Operations', icon: <Layers className="w-4 h-4 text-brand-cyan" /> },
     { href: '/admin/clusters', label: 'Cluster Management', icon: <Boxes className="w-4 h-4 text-amber-400" /> },
