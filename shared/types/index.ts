@@ -2640,3 +2640,138 @@ export interface RuntimeScalingPolicy {
   targetCpuPercent: number;
   createdAt: string;
 }
+
+// ─── Phase 8C — AI Knowledge Cloud & Enterprise RAG Platform (Version 5.2) ───
+
+export interface KnowledgeBase {
+  id: string;
+  tenantId?: string;
+  name: string;
+  description?: string;
+  vectorDimension: number;
+  embeddingModel: string;
+  status: string;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface KnowledgeDocument {
+  id: string;
+  knowledgeBaseId: string;
+  title: string;
+  filePath?: string;
+  fileType: string;
+  fileSizeBytes: number;
+  chunkCount: number;
+  status: string;
+  uploadedAt: string;
+}
+
+export interface DocumentChunk {
+  id: string;
+  documentId: string;
+  chunkIndex: number;
+  contentText: string;
+  tokenCount: number;
+  vectorId?: string;
+  createdAt: string;
+}
+
+export interface EmbeddingVector {
+  id: string;
+  chunkId: string;
+  vectorData: number[];
+  dimensions: number;
+  createdAt: string;
+}
+
+export interface VectorIndex {
+  id: string;
+  knowledgeBaseId: string;
+  indexName: string;
+  indexType: string;
+  metric: string;
+  vectorCount: number;
+  status: string;
+  createdAt: string;
+}
+
+export interface KnowledgeCollection {
+  id: string;
+  name: string;
+  description?: string;
+  documentCount: number;
+  createdAt: string;
+}
+
+export interface KnowledgeConnector {
+  id: string;
+  name: string;
+  connectorType: string;
+  status: string;
+  config?: any;
+  lastSyncAt?: string;
+  createdAt: string;
+}
+
+export interface ConnectorSyncJob {
+  id: string;
+  connectorId: string;
+  documentsSynced: number;
+  status: string;
+  startedAt: string;
+  completedAt?: string;
+}
+
+export interface SemanticSearchResult {
+  chunkId: string;
+  documentId: string;
+  documentTitle: string;
+  contentText: string;
+  score: number;
+}
+
+export interface RAGSession {
+  id: string;
+  knowledgeBaseId: string;
+  sessionName: string;
+  modelName: string;
+  status: string;
+  createdAt: string;
+}
+
+export interface ConversationMemory {
+  id: string;
+  sessionId: string;
+  memoryKey: string;
+  memoryValue?: any;
+  importanceScore: number;
+  createdAt: string;
+}
+
+export interface MemorySnapshot {
+  id: string;
+  sessionId: string;
+  snapshotName: string;
+  stateJson?: any;
+  createdAt: string;
+}
+
+export interface KnowledgeFeedback {
+  id: string;
+  conversationId: string;
+  rating: number;
+  comments?: string;
+  createdAt: string;
+}
+
+export interface KnowledgeStatistic {
+  id: string;
+  knowledgeBaseId: string;
+  totalDocuments: number;
+  totalChunks: number;
+  totalQueriesToday: number;
+  avgSearchLatencyMs: number;
+  timestamp: string;
+}

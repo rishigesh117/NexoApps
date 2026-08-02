@@ -84,6 +84,10 @@ const agentMetricsRoutes = require('./agent_metrics.routes');
 const deploymentRuntimeRoutes = require('./deployment_runtime.routes');
 const runtimeMonitorRoutes = require('./runtime_monitor.routes');
 const runtimeBackupRoutes = require('./runtime_backup.routes');
+const knowledgeRoutes = require('./knowledge.routes');
+const ragRoutes = require('./rag.routes');
+const connectorRoutes = require('./connector.routes');
+const memoryRoutes = require('./memory.routes');
 
 router.use('/apps', appRoutes);
 router.use('/auth', authRoutes);
@@ -178,5 +182,10 @@ router.use('/agent-metrics', agentMetricsRoutes);
 router.use('/runtime-deployment', deploymentRuntimeRoutes);
 router.use('/runtime-monitor', runtimeMonitorRoutes);
 router.use('/runtime-backup', runtimeBackupRoutes);
+
+router.use('/knowledge', knowledgeRoutes);
+router.use('/rag', ragRoutes);
+router.use('/connectors', connectorRoutes);
+router.use('/memory', memoryRoutes);
 
 module.exports = router;

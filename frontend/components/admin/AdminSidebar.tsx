@@ -34,6 +34,8 @@ import {
   Globe,
   Webhook,
   Layers,
+  Link2,
+  BrainCircuit,
 } from 'lucide-react';
 
 export const AdminSidebar: React.FC = () => {
@@ -50,6 +52,11 @@ export const AdminSidebar: React.FC = () => {
     { href: '/admin/lts', label: 'v4.0 LTS Center', icon: <ShieldCheck className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/agent-cloud', label: 'Agent Cloud Console', icon: <Bot className="w-4 h-4 text-brand-cyan" /> },
     { href: '/admin/runtime-v2', label: 'AI Runtime Console v2', icon: <Cpu className="w-4 h-4 text-emerald-400" /> },
+    { href: '/admin/knowledge', label: 'Knowledge Cloud', icon: <Database className="w-4 h-4 text-brand-cyan" /> },
+    { href: '/knowledge/chat', label: 'Enterprise RAG', icon: <Bot className="w-4 h-4 text-emerald-400" /> },
+    { href: '/admin/vector-indexes', label: 'Vector Database', icon: <Layers className="w-4 h-4 text-violet-400" /> },
+    { href: '/admin/connectors', label: 'Knowledge Connectors', icon: <Link2 className="w-4 h-4 text-blue-400" /> },
+    { href: '/knowledge/memory', label: 'Conversation Memory', icon: <BrainCircuit className="w-4 h-4 text-amber-400" /> },
     { href: '/admin/cloud', label: 'Enterprise Cloud Console', icon: <Server className="w-4 h-4 text-emerald-400" /> },
     { href: '/admin/workflows', label: 'Workflow Operations', icon: <Layers className="w-4 h-4 text-brand-cyan" /> },
     { href: '/admin/clusters', label: 'Cluster Management', icon: <Boxes className="w-4 h-4 text-amber-400" /> },
