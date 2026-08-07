@@ -1,25 +1,35 @@
 /**
- * Storage Service — NexoApps Phase 10B
- * NVMe SSD block volumes, object storage S3-compatible buckets, and data persistence.
+ * Storage Service — NexoApps Phase 12A (v9.1)
+ * Object storage providers, S3-compatible buckets, and object explorer.
  */
 
-class StorageService {
+class StorageInfrastructureService {
   constructor() {
-    this.volumes = [
-      { id: 'vol-101', tenantId: 'tnt-enterprise-01', vmId: 'vm-1001', name: 'model-weights-nvme', sizeGb: 2000, volumeType: 'nvme_ssd', status: 'attached', createdAt: new Date().toISOString() }
+    this.providers = [
+      { id: 'sp-1', providerName: 'AWS S3 Cloud Storage', providerType: 's3_compatible', status: 'active', createdAt: new Date().toISOString() }
     ];
+
     this.buckets = [
-      { id: 'bkt-1', tenantId: 'tnt-enterprise-01', regionId: 'reg-1', bucketName: 'nexo-ai-datasets-prod', accessLevel: 'private', storageClass: 'standard', createdAt: new Date().toISOString() }
+      { id: 'sb-1', providerId: 'sp-1', bucketName: 'nexo-production-assets', region: 'us-east-1', createdAt: new Date().toISOString() },
+      { id: 'sb-2', providerId: 'sp-1', bucketName: 'nexo-modelops-artifacts', region: 'us-east-1', createdAt: new Date().toISOString() }
+    ];
+
+    this.objects = [
+      { id: 'so-1', bucketId: 'sb-1', objectKey: 'builds/v9.1-production-bundle.tar.gz', sizeBytes: 524288000, contentType: 'application/gzip', uploadedAt: new Date().toISOString() }
     ];
   }
 
-  async getVolumes(tenantId = 'tnt-enterprise-01') {
-    return this.volumes.filter(v => v.tenantId === tenantId);
+  async getProviders() {
+    return this.providers;
   }
 
-  async getBuckets(tenantId = 'tnt-enterprise-01') {
-    return this.buckets.filter(b => b.tenantId === tenantId);
+  async getBuckets() {
+    return this.buckets;
+  }
+
+  async getObjects() {
+    return this.objects;
   }
 }
 
-module.exports = new StorageService();
+module.exports = new StorageInfrastructureService();

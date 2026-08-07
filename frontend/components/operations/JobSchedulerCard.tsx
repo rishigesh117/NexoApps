@@ -23,7 +23,7 @@ export const JobSchedulerCard: React.FC<JobSchedulerCardProps> = ({ jobs }) => {
               Cron: <span className="font-mono text-brand-cyan">{j.cronExpression}</span> • Total Executions: {j.runCount}
             </p>
             <p className="text-[11px] text-text-secondary">
-              Next Run: {new Date(j.nextRunAt).toLocaleString()}
+              Next Run: {j.nextRunAt ? new Date(j.nextRunAt).toLocaleString() : 'Pending'}
             </p>
           </div>
 

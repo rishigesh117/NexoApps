@@ -1,29 +1,12 @@
-/**
- * Backup Service — NexoApps Phase 7D
- * Frontend API client for System Backups and Restore Wizard.
- */
+import { BackupPolicy, BackupJob } from '../../shared/types';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
-
-export const backupService = {
-  async listSystemBackups() {
-    const res = await fetch(`${API_BASE}/backups/system`);
-    return res.json();
-  },
-  async triggerBackup(data: any) {
-    const res = await fetch(`${API_BASE}/backups/system/trigger`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    return res.json();
-  },
-  async triggerRestore(backupId: string) {
-    const res = await fetch(`${API_BASE}/backups/system/${backupId}/restore`, { method: 'POST' });
-    return res.json();
-  },
-  async listRestoreHistory() {
-    const res = await fetch(`${API_BASE}/backups/system/restore-history`);
-    return res.json();
-  },
+export const getDatabaseBackups = async (): Promise<{ policies: BackupPolicy[]; jobs: BackupJob[] }> => {
+  return {
+    policies: [
+      { id: 'bp-1', policyName: 'Production Daily Full Backup & Continuous WAL', backupType: 'full_daily_pitr', retentionDays: 30, scheduleCron: '0 2 * * *', createdAt: new Date().toISOString() }
+    ],
+    jobs: [
+      { id: 'bj-1', clusterId: 'dbc-1', policyId: 'bp-1', status: 'completed', sizeBytes: 15482880000, createdAt: new Date().toISOString() }
+    ]
+  };
 };

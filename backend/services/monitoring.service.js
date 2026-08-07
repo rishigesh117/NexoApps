@@ -1,59 +1,26 @@
 /**
- * System Monitoring & Health Service
- * NexoApps Platform - Phase 4E
+ * Monitoring Service — NexoApps Phase 12A (v9.1)
+ * System alerts, resource monitors, and infrastructure telemetry.
  */
 
-const os = require('os');
-const envConfig = require('../config/env.config');
-
-class MonitoringService {
+class ProductionMonitoringService {
   constructor() {
-    this.startTime = Date.now();
-    this.slowRequests = [];
+    this.alerts = [
+      { id: 'alt-1', alertTitle: 'Auto-scaled Compute Pool Active', severity: 'info', message: 'Kubernetes autoscaler added 2 replicas to compute pool.', isResolved: true, createdAt: new Date().toISOString() }
+    ];
+
+    this.resourceMonitors = [
+      { id: 'rm-1', resourceId: 'cluster-k8s-prod', cpuUsagePct: 42.5, memoryUsagePct: 61.2, recordedAt: new Date().toISOString() }
+    ];
   }
 
-  getSystemHealth() {
-    const memoryUsage = process.memoryUsage();
-    const uptimeSeconds = Math.floor((Date.now() - this.startTime) / 1000);
-
-    return {
-      status: 'Operational',
-      version: 'v1.0.0-rc1',
-      environment: envConfig.env,
-      timestamp: new Date().toISOString(),
-      uptimeSeconds,
-      system: {
-        platform: os.platform(),
-        arch: os.arch(),
-        cpus: os.cpus().length,
-        totalMemoryMb: Math.round(os.totalmem() / 1024 / 1024),
-        freeMemoryMb: Math.round(os.freemem() / 1024 / 1024),
-        cpuLoadAvg: os.loadavg(),
-      },
-      process: {
-        memoryHeapUsedMb: Math.round(memoryUsage.heapUsed / 1024 / 1024),
-        memoryRssMb: Math.round(memoryUsage.rss / 1024 / 1024),
-        pid: process.pid,
-      },
-      services: {
-        database: 'Connected',
-        storage: 'Connected',
-        cache: 'Operational',
-        notificationEngine: 'Active',
-      },
-    };
+  async getAlerts() {
+    return this.alerts;
   }
 
-  logSlowRequest(path, durationMs) {
-    if (durationMs > 500) {
-      this.slowRequests.unshift({
-        path,
-        durationMs,
-        timestamp: new Date().toISOString(),
-      });
-      if (this.slowRequests.length > 50) this.slowRequests.pop();
-    }
+  async getResourceMonitors() {
+    return this.resourceMonitors;
   }
 }
 
-module.exports = new MonitoringService();
+module.exports = new ProductionMonitoringService();

@@ -955,12 +955,20 @@ export interface ServerMetrics {
 
 export interface JobSchedule {
   id: string;
-  jobName: string;
-  cronExpression: string;
+  scheduleName?: string;
+  jobId?: string;
+  jobName?: string;
+  cronExpression?: string;
+  timezone?: string;
+  isEnabled?: boolean;
   lastRunAt?: string;
-  nextRunAt: string;
-  status: 'ACTIVE' | 'PAUSED' | 'FAILED';
-  runCount: number;
+  nextRunAt?: string;
+  lastExecutedAt?: string;
+  nextExecutionAt?: string;
+  status?: string;
+  runCount?: number;
+  isActive?: boolean;
+  createdAt?: string;
 }
 
 export interface DeploymentEntry {
@@ -2275,26 +2283,18 @@ export interface AutomationJob {
   updatedAt: string;
 }
 
-export interface JobSchedule {
-  id: string;
-  jobId: string;
-  cronExpression: string;
-  timezone: string;
-  isEnabled: boolean;
-  lastExecutedAt?: string;
-  nextExecutionAt?: string;
-  createdAt: string;
-}
-
 export interface MessageQueue {
   id: string;
   tenantId?: string;
   queueName: string;
   queueType: string;
-  messageTtlSeconds: number;
-  maxRetries: number;
+  messagesCount?: number;
+  consumersCount?: number;
+  messageTtlSeconds?: number;
+  maxRetries?: number;
   deadLetterQueueId?: string;
-  createdAt: string;
+  status?: string;
+  createdAt?: string;
 }
 
 export interface QueueMessage {
@@ -2484,9 +2484,10 @@ export interface PerformanceMetric {
   id: string;
   metricName: string;
   metricValue: number;
-  unit: string;
-  moduleName: string;
-  timestamp: string;
+  unit?: string;
+  moduleName?: string;
+  timestamp?: string;
+  recordedAt?: string;
 }
 
 // ─── Phase 8A — AI Operating Cloud & Multi-Agent Workspace (Version 5.0) ───
@@ -4302,12 +4303,14 @@ export interface StorageVolume {
 
 export interface StorageBucket {
   id: string;
-  tenantId: string;
-  regionId: string;
+  tenantId?: string;
+  regionId?: string;
+  providerId?: string;
   bucketName: string;
-  accessLevel: 'private' | 'public_read';
-  storageClass: 'standard' | 'glacier' | 'warm';
-  createdAt: string;
+  region?: string;
+  accessLevel?: string;
+  storageClass?: string;
+  createdAt?: string;
 }
 
 export interface ObjectStorage {
@@ -4784,8 +4787,8 @@ export interface PlatformBackup {
 
 export interface RestorePoint {
   id: string;
-  backupId: string;
-  restorePointName: string;
+  backupId?: string;
+  restorePointName?: string;
   createdAt: string;
 }
 
@@ -5860,6 +5863,324 @@ export interface EnterpriseRelease {
   changelog?: string;
   releasedAt: string;
 }
+
+// ─── Phase 12A — Production Infrastructure, Scalability & Performance (Version 9.1) ───
+
+export interface CacheCluster {
+  id: string;
+  clusterName: string;
+  clusterType: string;
+  status: 'healthy' | 'degraded' | 'offline';
+  nodesCount: number;
+  createdAt: string;
+}
+
+export interface CacheNode {
+  id: string;
+  clusterId: string;
+  nodeName: string;
+  hostIp: string;
+  port: number;
+  role: 'master' | 'replica';
+  status: 'online' | 'offline';
+}
+
+export interface QueueTopic {
+  id: string;
+  queueId: string;
+  topicName: string;
+  createdAt: string;
+}
+
+export interface QueueConsumer {
+  id: string;
+  queueId: string;
+  consumerName: string;
+  status: 'listening' | 'idle' | 'stopped';
+}
+
+export interface BackgroundJob {
+  id: string;
+  jobName: string;
+  jobType: string;
+  status: 'queued' | 'running' | 'completed' | 'failed';
+  payloadJson?: Record<string, any>;
+  createdAt: string;
+}
+
+export interface JobExecution {
+  id: string;
+  jobId: string;
+  executionStatus: 'running' | 'success' | 'failed';
+  startedAt: string;
+  completedAt?: string;
+}
+
+export interface DistributedLock {
+  id: string;
+  lockKey: string;
+  ownerId: string;
+  acquiredAt: string;
+  expiresAt: string;
+}
+
+export interface StorageProvider {
+  id: string;
+  providerName: string;
+  providerType: string;
+  status: 'active' | 'maintenance';
+  createdAt: string;
+}
+
+export interface StorageObject {
+  id: string;
+  bucketId: string;
+  objectKey: string;
+  sizeBytes: number;
+  contentType: string;
+  uploadedAt: string;
+}
+
+export interface CDNConfiguration {
+  id: string;
+  domainName: string;
+  originUrl: string;
+  status: 'active' | 'configuring' | 'disabled';
+  createdAt: string;
+}
+
+export interface ResourceMonitor {
+  id: string;
+  resourceId: string;
+  cpuUsagePct: number;
+  memoryUsagePct: number;
+  recordedAt: string;
+}
+
+export interface SystemAlert {
+  id: string;
+  alertTitle: string;
+  severity: 'info' | 'warning' | 'critical';
+  message: string;
+  isResolved: boolean;
+  createdAt: string;
+}
+
+export interface HealthCheck {
+  id: string;
+  endpointName: string;
+  statusCode: number;
+  responseTimeMs: number;
+  status: 'healthy' | 'unhealthy' | 'degraded';
+  checkedAt: string;
+}
+
+export interface ServiceDiscovery {
+  id: string;
+  serviceName: string;
+  instanceIp: string;
+  port: number;
+  status: 'online' | 'offline';
+}
+
+export interface AutoscalingPolicy {
+  id: string;
+  policyName: string;
+  minReplicas: number;
+  maxReplicas: number;
+  cpuThresholdPct: number;
+  createdAt: string;
+}
+
+export interface InfrastructureSnapshot {
+  id: string;
+  snapshotName: string;
+  sizeGb: number;
+  createdAt: string;
+}
+
+// ─── Phase 12B — Database Infrastructure, Distributed Storage & High Availability (Version 9.2) ───
+
+export interface DatabaseCluster {
+  id: string;
+  clusterName: string;
+  engineType: string;
+  version: string;
+  status: 'healthy' | 'degraded' | 'offline';
+  nodesCount: number;
+  createdAt: string;
+}
+
+export interface DatabaseNode {
+  id: string;
+  clusterId: string;
+  nodeName: string;
+  hostIp: string;
+  port: number;
+  role: 'primary' | 'replica';
+  status: 'online' | 'offline';
+}
+
+export interface DatabaseInstance {
+  id: string;
+  clusterId: string;
+  instanceName: string;
+  databaseName: string;
+  status: 'active' | 'inactive';
+  createdAt: string;
+}
+
+export interface ReplicationGroup {
+  id: string;
+  groupName: string;
+  primaryNodeId: string;
+  replicationMode: string;
+  status: 'active' | 'paused';
+  createdAt: string;
+}
+
+export interface ReplicationStatus {
+  id: string;
+  groupId: string;
+  replicaNodeId: string;
+  replicationLagMs: number;
+  status: 'in_sync' | 'lagging' | 'broken';
+  updatedAt: string;
+}
+
+export interface FailoverEvent {
+  id: string;
+  clusterId: string;
+  oldPrimaryId: string;
+  newPrimaryId: string;
+  failoverReason: string;
+  triggeredAt: string;
+}
+
+export interface BackupPolicy {
+  id: string;
+  policyName: string;
+  backupType: string;
+  retentionDays: number;
+  scheduleCron: string;
+  createdAt: string;
+}
+
+export interface BackupJob {
+  id: string;
+  clusterId: string;
+  policyId: string;
+  status: 'queued' | 'running' | 'completed' | 'failed';
+  sizeBytes: number;
+  createdAt: string;
+}
+
+export interface BackupArchive {
+  id: string;
+  jobId: string;
+  archiveKey: string;
+  storageLocation: string;
+  createdAt: string;
+}
+
+export interface RestoreJob {
+  id: string;
+  archiveId: string;
+  targetClusterId: string;
+  status: 'pending' | 'restoring' | 'completed' | 'failed';
+  restoredAt: string;
+}
+
+export interface RestorePoint {
+  id: string;
+  clusterId?: string;
+  backupId?: string;
+  snapshotTag?: string;
+  restorePointName?: string;
+  pointInTime?: string;
+  createdAt: string;
+}
+
+export interface DisasterRecoverySite {
+  id: string;
+  siteName: string;
+  region: string;
+  status: 'active' | 'standby' | 'syncing';
+  createdAt: string;
+}
+
+export interface StorageCluster {
+  id: string;
+  clusterName: string;
+  storageType: string;
+  totalCapacityGb: number;
+  usedCapacityGb: number;
+  status: 'healthy' | 'degraded' | 'offline';
+  createdAt: string;
+}
+
+export interface StorageNode {
+  id: string;
+  clusterId: string;
+  nodeName: string;
+  capacityGb: number;
+  status: 'online' | 'offline';
+}
+
+export interface StorageReplication {
+  id: string;
+  sourceClusterId: string;
+  targetClusterId: string;
+  replicationLagSec: number;
+  status: 'synced' | 'replicating';
+}
+
+export interface StorageLifecycleRule {
+  id: string;
+  ruleName: string;
+  transitionDays: number;
+  actionType: string;
+  createdAt: string;
+}
+
+export interface DatabaseConnection {
+  id: string;
+  clusterId: string;
+  activeConnections: number;
+  maxConnections: number;
+  idleConnections: number;
+  recordedAt: string;
+}
+
+export interface QueryStatistic {
+  id: string;
+  clusterId: string;
+  queryHash: string;
+  queryText: string;
+  callsCount: number;
+  totalExecTimeMs: number;
+  meanExecTimeMs: number;
+}
+
+export interface DatabaseHealth {
+  id: string;
+  clusterId: string;
+  cpuUtilizationPct: number;
+  memoryUtilizationPct: number;
+  diskUtilizationPct: number;
+  healthScore: number;
+  recordedAt: string;
+}
+
+export interface CapacityForecast {
+  id: string;
+  clusterId: string;
+  forecastDays: number;
+  predictedGrowthGb: number;
+  forecastedAt: string;
+}
+
+
 
 
 

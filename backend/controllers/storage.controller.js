@@ -1,27 +1,22 @@
 /**
- * Storage Controller — NexoApps Phase 10B
+ * Storage Controller — NexoApps Phase 12A (v9.1)
  */
 
 const storageService = require('../services/storage.service');
+const cdnService = require('../services/cdn.service');
 
-class StorageController {
-  async getVolumes(req, res) {
+class StorageInfrastructureController {
+  async getStorage(req, res) {
     try {
-      const volumes = await storageService.getVolumes();
-      res.json({ success: true, data: volumes });
-    } catch (err) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  }
-
-  async getBuckets(req, res) {
-    try {
+      const providers = await storageService.getProviders();
       const buckets = await storageService.getBuckets();
-      res.json({ success: true, data: buckets });
+      const objects = await storageService.getObjects();
+      const cdns = await cdnService.getCDNConfigs();
+      res.json({ success: true, data: { providers, buckets, objects, cdns } });
     } catch (err) {
       res.status(500).json({ success: false, error: err.message });
     }
   }
 }
 
-module.exports = new StorageController();
+module.exports = new StorageInfrastructureController();

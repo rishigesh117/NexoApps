@@ -398,6 +398,32 @@ router.use('/enterprise/admin', phase11eAdminRoutes);
 router.use('/enterprise/releases', phase11eReleaseRoutes);
 router.use('/enterprise/support', phase11eSupportRoutes);
 
+// Phase 12A NexoApps Production Infrastructure Mounted Routes (Version 9.1)
+const phase12aProductionRoutes = require('./production.routes');
+const phase12aCacheRoutes = require('./cache.routes');
+const phase12aQueueRoutes = require('./queue.routes');
+const phase12aMonitoringRoutes = require('./monitoring.routes');
+const phase12aStorageRoutes = require('./storage.routes');
+
+router.use('/production/core', phase12aProductionRoutes);
+router.use('/production/cache', phase12aCacheRoutes);
+router.use('/production/queue', phase12aQueueRoutes);
+router.use('/production/monitoring', phase12aMonitoringRoutes);
+router.use('/production/storage', phase12aStorageRoutes);
+
+// Phase 12B NexoApps Database Infrastructure Mounted Routes (Version 9.2)
+const phase12bDatabasePlatformRoutes = require('./database_platform.routes');
+const phase12bBackupRoutes = require('./backup.routes');
+const phase12bRestoreRoutes = require('./restore.routes');
+const phase12bReplicationRoutes = require('./replication.routes');
+const phase12bStorageClusterRoutes = require('./storage_cluster.routes');
+
+router.use('/database-platform/core', phase12bDatabasePlatformRoutes);
+router.use('/database-platform/backups', phase12bBackupRoutes);
+router.use('/database-platform/restores', phase12bRestoreRoutes);
+router.use('/database-platform/replication', phase12bReplicationRoutes);
+router.use('/database-platform/storage-clusters', phase12bStorageClusterRoutes);
+
 module.exports = router;
 
 
