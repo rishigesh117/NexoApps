@@ -1,6 +1,6 @@
 /**
  * Workflow Routes
- * NexoApps Platform - Version 3.3 (Extended for Phase 7D)
+ * NexoApps Platform - Version 8.3 (Phase 11C)
  */
 
 const express = require('express');
@@ -20,5 +20,12 @@ router.get('/instances/:id/steps', optionalAuthToken, workflowController.getStep
 router.post('/instances/:id/run', optionalAuthToken, workflowController.runWorkflow);
 router.get('/instances/:id/runs', optionalAuthToken, workflowController.listRuns);
 router.get('/runs/:runId/logs', optionalAuthToken, workflowController.getLogs);
+
+// Phase 11C Extensions
+router.get('/enterprise', optionalAuthToken, workflowController.listEnterpriseWorkflows);
+router.get('/enterprise/:id', optionalAuthToken, workflowController.getEnterpriseWorkflowById);
+router.post('/enterprise', optionalAuthToken, workflowController.createEnterpriseWorkflow);
+router.post('/enterprise/:id/publish', optionalAuthToken, workflowController.publishWorkflow);
+router.get('/enterprise/:id/executions', optionalAuthToken, workflowController.getWorkflowExecutions);
 
 module.exports = router;

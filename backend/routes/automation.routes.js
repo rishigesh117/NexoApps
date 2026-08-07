@@ -1,6 +1,6 @@
 /**
  * Platform Automation Routes
- * NexoApps Platform - Version 3.3 (Extended for Phase 7D)
+ * NexoApps Platform - Version 8.3 (Phase 11C)
  */
 
 const express = require('express');
@@ -21,5 +21,16 @@ router.get('/queues/:queueId/messages', optionalAuthToken, automationController.
 router.post('/queues/:queueId/purge', optionalAuthToken, automationController.purgeQueue);
 router.get('/workers', optionalAuthToken, automationController.listWorkers);
 router.get('/schedules', optionalAuthToken, automationController.listSchedules);
+
+// Phase 11C Extensions
+router.get('/workspaces', optionalAuthToken, automationController.listWorkspaces);
+router.post('/workspaces', optionalAuthToken, automationController.createWorkspace);
+router.get('/triggers', optionalAuthToken, automationController.listTriggers);
+router.post('/triggers', optionalAuthToken, automationController.createTrigger);
+router.get('/business-rules', optionalAuthToken, automationController.listBusinessRules);
+router.post('/business-rules', optionalAuthToken, automationController.createBusinessRule);
+router.get('/decision-tables', optionalAuthToken, automationController.listDecisionTables);
+router.post('/decision-tables', optionalAuthToken, automationController.createDecisionTable);
+router.get('/analytics/dashboard', optionalAuthToken, automationController.getAnalyticsDashboard);
 
 module.exports = router;

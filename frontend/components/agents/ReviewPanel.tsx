@@ -24,7 +24,7 @@ export const ReviewPanel: React.FC<ReviewPanelProps> = ({ reviews, bugs }) => {
               </span>
             </div>
             <ul className="space-y-1 text-xs text-text-secondary list-disc list-inside">
-              {r.comments.map((c, idx) => (
+              {r.comments?.map((c, idx) => (
                 <li key={idx}>{c}</li>
               ))}
             </ul>

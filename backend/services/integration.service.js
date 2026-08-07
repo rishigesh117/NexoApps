@@ -1,16 +1,18 @@
 /**
- * Third-Party Integrations Service
- * NexoApps Platform - Phase 7B (Version 3.1)
+ * Integration Service — NexoApps Phase 10E (v8.0)
+ * External SaaS integrations, enterprise API connectors, and webhook bus.
  */
 
 class IntegrationService {
-  getProviders() {
-    return [
-      { id: 'prov-google', name: 'Google Cloud Platform', category: 'SAAS', description: 'Cloud Auth & Drive Storage', isActive: true },
-      { id: 'prov-github', name: 'GitHub Enterprise', category: 'SAAS', description: 'Repository Sync & Actions CI/CD', isActive: true },
-      { id: 'prov-slack', name: 'Slack Workplace', category: 'COMMUNICATION', description: 'Agent Notifications & Webhooks', isActive: true },
-      { id: 'prov-stripe', name: 'Stripe Payments', category: 'PAYMENT', description: 'SaaS Invoicing & Credit Cards', isActive: true },
+  constructor() {
+    this.integrations = [
+      { id: 'int-101', integrationName: 'GitHub Enterprise Cloud', integrationType: 'vcs', status: 'connected', config: { syncEnabled: true }, createdAt: new Date().toISOString() },
+      { id: 'int-102', integrationName: 'Datadog APM & Telemetry', integrationType: 'monitoring', status: 'connected', config: { env: 'prod' }, createdAt: new Date().toISOString() }
     ];
+  }
+
+  async getIntegrations() {
+    return this.integrations;
   }
 }
 

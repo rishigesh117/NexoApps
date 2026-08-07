@@ -1,23 +1,17 @@
 /**
- * Release Manager Service — NexoApps Phase 8E
- * Release info, platform versioning history, and LTS status tracking.
+ * Release Manager Service — NexoApps Phase 10E (v8.0)
+ * Release engineering, version deployment history, and LTS lifecycle management.
  */
 
 class ReleaseManagerService {
-  async getReleaseInformation() {
-    return {
-      versionNumber: '5.4.0',
-      releaseName: 'Autonomous AI Super Platform (Official Release)',
-      isLts: true,
-      releasedAt: new Date().toISOString(),
-      supportedFeatures: [
-        'Phase 8A — AI Operating Cloud & Multi-Agent Workspace',
-        'Phase 8B — AI Runtime Engine & Serverless Execution',
-        'Phase 8C — AI Knowledge Cloud & Enterprise RAG Platform',
-        'Phase 8D — Autonomous AI Enterprise & Digital Workforce',
-        'Phase 8E — Autonomous AI Super Platform & Global AI Network',
-      ],
-    };
+  constructor() {
+    this.releases = [
+      { id: 'rel-v8.0', releaseVersion: '8.0.0', releaseName: 'NexoApps AI Hyper Platform Production Release', notes: 'Unified release of all 15 platform modules (Phases 1A through 10E).', deployedAt: new Date().toISOString() }
+    ];
+  }
+
+  async getReleases() {
+    return this.releases;
   }
 }
 

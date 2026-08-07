@@ -1,16 +1,10 @@
-/**
- * Enterprise Routes — NexoApps Phase 8D
- */
-
 const express = require('express');
 const router = express.Router();
-const { optionalAuthToken } = require('../middleware/auth.middleware');
 const enterpriseController = require('../controllers/enterprise.controller');
 
-router.get('/departments', optionalAuthToken, enterpriseController.listDepartments);
-router.get('/employees/:departmentId', optionalAuthToken, enterpriseController.listEmployees);
-router.post('/employees/:departmentId', optionalAuthToken, enterpriseController.createEmployee);
-router.get('/dashboard', optionalAuthToken, enterpriseController.getDashboard);
-router.get('/metrics/:departmentId', optionalAuthToken, enterpriseController.getMetrics);
+router.get('/overview', (req, res) => enterpriseController.getOverview(req, res));
+router.get('/modules', (req, res) => enterpriseController.getModules(req, res));
+router.get('/services', (req, res) => enterpriseController.getServices(req, res));
+router.get('/workflows', (req, res) => enterpriseController.getWorkflows(req, res));
 
 module.exports = router;

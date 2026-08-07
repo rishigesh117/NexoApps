@@ -1,56 +1,49 @@
 /**
- * Multi-Tenant Organization Service
- * NexoApps Platform - Phase 7A (Version 3.0)
+ * Tenant Service — NexoApps Phase 10B
+ * Enterprise multi-tenant isolation, organization accounts, and quota limits.
  */
 
 class TenantService {
   constructor() {
     this.tenants = [
       {
-        id: 't-1',
-        ownerUserId: 'usr-1',
-        name: 'Batlytics Sports Inc.',
-        slug: 'batlytics-sports',
-        planTier: 'ENTERPRISE',
-        status: 'ACTIVE',
-        membersCount: 14,
-        createdAt: new Date(Date.now() - 86400000 * 90).toISOString(),
-      },
-      {
-        id: 't-2',
-        ownerUserId: 'usr-1',
-        name: 'Nexo AI Developer Org',
-        slug: 'nexo-ai-dev-org',
-        planTier: 'PROFESSIONAL',
-        status: 'ACTIVE',
-        membersCount: 6,
-        createdAt: new Date(Date.now() - 86400000 * 45).toISOString(),
-      },
+        id: 'tnt-enterprise-01',
+        name: 'Acme Global AI Labs',
+        slug: 'acme-ai-labs',
+        tier: 'enterprise',
+        status: 'active',
+        maxVcpus: 512,
+        maxRamGb: 2048,
+        maxStorageTb: 100,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }
     ];
   }
 
-  getTenants() {
+  async getTenants() {
     return this.tenants;
   }
 
-  getTenantBySlug(slug) {
-    return this.tenants.find((t) => t.slug === slug || t.id === slug) || this.tenants[0];
+  async getTenantById(id) {
+    return this.tenants.find(t => t.id === id || t.slug === id) || this.tenants[0];
   }
 
-  createTenant(ownerUserId, data) {
-    const slug = (data.name || 'new-tenant').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    const newTenant = {
-      id: `t-${Date.now()}`,
-      ownerUserId: ownerUserId || 'usr-1',
-      name: data.name || 'New Organization',
-      slug,
-      planTier: data.planTier || 'STARTER',
-      status: 'ACTIVE',
-      membersCount: 1,
+  async createTenant(tenantData) {
+    const tenant = {
+      id: `tnt-${Date.now()}`,
+      name: tenantData.name || 'New Enterprise Tenant',
+      slug: tenantData.slug || `tenant-${Date.now()}`,
+      tier: tenantData.tier || 'enterprise',
+      status: 'active',
+      maxVcpus: tenantData.maxVcpus || 128,
+      maxRamGb: tenantData.maxRamGb || 512,
+      maxStorageTb: tenantData.maxStorageTb || 50,
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
-    this.tenants.unshift(newTenant);
-    return newTenant;
+    this.tenants.push(tenant);
+    return tenant;
   }
 }
 

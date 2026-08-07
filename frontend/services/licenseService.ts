@@ -1,7 +1,22 @@
-import { fetchApi } from './apiClient';
-import { License } from '../types';
+/**
+ * License Service — NexoApps Phase 9C
+ * Frontend API service for user license keys, activation, and entitlement management.
+ */
 
-export async function getLicenseForItem(itemId: string): Promise<License> {
-  const res = await fetchApi<{ success: boolean; data: License }>(`/licenses/${itemId}`);
-  return res.data;
-}
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
+
+export const licenseService = {
+  async listLicenses() {
+    const res = await fetch(`${API_BASE}/marketplace/extensions/licenses`);
+    return res.json();
+  },
+
+  async generateLicense(itemId: string, licenseType = 'standard') {
+    const res = await fetch(`${API_BASE}/marketplace/extensions/licenses`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ itemId, licenseType }),
+    });
+    return res.json();
+  },
+};

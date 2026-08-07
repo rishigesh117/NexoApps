@@ -1,18 +1,28 @@
 /**
- * Deployment Controller
- * NexoApps Platform - Phase 5E (Version 2.0 EC1)
+ * Deployment Controller — NexoApps Phase 11B (v8.2)
  */
 
-const deploymentService = require('../services/deployment.service');
+const deploymentEndpointService = require('../services/deployment_endpoint.service');
+const inferenceService = require('../services/inference.service');
 
-exports.getDeployments = async (req, res, next) => {
-  try {
-    const deployments = deploymentService.getDeployments();
-    return res.status(200).json({
-      success: true,
-      data: deployments,
-    });
-  } catch (err) {
-    next(err);
+class DeploymentController {
+  async getDeployments(req, res) {
+    try {
+      const deps = await deploymentEndpointService.getDeployments();
+      res.json({ success: true, data: deps });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
-};
+
+  async getInferenceStats(req, res) {
+    try {
+      const stats = await inferenceService.getInferenceStats();
+      res.json({ success: true, data: stats });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+}
+
+module.exports = new DeploymentController();

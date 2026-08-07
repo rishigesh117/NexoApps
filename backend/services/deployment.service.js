@@ -1,34 +1,17 @@
 /**
- * Deployment Manager Service
- * NexoApps Platform - Phase 5E (Version 2.0 EC1)
+ * Deployment Service — NexoApps Phase 11A (v8.1)
+ * Multi-target deployment automation (Kubernetes, AWS EKS, Bare-metal).
  */
 
 class DeploymentService {
   constructor() {
-    this.deployments = [
-      {
-        id: 'dep-1001',
-        environment: 'Production',
-        version: 'v2.0.0-EC1',
-        commitHash: 'edf5da5',
-        deployedBy: 'Rishigesh (Platform Owner)',
-        status: 'SUCCESS',
-        deployedAt: new Date().toISOString(),
-      },
-      {
-        id: 'dep-1002',
-        environment: 'Staging',
-        version: 'v1.0.0-RC1',
-        commitHash: '84c21e7',
-        deployedBy: 'CI/CD GitHub Actions',
-        status: 'SUCCESS',
-        deployedAt: new Date(Date.now() - 86400000).toISOString(),
-      },
+    this.histories = [
+      { id: 'dep-101', targetId: 'tgt-k8s-prod', imageTag: 'cr.nexoapps.internal/api-gateway:v8.1.0-latest', status: 'success', deployedAt: new Date().toISOString() }
     ];
   }
 
-  getDeployments() {
-    return this.deployments;
+  async getDeployments() {
+    return this.histories;
   }
 }
 

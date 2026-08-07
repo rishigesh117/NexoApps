@@ -1,31 +1,28 @@
 /**
- * Enterprise Analytics Controller
- * NexoApps Platform - Phase 5A
+ * Analytics Controller — NexoApps Phase 10C
  */
 
 const analyticsEngineService = require('../services/analytics_engine.service');
+const predictiveAnalyticsService = require('../services/predictive_analytics.service');
 
-exports.getOverview = async (req, res, next) => {
-  try {
-    const metrics = analyticsEngineService.getOverviewMetrics();
-    return res.status(200).json({
-      success: true,
-      data: metrics,
-    });
-  } catch (err) {
-    next(err);
+class AnalyticsController {
+  async getMetrics(req, res) {
+    try {
+      const metrics = await analyticsEngineService.getMetrics();
+      res.json({ success: true, data: metrics });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
-};
 
-exports.getDeveloperAnalytics = async (req, res, next) => {
-  try {
-    const devId = req.params.developerId || req.user?.id || 'dev-batlytics';
-    const metrics = analyticsEngineService.getDeveloperMetrics(devId);
-    return res.status(200).json({
-      success: true,
-      data: metrics,
-    });
-  } catch (err) {
-    next(err);
+  async getPredictiveModels(req, res) {
+    try {
+      const models = await predictiveAnalyticsService.getModels();
+      res.json({ success: true, data: models });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
-};
+}
+
+module.exports = new AnalyticsController();

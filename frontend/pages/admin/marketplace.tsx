@@ -1,35 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { AdminLayout } from '../../components/admin/AdminLayout';
-import { MarketplaceCard } from '../../components/marketplace/MarketplaceCard';
-import { getMarketplaceItems } from '../../services/marketplaceService';
-import { MarketplaceItem } from '../../types';
+import React from 'react';
+import Head from 'next/head';
 import { Store } from 'lucide-react';
+import { Navbar } from '../../components/Navbar';
+import { AdminSidebar } from '../../components/admin/AdminSidebar';
+import { MarketplaceExplorer } from '../../components/marketplace/MarketplaceExplorer';
 
 export default function AdminMarketplacePage() {
-  const [items, setItems] = useState<MarketplaceItem[]>([]);
-
-  useEffect(() => {
-    getMarketplaceItems().then((res) => setItems(res.items)).catch(() => {});
-  }, []);
-
   return (
-    <AdminLayout title="Admin AI Marketplace Console | NexoApps Admin">
-      <div className="space-y-8 text-left">
-        <div className="glass-panel p-6 rounded-3xl border border-white/10 shadow-2xl space-y-2">
-          <h1 className="text-2xl font-black text-white flex items-center gap-2">
-            <Store className="w-6 h-6 text-brand-cyan" /> Enterprise AI Marketplace Administration
-          </h1>
-          <p className="text-xs text-text-secondary">
-            Approve asset submissions, verify creator badges, and moderate AI Marketplace products.
-          </p>
-        </div>
+    <>
+      <Head>
+        <title>Marketplace Platform Console | NexoApps Admin</title>
+        <meta name="description" content="AI Marketplace administration console." />
+      </Head>
+      <Navbar />
+      <main className="min-h-screen bg-background text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col lg:flex-row gap-8">
+            <AdminSidebar />
+            <div className="flex-1 min-w-0 space-y-8">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h1 className="text-2xl font-display font-bold text-white flex items-center gap-2">
+                    <Store className="w-6 h-6 text-brand-cyan" />
+                    AI Marketplace & Extension Platform Administration
+                  </h1>
+                  <p className="text-xs text-text-secondary">Version 6.2 Ecosystem Management & Item Moderation</p>
+                </div>
+              </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {items.map((item) => (
-            <MarketplaceCard key={item.id} item={item} />
-          ))}
+              <MarketplaceExplorer />
+            </div>
+          </div>
         </div>
-      </div>
-    </AdminLayout>
+      </main>
+    </>
   );
 }

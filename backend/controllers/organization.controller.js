@@ -1,73 +1,28 @@
 /**
- * Organization Controller
- * NexoApps Platform - Phase 5D
+ * Organization Controller — NexoApps Phase 10D
  */
 
 const organizationService = require('../services/organization.service');
-const teamService = require('../services/team.service');
-const invitationService = require('../services/invitation.service');
+const sessionManagerService = require('../services/session_manager.service');
 
-exports.getAllOrganizations = async (req, res, next) => {
-  try {
-    const orgs = organizationService.getAllOrganizations();
-    return res.status(200).json({
-      success: true,
-      data: orgs,
-    });
-  } catch (err) {
-    next(err);
+class OrganizationController {
+  async getOrganizations(req, res) {
+    try {
+      const orgs = await organizationService.getOrganizations();
+      res.json({ success: true, data: orgs });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
-};
 
-exports.getOrganizationBySlug = async (req, res, next) => {
-  try {
-    const { slug } = req.params;
-    const org = organizationService.getOrganizationBySlug(slug);
-    if (!org) return res.status(404).json({ success: false, message: 'Organization not found' });
-    return res.status(200).json({
-      success: true,
-      data: org,
-    });
-  } catch (err) {
-    next(err);
+  async getActiveSessions(req, res) {
+    try {
+      const sessions = await sessionManagerService.getActiveSessions();
+      res.json({ success: true, data: sessions });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
-};
+}
 
-exports.createOrganization = async (req, res, next) => {
-  try {
-    const org = organizationService.createOrganization(req.body, req.user?.id);
-    return res.status(201).json({
-      success: true,
-      data: org,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
-exports.getMembers = async (req, res, next) => {
-  try {
-    const { orgId } = req.params;
-    const members = teamService.getMembers(orgId);
-    return res.status(200).json({
-      success: true,
-      data: members,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
-exports.inviteMember = async (req, res, next) => {
-  try {
-    const { orgId } = req.params;
-    const { email, role } = req.body;
-    const invitation = invitationService.createInvitation(orgId, email, role, req.user?.id);
-    return res.status(201).json({
-      success: true,
-      data: invitation,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports = new OrganizationController();

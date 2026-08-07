@@ -1,15 +1,12 @@
-/**
- * Platform OS Routes
- * NexoApps Platform - Phase 6E (Version 2.5)
- */
-
 const express = require('express');
 const router = express.Router();
 const platformController = require('../controllers/platform.controller');
-const { optionalAuthToken } = require('../middleware/auth.middleware');
 
-router.get('/health', optionalAuthToken, platformController.getHealth);
-router.get('/notifications', optionalAuthToken, platformController.getNotifications);
-router.get('/commands', optionalAuthToken, platformController.getCommands);
+router.get('/overview', (req, res) => platformController.getOverview(req, res));
+router.get('/registry', (req, res) => platformController.getRegistry(req, res));
+router.get('/modules', (req, res) => platformController.getModules(req, res));
+router.get('/health', (req, res) => platformController.getHealth(req, res));
+router.get('/integrations', (req, res) => platformController.getIntegrations(req, res));
+router.get('/workflows', (req, res) => platformController.getWorkflows(req, res));
 
 module.exports = router;

@@ -63,7 +63,7 @@ export default function MarketplaceItemDetailsPage() {
 
                 <div className="flex items-center gap-3 shrink-0">
                   <span className="text-2xl font-black text-emerald-400">
-                    {item.price > 0 ? `$${item.price.toFixed(2)}` : 'FREE'}
+                    {(item.price ?? 0) > 0 ? `$${(item.price ?? 0).toFixed(2)}` : 'FREE'}
                   </span>
                   <button
                     type="button"
@@ -84,7 +84,7 @@ export default function MarketplaceItemDetailsPage() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 border-t border-white/10 pt-6 text-xs text-text-muted">
                 <div className="flex items-center gap-2">
                   <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  <span>Rating: <strong className="text-white">{item.ratingAvg.toFixed(1)} / 5.0</strong></span>
+                  <span>Rating: <strong className="text-white">{(item.ratingAvg ?? 5.0).toFixed(1)} / 5.0</strong></span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Download className="w-4 h-4 text-brand-cyan" />

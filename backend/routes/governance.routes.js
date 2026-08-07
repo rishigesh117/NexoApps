@@ -1,13 +1,9 @@
-/**
- * Governance Routes — NexoApps Phase 8E
- */
-
 const express = require('express');
 const router = express.Router();
-const { optionalAuthToken } = require('../middleware/auth.middleware');
 const governanceController = require('../controllers/governance.controller');
 
-router.get('/policies', optionalAuthToken, governanceController.listPolicies);
-router.get('/compliance-logs', optionalAuthToken, governanceController.getComplianceLogs);
+router.get('/quality-rules', (req, res) => governanceController.getQualityRules(req, res));
+router.get('/master-data', (req, res) => governanceController.getMasterData(req, res));
+router.get('/lineage', (req, res) => governanceController.getLineage(req, res));
 
 module.exports = router;

@@ -1,16 +1,13 @@
-/**
- * AI Marketplace Routes
- * NexoApps Platform - Phase 6D (Version 2.4)
- */
-
 const express = require('express');
 const router = express.Router();
 const marketplaceController = require('../controllers/marketplace.controller');
-const { optionalAuthToken } = require('../middleware/auth.middleware');
 
-router.get('/items', optionalAuthToken, marketplaceController.getItems);
-router.get('/items/:id', optionalAuthToken, marketplaceController.getItemById);
-router.post('/items', optionalAuthToken, marketplaceController.publishItem);
-router.get('/collections', optionalAuthToken, marketplaceController.getCollections);
+router.get('/items', marketplaceController.listItems);
+router.post('/items', marketplaceController.createItem);
+router.get('/items/:id', marketplaceController.getItemById);
+router.get('/categories', marketplaceController.listCategories);
+router.get('/recommendations', marketplaceController.getRecommendations);
+router.get('/items/:id/reviews', marketplaceController.getReviews);
+router.post('/items/:id/reviews', marketplaceController.addReview);
 
 module.exports = router;

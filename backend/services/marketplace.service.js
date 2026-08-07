@@ -1,106 +1,131 @@
 /**
- * AI Marketplace Catalog & Search Service
- * NexoApps Platform - Phase 6D (Version 2.4)
+ * Marketplace Service — NexoApps Phase 9C
+ * Manages marketplace items, packages, templates, agents, datasets & extensions.
  */
+
+const { v4: uuidv4 } = require('uuid');
 
 class MarketplaceService {
   constructor() {
     this.items = [
       {
-        id: 'mk-1',
-        creatorId: 'c-1',
-        creatorName: 'Rishigesh Team',
-        creatorUsername: 'rishigesh',
-        title: 'Batlytics AI Match Predictor & Analytics Agent',
-        slug: 'batlytics-ai-match-predictor',
-        type: 'AGENT',
-        shortDescription: 'Autonomous cricket match analysis, win-probability calculator, and ball-by-ball strategy agent.',
-        fullDescription: 'Production-ready AI agent fine-tuned on 15,000 professional cricket matches.',
-        price: 29.00,
-        pricingModel: 'ONE_TIME',
-        ratingAvg: 4.90,
-        downloadsCount: 1420,
+        id: 'item-agent-1',
+        publisherId: 'pub-nexo-official',
+        title: 'Autonomous DevOps & Kubernetes Agent',
+        slug: 'devops-k8s-agent',
+        shortDescription: 'Autonomous cluster monitoring, Pod triage, and automated rollback agent.',
+        fullDescription: 'Enterprise AI Agent built for Kubernetes clusters with automated health probes and incident remediation.',
+        itemType: 'agent',
+        category: 'DevOps & Cloud',
+        pricingModel: 'freemium',
+        priceUsd: 19.99,
+        iconUrl: '/assets/icons/k8s-agent.png',
+        bannerUrl: '/assets/banners/k8s-agent-banner.png',
+        version: '2.1.0',
+        downloadCount: 4820,
+        ratingAvg: 4.9,
+        ratingCount: 128,
+        isPublished: true,
         isFeatured: true,
-        createdAt: new Date(Date.now() - 86400000 * 15).toISOString(),
+        createdAt: new Date(Date.now() - 864000000).toISOString(),
+        updatedAt: new Date().toISOString()
       },
       {
-        id: 'mk-2',
-        creatorId: 'c-2',
-        creatorName: 'Nexo AI Labs',
-        creatorUsername: 'nexo-labs',
-        title: 'Nexo-LLM 7B Code & UI Generator Model',
-        slug: 'nexo-llm-7b-code-generator',
-        type: 'MODEL',
-        shortDescription: '7B parameter fine-tuned model for React component generation, Express APIs, and TypeScript code reviews.',
-        fullDescription: 'Optimized ONNX / PyTorch weights artifact compatible with edge GPU clusters.',
-        price: 0.00,
-        pricingModel: 'FREE',
-        ratingAvg: 4.95,
-        downloadsCount: 3850,
+        id: 'item-plugin-1',
+        publisherId: 'pub-nexo-official',
+        title: 'Vector Knowledge RAG Plugin',
+        slug: 'vector-rag-plugin',
+        shortDescription: 'Deep Pinecone, Qdrant, & PGVector similarity connector plugin.',
+        fullDescription: 'High-throughput RAG search plugin connecting enterprise documents directly to LLM completion pipelines.',
+        itemType: 'plugin',
+        category: 'Data & RAG',
+        pricingModel: 'free',
+        priceUsd: 0.0,
+        iconUrl: '/assets/icons/rag-plugin.png',
+        bannerUrl: '/assets/banners/rag-plugin-banner.png',
+        version: '1.4.0',
+        downloadCount: 8910,
+        ratingAvg: 5.0,
+        ratingCount: 310,
+        isPublished: true,
         isFeatured: true,
-        createdAt: new Date(Date.now() - 86400000 * 20).toISOString(),
+        createdAt: new Date(Date.now() - 432000000).toISOString(),
+        updatedAt: new Date().toISOString()
       },
       {
-        id: 'mk-3',
-        creatorId: 'c-1',
-        creatorName: 'Rishigesh Team',
-        creatorUsername: 'rishigesh',
-        title: 'SaaS Multi-Tenant Enterprise Starter Template',
-        slug: 'saas-multi-tenant-enterprise-template',
-        type: 'TEMPLATE',
-        shortDescription: 'Complete Next.js + Express + Tailwind + Postgres SaaS starter project with Auth, Billing & Admin UI.',
-        fullDescription: 'Full production template with zero TypeScript errors and complete CI/CD scripts.',
-        price: 49.00,
-        pricingModel: 'ONE_TIME',
-        ratingAvg: 4.85,
-        downloadsCount: 890,
-        isFeatured: true,
-        createdAt: new Date(Date.now() - 86400000 * 10).toISOString(),
-      },
+        id: 'item-dataset-1',
+        publisherId: 'pub-data-labs',
+        title: 'OWASP Top 10 Security Audit Dataset',
+        slug: 'owasp-security-dataset',
+        shortDescription: 'Annotated vulnerability code diff dataset for fine-tuning security models.',
+        fullDescription: 'Includes 50,000+ labeled code snippets with remediation examples across Python, TS, Java, and Go.',
+        itemType: 'dataset',
+        category: 'Security',
+        pricingModel: 'paid',
+        priceUsd: 49.0,
+        iconUrl: '/assets/icons/security-dataset.png',
+        bannerUrl: '/assets/banners/security-dataset-banner.png',
+        version: '3.0.0',
+        downloadCount: 1250,
+        ratingAvg: 4.8,
+        ratingCount: 45,
+        isPublished: true,
+        isFeatured: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }
+    ];
+
+    this.categories = [
+      { id: 'cat-agents', name: 'AI Agents', slug: 'ai-agents', description: 'Autonomous agent swarms & assistants', iconName: 'Bot' },
+      { id: 'cat-plugins', name: 'Plugins & Connectors', slug: 'plugins', description: 'Third-party API & tool plugins', iconName: 'Boxes' },
+      { id: 'cat-workflows', name: 'Workflows', slug: 'workflows', description: 'Visual automation workflow templates', iconName: 'Layers' },
+      { id: 'cat-datasets', name: 'Datasets', slug: 'datasets', description: 'Fine-tuning & benchmark data packages', iconName: 'Database' },
+      { id: 'cat-templates', name: 'App Templates', slug: 'templates', description: 'Low-code AI application starter kits', iconName: 'Store' },
+      { id: 'cat-extensions', name: 'Extensions', slug: 'extensions', description: 'NexoApps Platform SDK extension packages', iconName: 'Globe' }
     ];
   }
 
-  getItems(type) {
-    if (type) {
-      return this.items.filter((i) => i.type === type.toUpperCase());
-    }
-    return this.items;
+  async listItems(type, category) {
+    let result = this.items.filter(i => i.isPublished);
+    if (type) result = result.filter(i => i.itemType === type);
+    if (category && category !== 'All') result = result.filter(i => i.category === category);
+    return result;
   }
 
-  getItemById(id) {
-    return this.items.find((i) => i.id === id || i.slug === id) || this.items[0];
+  async getItemById(id) {
+    return this.items.find(i => i.id === id || i.slug === id);
   }
 
-  publishItem(creatorId, data) {
-    const slug = (data.title || 'ai-item').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    const newItem = {
-      id: `mk-${Date.now()}`,
-      creatorId: creatorId || 'c-1',
-      creatorName: 'Developer Creator',
-      creatorUsername: 'devcreator',
-      title: data.title || 'New AI Marketplace Item',
-      slug,
-      type: data.type || 'AGENT',
-      shortDescription: data.shortDescription || 'High-performance AI marketplace artifact.',
-      fullDescription: data.fullDescription || 'Complete production asset with docs.',
-      price: data.price || 0.00,
-      pricingModel: data.price > 0 ? 'ONE_TIME' : 'FREE',
-      ratingAvg: 5.00,
-      downloadsCount: 1,
-      isFeatured: false,
+  async createItem(data) {
+    const item = {
+      id: `item-${data.itemType || 'package'}-${uuidv4().substring(0, 8)}`,
+      publisherId: data.publisherId || 'pub-nexo-official',
+      title: data.title,
+      slug: data.slug || data.title.toLowerCase().replace(/\s+/g, '-'),
+      shortDescription: data.shortDescription || '',
+      fullDescription: data.fullDescription || '',
+      itemType: data.itemType || 'agent',
+      category: data.category || 'General',
+      pricingModel: data.pricingModel || 'free',
+      priceUsd: data.priceUsd || 0.0,
+      iconUrl: data.iconUrl || '',
+      bannerUrl: data.bannerUrl || '',
+      version: '1.0.0',
+      downloadCount: 0,
+      ratingAvg: 5.0,
+      ratingCount: 0,
+      isPublished: true,
+      isFeatured: data.isFeatured || false,
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
-    this.items.unshift(newItem);
-    return newItem;
+    this.items.push(item);
+    return item;
   }
 
-  getStats() {
-    return {
-      totalItems: this.items.length,
-      totalDownloads: 6160,
-      totalCreators: 48,
-      activeSubscriptions: 215,
-    };
+  async listCategories() {
+    return this.categories;
   }
 }
 

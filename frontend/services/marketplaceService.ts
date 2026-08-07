@@ -1,27 +1,58 @@
-import { fetchApi } from './apiClient';
-import { MarketplaceItem, MarketplaceStatistics, MarketplaceCollection } from '../types';
+/**
+ * Marketplace Service — NexoApps Phase 9C
+ * Frontend API service for browsing, searching, and managing marketplace packages.
+ */
 
-export async function getMarketplaceItems(type?: string): Promise<{ items: MarketplaceItem[]; stats: MarketplaceStatistics }> {
-  const query = type ? `?type=${type}` : '';
-  const res = await fetchApi<{ success: boolean; data: { items: MarketplaceItem[]; stats: MarketplaceStatistics } }>(`/marketplace/items${query}`);
-  return res.data || { items: [], stats: { totalItems: 0, totalDownloads: 0, totalCreators: 0, activeSubscriptions: 0 } };
-}
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
 
-export async function getMarketplaceItemById(id: string): Promise<MarketplaceItem> {
-  const res = await fetchApi<{ success: boolean; data: MarketplaceItem }>(`/marketplace/items/${id}`);
-  return res.data;
-}
+export const marketplaceService = {
+  async listItems(params?: { type?: string; category?: string; query?: string; pricingModel?: string }) {
+    const query = new URLSearchParams(params as any).toString();
+    const res = await fetch(`${API_BASE}/marketplace/items${query ? `?${query}` : ''}`);
+    return res.json();
+  },
 
-export async function publishMarketplaceItem(data: Partial<MarketplaceItem>): Promise<MarketplaceItem> {
-  const res = await fetchApi<{ success: boolean; data: MarketplaceItem }>('/marketplace/items', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-  return res.data;
-}
+  async getItemById(id: string) {
+    const res = await fetch(`${API_BASE}/marketplace/items/${id}`);
+    return res.json();
+  },
 
-export async function getFeaturedCollections(): Promise<MarketplaceCollection[]> {
-  const res = await fetchApi<{ success: boolean; data: MarketplaceCollection[] }>('/marketplace/collections');
-  return res.data || [];
-}
+  async createItem(data: any) {
+    const res = await fetch(`${API_BASE}/marketplace/items`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  },
+
+  async listCategories() {
+    const res = await fetch(`${API_BASE}/marketplace/categories`);
+    return res.json();
+  },
+
+  async getReviews(itemId: string) {
+    const res = await fetch(`${API_BASE}/marketplace/items/${itemId}/reviews`);
+    return res.json();
+  },
+
+  async addReview(itemId: string, data: any) {
+    const res = await fetch(`${API_BASE}/marketplace/items/${itemId}/reviews`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  },
+};
+
+// Backward compatibility helpers for Phase 5 Marketplace pages
+export const getMarketplaceItems = async (type?: string) => {
+  const res = await marketplaceService.listItems(type ? { type } : undefined);
+  return res.success ? res.data : [];
+};
+
+export const getMarketplaceItemById = async (id: string) => {
+  const res = await marketplaceService.getItemById(id);
+  return res.success ? res.data : null;
+};

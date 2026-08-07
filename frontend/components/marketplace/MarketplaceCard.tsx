@@ -16,7 +16,7 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({ item }) => {
             {item.type}
           </span>
           <span className="text-xs font-black text-emerald-400">
-            {item.price > 0 ? `$${item.price.toFixed(2)}` : 'FREE'}
+            {(item.price ?? 0) > 0 ? `$${(item.price ?? 0).toFixed(2)}` : 'FREE'}
           </span>
         </div>
 
@@ -33,7 +33,7 @@ export const MarketplaceCard: React.FC<MarketplaceCardProps> = ({ item }) => {
 
       <div className="flex items-center justify-between border-t border-white/10 pt-3 text-xs text-text-muted">
         <span className="flex items-center gap-1 font-bold text-amber-400">
-          <Star className="w-3.5 h-3.5 fill-amber-400" /> {item.ratingAvg.toFixed(1)}
+          <Star className="w-3.5 h-3.5 fill-amber-400" /> {(item.ratingAvg ?? 5.0).toFixed(1)}
         </span>
 
         <span className="flex items-center gap-1 font-bold text-white">

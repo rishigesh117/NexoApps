@@ -11,7 +11,7 @@ export default function TenantInvoicesPage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
 
   useEffect(() => {
-    getInvoices().then((data) => setInvoices(data)).catch(() => {});
+    getInvoices().then((data: Invoice[]) => setInvoices(data)).catch(() => {});
   }, []);
 
   return (
@@ -51,7 +51,7 @@ export default function TenantInvoicesPage() {
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <span className="text-base font-black text-white">${inv.amountPaid.toFixed(2)}</span>
+                    <span className="text-base font-black text-white">${(inv.amountPaid || 0).toFixed(2)}</span>
                     <button
                       type="button"
                       onClick={() => alert(`Downloading PDF for ${inv.invoiceNumber}`)}

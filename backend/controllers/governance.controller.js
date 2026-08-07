@@ -1,28 +1,38 @@
 /**
- * Governance Controller — NexoApps Phase 8E
+ * Governance Controller — NexoApps Phase 10C
  */
 
-const governanceService = require('../services/governance.service');
-const complianceService = require('../services/compliance.service');
+const dataQualityService = require('../services/data_quality.service');
+const masterDataService = require('../services/master_data.service');
+const metadataService = require('../services/metadata.service');
 
-const governanceController = {
-  async listPolicies(req, res) {
+class GovernanceController {
+  async getQualityRules(req, res) {
     try {
-      const policies = await governanceService.listPolicies();
-      res.json({ success: true, data: policies });
+      const rules = await dataQualityService.getQualityRules();
+      res.json({ success: true, data: rules });
     } catch (err) {
       res.status(500).json({ success: false, error: err.message });
     }
-  },
+  }
 
-  async getComplianceLogs(req, res) {
+  async getMasterData(req, res) {
     try {
-      const logs = await complianceService.getComplianceLogs();
-      res.json({ success: true, data: logs });
+      const mdm = await masterDataService.getMasterData();
+      res.json({ success: true, data: mdm });
     } catch (err) {
       res.status(500).json({ success: false, error: err.message });
     }
-  },
-};
+  }
 
-module.exports = governanceController;
+  async getLineage(req, res) {
+    try {
+      const lineage = await metadataService.getLineage();
+      res.json({ success: true, data: lineage });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+}
+
+module.exports = new GovernanceController();

@@ -44,7 +44,7 @@ export default function TenantSubscriptionPage() {
                     <div className="flex items-center justify-between">
                       <h3 className="font-extrabold text-white text-lg">{p.name}</h3>
                       <span className="text-2xl font-black text-emerald-400 font-mono">
-                        ${p.priceMonthly.toFixed(0)}<span className="text-xs text-text-muted font-normal">/mo</span>
+                        ${(p.priceMonthly || 0).toFixed(0)}<span className="text-xs text-text-muted font-normal">/mo</span>
                       </span>
                     </div>
                     <ul className="space-y-2 text-xs text-text-secondary">

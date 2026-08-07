@@ -1,11 +1,12 @@
 /**
- * Automation Service — NexoApps Phase 7D
- * Frontend API client for Event Automation, Queues, Workers, and Schedules.
+ * Automation Service — NexoApps Phase 11C
+ * Frontend API client for Workspaces, Event Automation, Triggers, Business Rules, and Decision Tables.
  */
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/v1';
 
 export const automationService = {
+  // Phase 7D Legacy Methods
   async listJobs() {
     const res = await fetch(`${API_BASE}/automation/jobs`);
     return res.json();
@@ -48,6 +49,59 @@ export const automationService = {
   },
   async listSchedules() {
     const res = await fetch(`${API_BASE}/automation/schedules`);
+    return res.json();
+  },
+
+  // Phase 11C Enterprise Automation Methods
+  async listWorkspaces(organizationId?: string) {
+    const query = organizationId ? `?organizationId=${organizationId}` : '';
+    const res = await fetch(`${API_BASE}/automation/core/workspaces${query}`);
+    return res.json();
+  },
+  async createWorkspace(data: any) {
+    const res = await fetch(`${API_BASE}/automation/core/workspaces`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  },
+  async listTriggers(workflowId?: string) {
+    const query = workflowId ? `?workflowId=${workflowId}` : '';
+    const res = await fetch(`${API_BASE}/automation/core/triggers${query}`);
+    return res.json();
+  },
+  async createTrigger(data: any) {
+    const res = await fetch(`${API_BASE}/automation/core/triggers`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  },
+  async listBusinessRules(group?: string) {
+    const query = group ? `?group=${group}` : '';
+    const res = await fetch(`${API_BASE}/automation/core/business-rules${query}`);
+    return res.json();
+  },
+  async createBusinessRule(data: any) {
+    const res = await fetch(`${API_BASE}/automation/core/business-rules`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  },
+  async listDecisionTables() {
+    const res = await fetch(`${API_BASE}/automation/core/decision-tables`);
+    return res.json();
+  },
+  async createDecisionTable(data: any) {
+    const res = await fetch(`${API_BASE}/automation/core/decision-tables`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
     return res.json();
   },
 };

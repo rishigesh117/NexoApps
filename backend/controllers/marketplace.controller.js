@@ -1,57 +1,86 @@
 /**
- * AI Marketplace Controller
- * NexoApps Platform - Phase 6D (Version 2.4)
+ * Marketplace Controller — NexoApps Phase 9C
  */
 
 const marketplaceService = require('../services/marketplace.service');
-const discoveryService = require('../services/discovery.service');
+const marketplaceSearchService = require('../services/marketplace_search.service');
+const recommendationService = require('../services/recommendation.service');
+const marketplaceReviewService = require('../services/marketplace_review.service');
 
-exports.getItems = async (req, res, next) => {
-  try {
-    const { type } = req.query;
-    const items = marketplaceService.getItems(type);
-    const stats = marketplaceService.getStats();
-    return res.status(200).json({
-      success: true,
-      data: { items, stats },
-    });
-  } catch (err) {
-    next(err);
+const marketplaceController = {
+  async listItems(req, res) {
+    try {
+      const { type, category, query, pricingModel } = req.query;
+      let items;
+      if (query || pricingModel) {
+        items = await marketplaceSearchService.searchMarketplace(query, type, category, pricingModel);
+      } else {
+        items = await marketplaceService.listItems(type, category);
+      }
+      res.json({ success: true, data: items });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  },
+
+  async getItemById(req, res) {
+    try {
+      const item = await marketplaceService.getItemById(req.params.id);
+      if (!item) return res.status(404).json({ success: false, error: 'Marketplace item not found' });
+      res.json({ success: true, data: item });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  },
+
+  async createItem(req, res) {
+    try {
+      const item = await marketplaceService.createItem(req.body);
+      res.status(201).json({ success: true, data: item });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  },
+
+  async listCategories(req, res) {
+    try {
+      const categories = await marketplaceService.listCategories();
+      res.json({ success: true, data: categories });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  },
+
+  async getRecommendations(req, res) {
+    try {
+      const recs = await recommendationService.getRecommendations();
+      res.json({ success: true, data: recs });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  },
+
+  async getReviews(req, res) {
+    try {
+      const reviews = await marketplaceReviewService.getReviewsByItemId(req.params.id);
+      res.json({ success: true, data: reviews });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  },
+
+  async addReview(req, res) {
+    try {
+      const review = await marketplaceReviewService.addReview({
+        ...req.body,
+        itemId: req.params.id,
+        userId: req.user?.id || req.body.userId
+      });
+      res.status(201).json({ success: true, data: review });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
 };
 
-exports.getItemById = async (req, res, next) => {
-  try {
-    const item = marketplaceService.getItemById(req.params.id);
-    return res.status(200).json({
-      success: true,
-      data: item,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
-exports.publishItem = async (req, res, next) => {
-  try {
-    const item = marketplaceService.publishItem(req.user?.id, req.body);
-    return res.status(201).json({
-      success: true,
-      data: item,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
-exports.getCollections = async (req, res, next) => {
-  try {
-    const collections = discoveryService.getFeaturedCollections();
-    return res.status(200).json({
-      success: true,
-      data: collections,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
+module.exports = marketplaceController;

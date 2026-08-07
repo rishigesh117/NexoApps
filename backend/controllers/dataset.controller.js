@@ -1,30 +1,28 @@
 /**
- * Dataset Controller
- * NexoApps Platform - Phase 6C (Version 2.3)
+ * Dataset Controller — NexoApps Phase 11B (v8.2)
  */
 
 const datasetService = require('../services/dataset.service');
+const featureStoreService = require('../services/feature_store.service');
 
-exports.getDatasets = async (req, res, next) => {
-  try {
-    const datasets = datasetService.getDatasets();
-    return res.status(200).json({
-      success: true,
-      data: datasets,
-    });
-  } catch (err) {
-    next(err);
+class DatasetController {
+  async getDatasets(req, res) {
+    try {
+      const datasets = await datasetService.getDatasets();
+      res.json({ success: true, data: datasets });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
-};
 
-exports.createDataset = async (req, res, next) => {
-  try {
-    const dataset = datasetService.createDataset(req.user?.id, req.body);
-    return res.status(201).json({
-      success: true,
-      data: dataset,
-    });
-  } catch (err) {
-    next(err);
+  async getStores(req, res) {
+    try {
+      const stores = await featureStoreService.getStores();
+      res.json({ success: true, data: stores });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
-};
+}
+
+module.exports = new DatasetController();

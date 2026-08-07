@@ -1,44 +1,67 @@
 /**
- * Platform OS Controller
- * NexoApps Platform - Phase 6E (Version 2.5)
+ * Platform Controller — NexoApps Phase 10E (v8.0)
  */
 
-const platformHealthService = require('../services/platform_health.service');
-const notificationCenterService = require('../services/notification_center.service');
-const commandPaletteService = require('../services/command_palette.service');
+const platformRegistryService = require('../services/platform_registry.service');
+const platformManagerService = require('../services/platform_manager.service');
+const healthMonitorService = require('../services/health_monitor.service');
+const integrationService = require('../services/integration.service');
+const orchestrationService = require('../services/orchestration.service');
 
-exports.getHealth = async (req, res, next) => {
-  try {
-    const health = platformHealthService.getHealthStatus();
-    return res.status(200).json({
-      success: true,
-      data: health,
-    });
-  } catch (err) {
-    next(err);
+class PlatformController {
+  async getOverview(req, res) {
+    try {
+      const overview = await platformManagerService.getOverview();
+      res.json({ success: true, data: overview });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
-};
 
-exports.getNotifications = async (req, res, next) => {
-  try {
-    const notifications = notificationCenterService.getNotifications(req.user?.id);
-    return res.status(200).json({
-      success: true,
-      data: notifications,
-    });
-  } catch (err) {
-    next(err);
+  async getRegistry(req, res) {
+    try {
+      const registry = await platformRegistryService.getRegistry();
+      res.json({ success: true, data: registry });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
-};
 
-exports.getCommands = async (req, res, next) => {
-  try {
-    const commands = commandPaletteService.getCommands();
-    return res.status(200).json({
-      success: true,
-      data: commands,
-    });
-  } catch (err) {
-    next(err);
+  async getModules(req, res) {
+    try {
+      const modules = await platformRegistryService.getModules();
+      res.json({ success: true, data: modules });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
   }
-};
+
+  async getHealth(req, res) {
+    try {
+      const health = await healthMonitorService.getHealth();
+      res.json({ success: true, data: health });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  async getIntegrations(req, res) {
+    try {
+      const integrations = await integrationService.getIntegrations();
+      res.json({ success: true, data: integrations });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  async getWorkflows(req, res) {
+    try {
+      const workflows = await orchestrationService.getWorkflows();
+      res.json({ success: true, data: workflows });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+}
+
+module.exports = new PlatformController();

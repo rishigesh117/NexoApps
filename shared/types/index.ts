@@ -626,12 +626,17 @@ export interface FAQItem {
 
 export interface AutomationLog {
   id: string;
-  type: string;
-  severity: 'info' | 'warning' | 'error' | 'critical';
-  title: string;
-  details: string;
-  recommendation: string;
-  resolved: boolean;
+  type?: string;
+  severity?: 'info' | 'warning' | 'error' | 'critical' | string;
+  title?: string;
+  details?: string;
+  recommendation?: string;
+  resolved?: boolean;
+  executionId?: string;
+  workflowId?: string;
+  logLevel?: 'info' | 'warn' | 'error' | 'debug' | string;
+  message?: string;
+  metadata?: Record<string, any>;
   createdAt: string;
 }
 
@@ -1166,23 +1171,30 @@ export interface SprintTask {
 
 export interface BugReport {
   id: string;
-  filePath: string;
-  severity: 'Low' | 'Medium' | 'High' | 'Critical';
-  issueTitle: string;
-  description: string;
+  projectId?: string;
+  filePath?: string;
+  title?: string;
+  issueTitle?: string;
+  description?: string;
+  severity?: 'Low' | 'Medium' | 'High' | 'Critical' | 'low' | 'medium' | 'high' | 'critical';
+  status?: 'To Do' | 'In Progress' | 'In Review' | 'Done' | 'open' | 'resolved' | 'in_progress';
   suggestedFix?: string;
   detectedByAgentId?: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface CodeReview {
   id: string;
-  reviewerAgentId: string;
-  pullRequestTitle: string;
-  qualityScore: number;
-  status: 'Approved' | 'Changes Requested' | 'Pending';
-  comments: string[];
-  createdAt: string;
+  projectId?: string;
+  reviewerAgentId?: string;
+  pullRequestTitle?: string;
+  targetBranch?: string;
+  qualityScore?: number;
+  status?: 'Approved' | 'Changes Requested' | 'Pending' | 'approved' | 'changes_requested' | 'pending';
+  comments?: string[];
+  summary?: string;
+  reviewedAt?: string;
+  createdAt?: string;
 }
 
 export interface DocumentationRecord {
@@ -1252,12 +1264,16 @@ export interface InferenceRequest {
 
 export interface Dataset {
   id: string;
-  userId: string;
-  name: string;
-  category: string;
-  description: string;
-  fileFormat: string;
-  sizeMb: number;
+  userId?: string;
+  name?: string;
+  datasetName?: string;
+  category?: string;
+  description?: string;
+  fileFormat?: string;
+  sizeMb?: number;
+  datasetType?: string;
+  numRows?: number;
+  sizeBytes?: number;
   createdAt: string;
 }
 
@@ -1272,10 +1288,11 @@ export interface DatasetVersion {
 
 export interface Experiment {
   id: string;
-  userId: string;
-  name: string;
-  objective: string;
-  status: 'Completed' | 'Running';
+  userId?: string;
+  name?: string;
+  experimentName?: string;
+  objective?: string;
+  status?: 'Completed' | 'Running' | string;
   createdAt: string;
 }
 
@@ -1318,10 +1335,14 @@ export interface EndpointKey {
 
 export interface DeploymentHistory {
   id: string;
-  deploymentId: string;
-  eventType: string;
-  details: string;
-  createdAt: string;
+  deploymentId?: string;
+  targetId?: string;
+  imageTag?: string;
+  status?: 'success' | 'failed' | 'rollback';
+  eventType?: string;
+  details?: Record<string, any> | string;
+  deployedAt?: string;
+  createdAt?: string;
 }
 
 // Phase 6D AI Marketplace Interfaces
@@ -1341,29 +1362,45 @@ export interface CreatorProfile {
 
 export interface MarketplaceItem {
   id: string;
-  creatorId: string;
+  creatorId?: string;
+  publisherId?: string;
   creatorName?: string;
   creatorUsername?: string;
   title: string;
   slug: string;
-  type: 'AGENT' | 'MODEL' | 'TEMPLATE' | 'WORKFLOW' | 'PROMPT_PACK';
-  shortDescription: string;
-  fullDescription: string;
-  price: number;
-  pricingModel: 'FREE' | 'ONE_TIME' | 'SUBSCRIPTION';
-  ratingAvg: number;
-  downloadsCount: number;
-  isFeatured: boolean;
-  createdAt: string;
+  type?: 'AGENT' | 'MODEL' | 'TEMPLATE' | 'WORKFLOW' | 'PROMPT_PACK';
+  itemType?: 'agent' | 'plugin' | 'workflow' | 'dataset' | 'template' | 'extension';
+  category?: string;
+  shortDescription?: string;
+  fullDescription?: string;
+  price?: number;
+  priceUsd?: number;
+  pricingModel?: 'FREE' | 'ONE_TIME' | 'SUBSCRIPTION' | 'free' | 'freemium' | 'paid' | 'subscription';
+  iconUrl?: string;
+  bannerUrl?: string;
+  version?: string;
+  downloadCount?: number;
+  downloadsCount?: number;
+  ratingAvg?: number;
+  ratingCount?: number;
+  isPublished?: boolean;
+  isFeatured?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface MarketplaceVersion {
   id: string;
   itemId: string;
-  version: string;
-  changelog: string;
-  downloadUrl: string;
-  createdAt: string;
+  version?: string;
+  versionNumber?: string;
+  changelog?: string;
+  downloadUrl?: string;
+  packageUrl?: string;
+  fileSize?: number;
+  checksum?: string;
+  releasedAt?: string;
+  createdAt?: string;
 }
 
 export interface MarketplaceReview {
@@ -1372,32 +1409,42 @@ export interface MarketplaceReview {
   userId: string;
   userName?: string;
   rating: number;
-  comment: string;
-  createdAt: string;
+  comment?: string;
+  reviewText?: string;
+  isApproved?: boolean;
+  createdAt?: string;
 }
 
 export interface MarketplaceRating {
+  id?: string;
   itemId: string;
-  ratingAvg: number;
-  totalRatings: number;
+  userId?: string;
+  ratingAvg?: number;
+  totalRatings?: number;
+  ratingScore?: number;
+  createdAt?: string;
 }
 
 export interface MarketplaceDownload {
   id: string;
   itemId: string;
   userId: string;
-  version: string;
-  downloadedAt: string;
+  version?: string;
+  versionNumber?: string;
+  ipAddress?: string;
+  downloadedAt?: string;
 }
 
 export interface MarketplaceCollection {
   id: string;
   title: string;
   slug: string;
-  description: string;
-  coverImage: string;
-  createdAt: string;
+  description?: string;
+  coverImage?: string;
+  coverUrl?: string;
+  isFeatured?: boolean;
   itemsCount?: number;
+  createdAt?: string;
 }
 
 export interface CreatorFollower {
@@ -1409,21 +1456,34 @@ export interface CreatorFollower {
 
 export interface License {
   id: string;
-  itemId: string;
-  licenseType: string;
-  termsUrl: string;
+  itemId?: string;
+  productId?: string;
+  userId?: string;
+  licenseKey?: string;
+  licenseType?: string;
+  termsUrl?: string;
+  maxActivations?: number;
+  currentActivations?: number;
+  status?: string;
+  expiresAt?: string;
   createdAt: string;
 }
 
 export interface Subscription {
   id: string;
-  userId: string;
-  itemId: string;
-  status: 'ACTIVE' | 'CANCELLED';
-  billingCycle: 'MONTHLY' | 'YEARLY';
-  amount: number;
-  currentPeriodEnd: string;
+  userId?: string;
+  tenantId?: string;
+  itemId?: string;
+  planId?: string;
+  plan?: SubscriptionPlan;
+  status: string;
+  billingCycle?: string;
+  amount?: number;
+  currentPeriodStart?: string;
+  currentPeriodEnd?: string;
+  cancelAtPeriodEnd?: boolean;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface PurchaseHistory {
@@ -1625,13 +1685,21 @@ export interface SubscriptionPlan {
   id: string;
   name: string;
   slug: string;
-  priceMonthly: number;
-  priceYearly: number;
-  storageGb: number;
-  apiRequestsPerMonth: number;
-  maxMembers: number;
+  description?: string;
+  price?: number;
+  priceMonthly?: number;
+  priceYearly?: number;
+  currency?: string;
+  billingCycle?: 'monthly' | 'yearly';
+  tier?: 'free' | 'pro' | 'enterprise';
   features: string[];
+  maxApiCalls?: number;
+  maxStorageGb?: number;
+  storageGb?: number;
+  apiRequestsPerMonth?: number;
+  maxMembers?: number;
   isActive: boolean;
+  createdAt?: string;
 }
 
 export interface TenantSubscription {
@@ -1647,13 +1715,19 @@ export interface TenantSubscription {
 
 export interface Invoice {
   id: string;
-  tenantId: string;
+  orderId?: string;
+  tenantId?: string;
   tenantName?: string;
   invoiceNumber: string;
-  amountDue: number;
-  amountPaid: number;
-  status: 'PAID' | 'PENDING' | 'FAILED';
+  userId?: string;
+  amount?: number;
+  amountDue?: number;
+  amountPaid?: number;
+  taxAmount?: number;
+  status: string;
   pdfUrl?: string;
+  dueDate?: string;
+  paidAt?: string;
   createdAt: string;
 }
 
@@ -1881,12 +1955,13 @@ export interface DataSource {
   description?: string;
   sourceType: string;
   connectionString?: string;
+  connectionUrl?: string;
   schemaDefinition?: string;
   status: string;
   lastSyncedAt?: string;
   createdBy?: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 export interface DataConnector {
@@ -1936,13 +2011,15 @@ export interface DataPipeline {
   tenantId?: string;
   name: string;
   description?: string;
+  sourceId?: string;
+  targetId?: string;
   pipelineConfig?: any;
   stages?: any;
   status: string;
   scheduleCron?: string;
   createdBy?: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 export interface WarehouseTable {
@@ -2274,12 +2351,13 @@ export interface Secret {
   id: string;
   tenantId?: string;
   secretName: string;
-  secretType: string;
-  encryptedValue: string;
+  secretType?: string;
+  encryptedValue?: string;
+  encryptedPayload?: string;
   version: number;
   createdBy?: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface DeploymentTarget {
@@ -3004,11 +3082,16 @@ export interface PlatformObservability {
 
 export interface ResourceAllocation {
   id: string;
-  clusterId: string;
-  cpuUnits: number;
-  memoryGb: number;
-  gpuUnits: number;
-  timestamp: string;
+  tenantId?: string;
+  clusterId?: string;
+  cpuUnits?: number;
+  memoryGb?: number;
+  gpuUnits?: number;
+  resourceType?: 'compute' | 'gpu' | 'storage' | 'network';
+  allocatedUnits?: number;
+  unitName?: string;
+  allocatedAt?: string;
+  timestamp?: string;
 }
 
 export interface ExecutionStrategy {
@@ -3064,3 +3147,2730 @@ export interface ReleaseInformation {
   isLts: boolean;
   releasedAt: string;
 }
+
+/**
+ * Phase 9A — AI Native Application Platform & Universal AI Gateway Types
+ */
+export interface AIProvider {
+  id: string;
+  name: string;
+  slug: string;
+  providerType: 'openai' | 'anthropic' | 'gemini' | 'xai' | 'mistral' | 'groq' | 'ollama' | 'azure' | 'bedrock' | 'huggingface' | 'together' | 'openrouter' | 'custom';
+  apiBaseUrl?: string;
+  isActive: boolean;
+  healthStatus: 'healthy' | 'degraded' | 'offline';
+  config?: Record<string, any>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProviderModel {
+  id: string;
+  providerId: string;
+  modelName: string;
+  modelKey: string;
+  contextWindow: number;
+  maxOutputTokens: number;
+  inputCostPer1k: number;
+  outputCostPer1k: number;
+  supportsVision: boolean;
+  supportsAudio: boolean;
+  supportsFunctionCalling: boolean;
+  supportsStreaming: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProviderCredential {
+  id: string;
+  providerId: string;
+  keyName: string;
+  apiKeyEncrypted: string;
+  environment: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ModelCapability {
+  id: string;
+  modelId: string;
+  capabilityName: string;
+  score: number;
+  metadata?: Record<string, any>;
+  createdAt: string;
+}
+
+export interface ChatSession {
+  id: string;
+  userId: string;
+  title: string;
+  providerId: string;
+  modelKey: string;
+  systemPrompt?: string;
+  temperature?: number;
+  maxTokens?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ChatMessage {
+  id: string;
+  sessionId: string;
+  role: 'user' | 'assistant' | 'system' | 'tool';
+  content: string;
+  tokensUsed?: number;
+  cost?: number;
+  latencyMs?: number;
+  multimodalAssets?: string[];
+  createdAt: string;
+}
+
+export interface PromptTemplate {
+  id: string;
+  title: string;
+  slug: string;
+  description?: string;
+  category?: string;
+  tags?: string[];
+  isPublic: boolean;
+  authorId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PromptVersion {
+  id: string;
+  templateId: string;
+  versionNumber: number;
+  templateContent: string;
+  variables?: string[];
+  commitMessage?: string;
+  createdAt: string;
+}
+
+export interface ModelUsage {
+  id: string;
+  userId?: string;
+  providerId: string;
+  modelKey: string;
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
+  estimatedCost: number;
+  requestDurationMs: number;
+  statusCode: number;
+  createdAt: string;
+}
+
+export interface TokenUsage {
+  id: string;
+  userId: string;
+  providerId: string;
+  periodStart: string;
+  periodEnd: string;
+  totalTokens: number;
+  totalCost: number;
+  requestCount: number;
+  updatedAt: string;
+}
+
+export interface ProviderHealth {
+  id: string;
+  providerId: string;
+  status: 'healthy' | 'degraded' | 'offline';
+  latencyMs: number;
+  errorRate: number;
+  lastCheckedAt: string;
+  details?: Record<string, any>;
+}
+
+export interface FallbackPolicy {
+  id: string;
+  primaryProviderId: string;
+  fallbackProviderId: string;
+  priority: number;
+  conditionRules?: Record<string, any>;
+  isEnabled: boolean;
+  createdAt: string;
+}
+
+export interface BenchmarkResult {
+  id: string;
+  modelKey: string;
+  benchmarkName: string;
+  score: number;
+  evaluatedAt: string;
+  metadata?: Record<string, any>;
+}
+
+export interface MultimodalRequest {
+  id: string;
+  userId?: string;
+  requestType: 'vision' | 'audio' | 'document' | 'synthesis';
+  providerId: string;
+  modelKey: string;
+  inputPayload: string;
+  outputPayload?: string;
+  status: 'pending' | 'processing' | 'completed' | 'failed';
+  createdAt: string;
+}
+
+export interface ImageGeneration {
+  id: string;
+  userId?: string;
+  providerId: string;
+  prompt: string;
+  imageUrl: string;
+  resolution?: string;
+  style?: string;
+  cost?: number;
+  createdAt: string;
+}
+
+export interface SpeechRequest {
+  id: string;
+  userId?: string;
+  providerId: string;
+  type: 'tts' | 'stt';
+  inputTextOrAudio: string;
+  outputUrl?: string;
+  durationSec?: number;
+  createdAt: string;
+}
+
+export interface TranslationRequest {
+  id: string;
+  userId?: string;
+  providerId: string;
+  sourceLang?: string;
+  targetLang: string;
+  inputText: string;
+  translatedText: string;
+  createdAt: string;
+}
+
+/**
+ * Phase 9B — AI Application Builder, Low-Code Studio & Intelligent App Composer Types
+ */
+export interface AIApplication {
+  id: string;
+  ownerId: string;
+  name: string;
+  slug: string;
+  description?: string;
+  category?: string;
+  iconUrl?: string;
+  status: 'draft' | 'published' | 'archived';
+  environment: 'development' | 'staging' | 'production';
+  version: string;
+  isPublic: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApplicationVersion {
+  id: string;
+  applicationId: string;
+  versionNumber: string;
+  changelog?: string;
+  snapshotPayload: string;
+  createdBy?: string;
+  createdAt: string;
+}
+
+export interface ApplicationTemplate {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  category?: string;
+  thumbnailUrl?: string;
+  templatePayload: string;
+  isFeatured: boolean;
+  usageCount: number;
+  createdAt: string;
+}
+
+export interface ApplicationComponent {
+  id: string;
+  applicationId: string;
+  pageId?: string;
+  componentType: string;
+  name: string;
+  props?: Record<string, any>;
+  layoutPosition?: Record<string, any>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApplicationPage {
+  id: string;
+  applicationId: string;
+  title: string;
+  slug: string;
+  isHome: boolean;
+  layoutConfig?: Record<string, any>;
+  createdAt: string;
+}
+
+export interface ApplicationWorkflow {
+  id: string;
+  applicationId: string;
+  name: string;
+  triggerType: string;
+  workflowNodes?: any[];
+  workflowEdges?: any[];
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface ApplicationVariable {
+  id: string;
+  applicationId: string;
+  variableKey: string;
+  variableValue?: string;
+  isSecret: boolean;
+  createdAt: string;
+}
+
+export interface ApplicationSetting {
+  id: string;
+  applicationId: string;
+  themeMode: 'dark' | 'light' | 'system';
+  customCss?: string;
+  modelOverride?: string;
+  rateLimitRpm: number;
+  updatedAt: string;
+}
+
+export interface ApplicationPermission {
+  id: string;
+  applicationId: string;
+  role: string;
+  canEdit: boolean;
+  canDeploy: boolean;
+  createdAt: string;
+}
+
+export interface ApplicationCollaborator {
+  id: string;
+  applicationId: string;
+  userId: string;
+  role: string;
+  addedAt: string;
+}
+
+export interface ApplicationAsset {
+  id: string;
+  applicationId: string;
+  assetName: string;
+  assetUrl: string;
+  fileSize: number;
+  mimeType?: string;
+  createdAt: string;
+}
+
+export interface ApplicationBuild {
+  id: string;
+  applicationId: string;
+  buildNumber: number;
+  status: 'pending' | 'building' | 'success' | 'failed';
+  logs?: string;
+  durationSec: number;
+  createdAt: string;
+}
+
+export interface ApplicationDeployment {
+  id: string;
+  applicationId: string;
+  buildId: string;
+  environment: 'development' | 'staging' | 'production';
+  deploymentUrl?: string;
+  status: 'active' | 'rollback' | 'deprecated';
+  deployedAt: string;
+}
+
+export interface ApplicationEnvironment {
+  id: string;
+  applicationId: string;
+  environmentName: string;
+  baseUrl?: string;
+  variablesConfig?: Record<string, any>;
+  updatedAt: string;
+}
+
+export interface ApplicationTest {
+  id: string;
+  applicationId: string;
+  testName: string;
+  suiteType: string;
+  status: 'passed' | 'failed' | 'running';
+  results?: Record<string, any>;
+  executedAt: string;
+}
+
+export interface ApplicationRelease {
+  id: string;
+  applicationId: string;
+  releaseTag: string;
+  title: string;
+  description?: string;
+  isLatest: boolean;
+  releasedAt: string;
+}
+
+export interface ApplicationSnapshot {
+  id: string;
+  applicationId: string;
+  snapshotName: string;
+  dataPayload: string;
+  createdAt: string;
+}
+
+export interface ComponentLibraryItem {
+  id: string;
+  name: string;
+  componentType: string;
+  category: string;
+  iconName: string;
+  defaultProps?: Record<string, any>;
+  isPublished: boolean;
+  createdAt: string;
+}
+
+export interface VisualEditorSession {
+  id: string;
+  applicationId: string;
+  userId: string;
+  lastCursorPosition?: string;
+  activePageId?: string;
+  updatedAt: string;
+}
+
+/**
+ * Phase 9C — AI Marketplace, Agent Ecosystem & Enterprise Extension Platform Types
+ */
+export interface MarketplaceCategory {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  iconName?: string;
+  createdAt: string;
+}
+
+export interface MarketplacePurchase {
+  id: string;
+  itemId: string;
+  userId: string;
+  amountPaid: number;
+  currency: string;
+  paymentStatus: string;
+  licenseKey?: string;
+  purchasedAt: string;
+}
+
+export interface MarketplaceSubscription {
+  id: string;
+  itemId: string;
+  userId: string;
+  planTier: string;
+  status: string;
+  renewsAt?: string;
+  createdAt: string;
+}
+
+export interface MarketplacePublisher {
+  id: string;
+  userId: string;
+  publisherName: string;
+  publisherSlug: string;
+  websiteUrl?: string;
+  supportEmail?: string;
+  bio?: string;
+  verificationStatus: 'pending' | 'verified' | 'rejected';
+  revenueSharePct: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PublisherVerification {
+  id: string;
+  publisherId: string;
+  taxId?: string;
+  identityVerified: boolean;
+  domainVerified: boolean;
+  verifiedAt: string;
+}
+
+export interface MarketplaceAsset {
+  id: string;
+  itemId: string;
+  assetName: string;
+  assetUrl: string;
+  assetType: string;
+  createdAt: string;
+}
+
+export interface MarketplaceLicense {
+  id: string;
+  itemId: string;
+  userId: string;
+  licenseKey: string;
+  licenseType: 'standard' | 'premium' | 'enterprise';
+  maxActivations: number;
+  activationCount: number;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface Plugin {
+  id: string;
+  name: string;
+  pluginKey: string;
+  description?: string;
+  version: string;
+  entrypointFile: string;
+  isOfficial: boolean;
+  createdAt: string;
+}
+
+export interface PluginInstallation {
+  id: string;
+  pluginId: string;
+  userId: string;
+  status: 'active' | 'disabled' | 'pending';
+  installedVersion: string;
+  installedAt: string;
+}
+
+export interface PluginPermission {
+  id: string;
+  pluginId: string;
+  permissionName: string;
+}
+
+export interface PluginUpdate {
+  id: string;
+  pluginId: string;
+  targetVersion: string;
+  updateNotes?: string;
+  releasedAt: string;
+}
+
+export interface ExtensionPackage {
+  id: string;
+  name: string;
+  packageId: string;
+  sdkVersion: string;
+  author?: string;
+  manifestJson?: Record<string, any>;
+  isVerified: boolean;
+  createdAt: string;
+}
+
+export interface ExtensionDependency {
+  id: string;
+  extensionId: string;
+  dependencyName: string;
+  minVersion?: string;
+}
+
+export interface MarketplaceStatistic {
+  id: string;
+  periodDate: string;
+  totalDownloads: number;
+  totalRevenueUsd: number;
+  activePublishers: number;
+  updatedAt: string;
+}
+
+/**
+ * Phase 9D — Autonomous AI Software Engineering Platform & SDLC Types
+ */
+export interface SoftwareProject {
+  id: string;
+  ownerId: string;
+  name: string;
+  slug: string;
+  description?: string;
+  techStack: string;
+  architecturePattern: string;
+  status: 'active' | 'archived' | 'generating';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectRepository {
+  id: string;
+  projectId: string;
+  repoName: string;
+  defaultBranch: string;
+  isPrivate: boolean;
+  createdAt: string;
+}
+
+export interface RepositoryBranch {
+  id: string;
+  repoId: string;
+  branchName: string;
+  headCommitHash?: string;
+  isProtected: boolean;
+  createdAt: string;
+}
+
+export interface RepositoryCommit {
+  id: string;
+  repoId: string;
+  commitHash: string;
+  authorName: string;
+  commitMessage: string;
+  committedAt: string;
+}
+
+export interface SourceFile {
+  id: string;
+  projectId: string;
+  filePath: string;
+  language: string;
+  content?: string;
+  lineCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CodeGeneration {
+  id: string;
+  projectId: string;
+  prompt: string;
+  generatedCode?: string;
+  targetFilePath?: string;
+  status: string;
+  generatedAt: string;
+}
+
+export interface PullRequest {
+  id: string;
+  repoId: string;
+  prNumber: number;
+  title: string;
+  sourceBranch: string;
+  targetBranch: string;
+  status: 'open' | 'merged' | 'closed';
+  authorId: string;
+  createdAt: string;
+}
+
+export interface CodeQualityReport {
+  id: string;
+  projectId: string;
+  maintainabilityIndex: number;
+  cognitiveComplexity: number;
+  duplicateCodePct: number;
+  createdAt: string;
+}
+
+export interface SecurityScan {
+  id: string;
+  projectId?: string;
+  scanType?: 'sast' | 'dast' | 'container' | 'secret';
+  vulnerabilitiesFound: number;
+  severityBreakdown?: Record<string, number>;
+  status: 'passed' | 'failed' | 'warning' | 'completed' | 'running';
+  scannedAt?: string;
+  ranAt?: string;
+}
+
+export interface DependencyGraph {
+  id: string;
+  projectId: string;
+  graphJson: Record<string, any>;
+  updatedAt: string;
+}
+
+export interface ArchitectureDesign {
+  id: string;
+  projectId: string;
+  patternType: string;
+  diagramMermaid?: string;
+  componentsJson?: any[];
+  createdAt: string;
+}
+
+export interface DatabaseDesign {
+  id: string;
+  projectId: string;
+  schemaSql?: string;
+  erDiagram?: string;
+  tablesCount: number;
+  updatedAt: string;
+}
+
+export interface ApiSpecification {
+  id: string;
+  projectId: string;
+  openapiSpec?: string;
+  endpointsCount: number;
+  updatedAt: string;
+}
+
+export interface TestSuite {
+  id: string;
+  projectId: string;
+  suiteName: string;
+  suiteType: 'unit' | 'integration' | 'e2e' | 'security';
+  createdAt: string;
+}
+
+export interface TestCase {
+  id: string;
+  suiteId: string;
+  testName: string;
+  assertionCode?: string;
+  isPassing: boolean;
+}
+
+export interface DocumentationProject {
+  id: string;
+  projectId: string;
+  readmeMd?: string;
+  apiDocsMd?: string;
+  architectureDocsMd?: string;
+  updatedAt: string;
+}
+
+export interface ReleasePipeline {
+  id: string;
+  projectId: string;
+  pipelineName: string;
+  status: 'success' | 'failed' | 'running';
+  createdAt: string;
+}
+
+export interface EngineeringMetric {
+  id: string;
+  projectId: string;
+  codeCoveragePct: number;
+  technicalDebtHours: number;
+  velocityScore: number;
+  updatedAt: string;
+}
+
+/**
+ * Phase 9E — NexoApps AI Operating System (AI OS) Version 7.0 Types
+ */
+export interface Workspace {
+  id: string;
+  ownerId: string;
+  workspaceName: string;
+  slug: string;
+  isActive: boolean;
+  theme?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkspaceModule {
+  id: string;
+  moduleKey: string;
+  displayName: string;
+  category: string;
+  version: string;
+  isEnabled: boolean;
+  icon: string;
+  routePath: string;
+}
+
+export interface GlobalSearchResult {
+  id: string;
+  entityId: string;
+  entityType: string;
+  title: string;
+  description?: string;
+  targetUrl: string;
+  keywords?: string;
+  updatedAt: string;
+}
+
+export interface Notification {
+  id: string;
+  userId: string;
+  title: string;
+  message: string;
+  category: 'system' | 'alert' | 'activity' | 'ai';
+  isRead: boolean;
+  actionUrl?: string;
+  createdAt: string;
+}
+
+export interface Activity {
+  id: string;
+  userId?: string;
+  actorName: string;
+  actionTitle: string;
+  moduleKey: string;
+  details?: string;
+  createdAt: string;
+}
+
+export interface FeatureFlag {
+  id: string;
+  flagKey: string;
+  description?: string;
+  isEnabled: boolean;
+  rolloutPercentage: number;
+  updatedAt: string;
+}
+
+export interface PlatformSetting {
+  id: string;
+  settingKey: string;
+  settingValue: string;
+  category: string;
+  updatedAt: string;
+}
+
+export interface ModuleHealth {
+  id: string;
+  moduleKey: string;
+  status: 'healthy' | 'degraded' | 'down';
+  uptimePct: number;
+  latencyMs: number;
+  lastChecked: string;
+}
+
+export interface Recommendation {
+  id: string;
+  targetUserId?: string;
+  recommendationType: string;
+  title: string;
+  description?: string;
+  actionLabel?: string;
+  actionUrl?: string;
+  createdAt: string;
+}
+
+export interface SystemVersion {
+  id: string;
+  versionTag: string;
+  releaseName: string;
+  changelog?: string;
+  deployedAt: string;
+}
+
+// =====================================================
+// Phase 10A — AI Commerce & Marketplace Types (Version 7.1)
+// =====================================================
+
+export interface ProductCategory {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  icon?: string;
+  createdAt: string;
+}
+
+export interface ProductPricing {
+  id: string;
+  productId: string;
+  pricingModel: 'one_time' | 'recurring' | 'usage_based' | 'free';
+  price: number;
+  currency: string;
+  billingInterval?: 'monthly' | 'yearly';
+  usageUnit?: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface Product {
+  id: string;
+  sellerId: string;
+  title: string;
+  slug: string;
+  description?: string;
+  categoryId?: string;
+  productType: 'digital_app' | 'ai_model' | 'api_subscription' | 'dataset' | 'license';
+  status: 'draft' | 'published' | 'archived';
+  iconUrl?: string;
+  bannerUrl?: string;
+  downloadUrl?: string;
+  features?: string[];
+  pricing?: ProductPricing[];
+  rating: number;
+  totalReviews: number;
+  isFeatured: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SubscriptionHistory {
+  id: string;
+  subscriptionId: string;
+  action: 'created' | 'upgraded' | 'downgraded' | 'canceled' | 'renewed';
+  oldPlanId?: string;
+  newPlanId?: string;
+  timestamp: string;
+}
+
+export interface OrderItem {
+  id: string;
+  orderId: string;
+  productId: string;
+  productTitle?: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+}
+
+export interface Order {
+  id: string;
+  userId: string;
+  orderNumber: string;
+  status: 'pending' | 'completed' | 'refunded' | 'failed';
+  totalAmount: number;
+  currency: string;
+  taxAmount: number;
+  discountAmount: number;
+  couponCode?: string;
+  items?: OrderItem[];
+  createdAt: string;
+}
+
+export interface PaymentGateway {
+  id: string;
+  gatewayName: string;
+  isEnabled: boolean;
+  config: Record<string, any>;
+  createdAt: string;
+}
+
+export interface Payment {
+  id: string;
+  orderId: string;
+  gatewayId?: string;
+  paymentMethod: string;
+  amount: number;
+  currency: string;
+  status: 'pending' | 'succeeded' | 'failed' | 'refunded';
+  transactionRef?: string;
+  createdAt: string;
+}
+
+export interface PaymentTransaction {
+  id: string;
+  paymentId: string;
+  eventType: string;
+  rawPayload: Record<string, any>;
+  createdAt: string;
+}
+
+export interface LicenseKey {
+  id: string;
+  licenseId: string;
+  activationCode: string;
+  deviceId?: string;
+  activatedAt?: string;
+}
+
+export interface InvoiceTemplate {
+  id: string;
+  name: string;
+  companyDetails: Record<string, any>;
+  footerText?: string;
+  isDefault: boolean;
+}
+
+export interface Coupon {
+  id: string;
+  code: string;
+  discountType: 'percentage' | 'fixed';
+  discountValue: number;
+  maxUses: number;
+  usedCount: number;
+  expiresAt?: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface DiscountCampaign {
+  id: string;
+  title: string;
+  bannerMessage?: string;
+  discountPercentage: number;
+  startsAt: string;
+  endsAt: string;
+  isActive: boolean;
+}
+
+export interface ShoppingCart {
+  id: string;
+  userId: string;
+  productId: string;
+  product?: Product;
+  quantity: number;
+  createdAt: string;
+}
+
+export interface WishlistItem {
+  id: string;
+  userId: string;
+  productId: string;
+  product?: Product;
+  createdAt: string;
+}
+
+export interface AffiliateProgram {
+  id: string;
+  name: string;
+  commissionRate: number;
+  cookieDays: number;
+  isActive: boolean;
+}
+
+export interface AffiliateCommission {
+  id: string;
+  affiliateUserId: string;
+  orderId: string;
+  commissionAmount: number;
+  status: 'pending' | 'approved' | 'paid';
+  createdAt: string;
+}
+
+export interface SellerAccount {
+  id: string;
+  userId: string;
+  storeName: string;
+  storeSlug: string;
+  bio?: string;
+  payoutDetails?: Record<string, any>;
+  status: 'pending' | 'approved' | 'suspended';
+  rating: number;
+  createdAt: string;
+}
+
+export interface SellerPayout {
+  id: string;
+  sellerId: string;
+  amount: number;
+  status: 'pending' | 'processing' | 'completed';
+  payoutMethod: string;
+  processedAt: string;
+}
+
+// =====================================================
+// Phase 10B — AI Cloud Infrastructure Platform Types (Version 7.2)
+// =====================================================
+
+export interface CloudTenant {
+  id: string;
+  name: string;
+  slug: string;
+  tier: 'starter' | 'pro' | 'enterprise';
+  status: 'active' | 'suspended' | 'provisioning';
+  maxVcpus: number;
+  maxRamGb: number;
+  maxStorageTb: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface TenantUser {
+  id: string;
+  tenantId: string;
+  userId: string;
+  role: 'owner' | 'admin' | 'engineer' | 'viewer';
+  createdAt: string;
+}
+
+export interface TenantSetting {
+  id: string;
+  tenantId: string;
+  settingKey: string;
+  settingValue?: string;
+  updatedAt: string;
+}
+
+export interface TenantBilling {
+  id: string;
+  tenantId: string;
+  billingAccountId: string;
+  monthlyBudget: number;
+  currentSpend: number;
+  currency: string;
+  updatedAt: string;
+}
+
+export interface CloudRegion {
+  id: string;
+  name: string;
+  code: string;
+  location: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface AvailabilityZone {
+  id: string;
+  regionId: string;
+  zoneCode: string;
+  status: 'available' | 'maintenance' | 'degraded';
+}
+
+export interface VirtualNetwork {
+  id: string;
+  tenantId: string;
+  regionId: string;
+  name: string;
+  cidrBlock: string;
+  status: 'active' | 'updating' | 'deleted';
+  createdAt: string;
+}
+
+export interface Subnet {
+  id: string;
+  vnetId: string;
+  zoneId: string;
+  name: string;
+  cidrBlock: string;
+  isPublic: boolean;
+}
+
+export interface FirewallRule {
+  id: string;
+  vnetId: string;
+  ruleName: string;
+  direction: 'inbound' | 'outbound';
+  protocol: 'tcp' | 'udp' | 'icmp' | 'all';
+  portRange: string;
+  sourceCidr: string;
+  action: 'allow' | 'deny';
+}
+
+export interface LoadBalancer {
+  id: string;
+  tenantId: string;
+  vnetId: string;
+  name: string;
+  type: 'application' | 'network';
+  dnsName: string;
+  status: 'active' | 'provisioning';
+  createdAt: string;
+}
+
+export interface ComputeCluster {
+  id: string;
+  tenantId: string;
+  regionId: string;
+  clusterName: string;
+  clusterType: 'kubernetes' | 'slurm' | 'ray_ai';
+  nodeCount: number;
+  gpuCount: number;
+  status: 'ready' | 'scaling' | 'degraded';
+  createdAt: string;
+}
+
+export interface VirtualMachine {
+  id: string;
+  tenantId: string;
+  clusterId?: string;
+  subnetId: string;
+  name: string;
+  instanceType: string;
+  vcpus: number;
+  ramGb: number;
+  gpus: number;
+  osImage: string;
+  privateIp?: string;
+  publicIp?: string;
+  status: 'running' | 'stopped' | 'terminated';
+  createdAt: string;
+}
+
+export interface StorageVolume {
+  id: string;
+  tenantId: string;
+  vmId?: string;
+  name: string;
+  sizeGb: number;
+  volumeType: 'nvme_ssd' | 'block_hdd' | 'high_iops';
+  status: 'attached' | 'detached';
+  createdAt: string;
+}
+
+export interface StorageBucket {
+  id: string;
+  tenantId: string;
+  regionId: string;
+  bucketName: string;
+  accessLevel: 'private' | 'public_read';
+  storageClass: 'standard' | 'glacier' | 'warm';
+  createdAt: string;
+}
+
+export interface ObjectStorage {
+  id: string;
+  bucketId: string;
+  objectKey: string;
+  sizeBytes: number;
+  contentType: string;
+  uploadedAt: string;
+}
+
+export interface ResourceGroup {
+  id: string;
+  tenantId: string;
+  name: string;
+  description?: string;
+  createdAt: string;
+}
+
+export interface InfrastructureTemplate {
+  id: string;
+  name?: string;
+  templateName?: string;
+  provider?: string;
+  templateType?: 'terraform' | 'cloudformation' | 'pulumi' | string;
+  iacType?: string;
+  content?: string;
+  templateBody?: string;
+  version?: string;
+  createdAt: string;
+}
+
+export interface CloudService {
+  id: string;
+  serviceName: string;
+  serviceType: string;
+  status: 'operational' | 'degraded' | 'maintenance';
+  updatedAt: string;
+}
+
+export interface InfrastructureEvent {
+  id: string;
+  tenantId?: string;
+  eventType: string;
+  severity: 'info' | 'warning' | 'critical';
+  message: string;
+  createdAt: string;
+}
+
+export interface AnalyticsReport {
+  id: string;
+  title: string;
+  chartType: string;
+  dataPayload: Record<string, any>;
+  createdAt: string;
+}
+
+export interface StreamingTopic {
+  id: string;
+  topicName: string;
+  partitions: number;
+  replicationFactor: number;
+  status: 'active' | 'inactive';
+  createdAt: string;
+}
+
+export interface PredictiveModel {
+  id: string;
+  modelName: string;
+  targetColumn: string;
+  accuracyPct: number;
+  status: 'deployed' | 'training' | 'archived';
+  trainedAt: string;
+}
+
+export interface DataConnection {
+  id: string;
+  sourceId: string;
+  connectionName: string;
+  authType: 'basic' | 'oauth' | 'apiKey' | 'iam';
+  config: Record<string, any>;
+  createdAt: string;
+}
+
+export interface PipelineRun {
+  id: string;
+  pipelineId: string;
+  runNumber?: number;
+  status: 'running' | 'completed' | 'failed' | 'success' | 'cancelled';
+  recordsProcessed?: number;
+  durationMs?: number;
+  startedAt: string;
+  finishedAt?: string;
+  completedAt?: string;
+}
+
+export interface PipelineSchedule {
+  id: string;
+  pipelineId: string;
+  cronExpression: string;
+  isActive: boolean;
+}
+
+export interface DataLakehouse {
+  id: string;
+  name: string;
+  storageLocation: string;
+  format: 'iceberg' | 'delta' | 'hudi';
+  totalSizeGb: number;
+  createdAt: string;
+}
+
+export interface DataCatalog {
+  id: string;
+  lakehouseId: string;
+  tableName: string;
+  schemaDefinition: string;
+  recordCount: number;
+  updatedAt: string;
+}
+
+export interface DataAsset {
+  id: string;
+  catalogId: string;
+  assetName: string;
+  assetType: 'table' | 'view' | 'stream';
+  owner: string;
+  createdAt: string;
+}
+
+export interface MetadataRegistry {
+  id: string;
+  assetId: string;
+  metaKey: string;
+  metaValue: string;
+}
+
+export interface DataLineage {
+  id: string;
+  sourceAssetId: string;
+  targetAssetId: string;
+  transformationLogic?: string;
+  createdAt: string;
+}
+
+export interface DatasetVersion {
+  id: string;
+  assetId: string;
+  versionTag: string;
+  snapshotUrl: string;
+  createdAt: string;
+}
+
+export interface DataQualityRule {
+  id: string;
+  assetId: string;
+  ruleType: string;
+  columnName: string;
+  threshold: number;
+  isActive: boolean;
+}
+
+export interface DataQualityReport {
+  id: string;
+  ruleId: string;
+  passed: boolean;
+  score: number;
+  executedAt: string;
+}
+
+export interface MasterData {
+  id: string;
+  entityType: string;
+  primaryKey: string;
+  attributes: Record<string, any>;
+  updatedAt: string;
+}
+
+export interface GovernancePolicy {
+  id: string;
+  policyName: string;
+  riskLevel: 'low' | 'medium' | 'high';
+  accessRole: string;
+  retentionDays: number;
+  isEnforced: boolean;
+}
+
+export interface AnalyticsModel {
+  id: string;
+  modelName: string;
+  queryDefinition: string;
+  refreshInterval: string;
+  createdAt: string;
+}
+
+// =====================================================
+// Phase 10D — AI Security Platform & Zero Trust Types (Version 7.4)
+// =====================================================
+
+export interface IdentityProvider {
+  id: string;
+  name: string;
+  providerType: 'saml' | 'oidc' | 'oauth2' | 'active_directory';
+  clientId: string;
+  issuerUrl: string;
+  isEnabled: boolean;
+  createdAt: string;
+}
+
+export interface Organization {
+  id: string;
+  name: string;
+  slug: string;
+  tenantId: string;
+  securityTier: string;
+  createdAt: string;
+}
+
+export interface OrganizationMember {
+  id: string;
+  orgId: string;
+  userId: string;
+  roleId: string;
+  status: 'active' | 'suspended';
+  joinedAt: string;
+}
+
+export interface Role {
+  id: string;
+  roleName: string;
+  description?: string;
+  isSystemRole: boolean;
+  createdAt: string;
+}
+
+export interface Permission {
+  id: string;
+  permissionKey: string;
+  resourceType: string;
+  action: string;
+}
+
+export interface AccessPolicy {
+  id: string;
+  policyName: string;
+  policyType: 'rbac' | 'abac' | 'zero_trust';
+  conditions: Record<string, any>;
+  isActive: boolean;
+}
+
+export interface UserSession {
+  id: string;
+  userId: string;
+  deviceId?: string;
+  ipAddress: string;
+  userAgent?: string;
+  isMfaVerified: boolean;
+  expiresAt: string;
+  createdAt: string;
+}
+
+export interface ApiKey {
+  id: string;
+  userId: string;
+  keyName: string;
+  keyHash: string;
+  permissions: string[];
+  lastUsedAt?: string;
+  expiresAt?: string;
+  createdAt: string;
+}
+
+export interface ServiceAccount {
+  id: string;
+  accountName: string;
+  roleId: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface SecretVersion {
+  id: string;
+  secretId: string;
+  version: number;
+  encryptedPayload: string;
+  createdAt: string;
+}
+
+export interface SecurityPolicy {
+  id: string;
+  policyName: string;
+  category: 'network' | 'identity' | 'data' | 'endpoint';
+  enforcementLevel: 'strict' | 'audit' | 'disabled';
+  createdAt: string;
+}
+
+export interface SecurityIncident {
+  id: string;
+  title: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  status: 'open' | 'investigating' | 'resolved';
+  detectedAt: string;
+}
+
+export interface ThreatIntel {
+  id: string;
+  indicator: string;
+  threatType: string;
+  riskScore: number;
+  detectedAt: string;
+}
+
+export interface VulnerabilityReport {
+  id: string;
+  cveId: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  affectedComponent: string;
+  remediationStatus: 'open' | 'patched' | 'ignored';
+  discoveredAt: string;
+}
+
+export interface TrustedDevice {
+  id: string;
+  userId: string;
+  deviceId: string;
+  trustedUntil: string;
+}
+
+export interface MFADevice {
+  id: string;
+  userId: string;
+  mfaType: 'totp' | 'fido2' | 'sms';
+  secretKey: string;
+  isVerified: boolean;
+}
+
+export interface ComplianceFramework {
+  id: string;
+  frameworkName: string;
+  version: string;
+  passingPct: number;
+}
+
+export interface ComplianceAssessment {
+  id: string;
+  frameworkId: string;
+  scorePct: number;
+  assessedAt: string;
+}
+
+// =====================================================
+// Phase 10E — AI Hyper Platform & Version 8.0 Release Types
+// =====================================================
+
+export interface PlatformRegistry {
+  id: string;
+  platformName: string;
+  version: string;
+  environment: string;
+  isLtsReady: boolean;
+  createdAt: string;
+}
+
+export interface PlatformModule {
+  id: string;
+  moduleKey: string;
+  moduleName: string;
+  version: string;
+  status: 'active' | 'inactive';
+  createdAt: string;
+}
+
+export interface ModuleDependency {
+  id: string;
+  moduleId: string;
+  dependsOnModuleId: string;
+  minVersion: string;
+}
+
+export interface PlatformIntegration {
+  id: string;
+  integrationName: string;
+  integrationType: string;
+  status: 'connected' | 'error';
+  config: Record<string, any>;
+  createdAt: string;
+}
+
+export interface PlatformWorkflow {
+  id: string;
+  workflowName: string;
+  stepCount: number;
+  status: 'active' | 'paused';
+  createdAt: string;
+}
+
+export interface GlobalConfiguration {
+  id: string;
+  configKey: string;
+  configValue: string;
+  category: string;
+  updatedAt: string;
+}
+
+export interface WorkspaceSession {
+  id: string;
+  workspaceId: string;
+  userId: string;
+  activeTab: string;
+  lastActivity: string;
+}
+
+export interface WorkspacePreference {
+  id: string;
+  workspaceId: string;
+  theme: string;
+  layout: string;
+}
+
+export interface WorkspaceLayout {
+  id: string;
+  workspaceId: string;
+  layoutJson: Record<string, any>;
+}
+
+export interface PlatformNotification {
+  id: string;
+  title: string;
+  message: string;
+  severity: 'info' | 'warning' | 'critical';
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface SystemHealth {
+  id: string;
+  subsystem: string;
+  status: 'healthy' | 'degraded' | 'error';
+  cpuPercent: number;
+  memoryPercent: number;
+  checkedAt: string;
+}
+
+export interface SystemMetric {
+  id: string;
+  metricKey: string;
+  metricValue: number;
+  recordedAt: string;
+}
+
+export interface PlatformTelemetry {
+  id: string;
+  eventType: string;
+  details: Record<string, any>;
+  createdAt: string;
+}
+
+export interface ReleaseHistory {
+  id: string;
+  releaseVersion: string;
+  releaseName: string;
+  notes?: string;
+  deployedAt: string;
+}
+
+export interface PlatformBackup {
+  id: string;
+  backupName: string;
+  sizeBytes: number;
+  storageUrl: string;
+  status: 'completed' | 'failed' | 'in_progress';
+  createdAt: string;
+}
+
+export interface RestorePoint {
+  id: string;
+  backupId: string;
+  restorePointName: string;
+  createdAt: string;
+}
+
+export interface MaintenanceWindow {
+  id: string;
+  title: string;
+  startTime: string;
+  endTime: string;
+  status: 'scheduled' | 'active' | 'completed';
+}
+
+export interface FeatureRollout {
+  id: string;
+  featureKey: string;
+  rolloutPct: number;
+  isEnabled: boolean;
+}
+
+export interface EnterpriseSupport {
+  id: string;
+  ticketId?: string;
+  ticketNumber?: string;
+  subject: string;
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
+  severity?: 'low' | 'normal' | 'high' | 'critical' | string;
+  status: 'open' | 'in_progress' | 'resolved' | 'closed';
+  createdAt: string;
+}
+
+export interface PlatformAuditLog {
+  id: string;
+  action: string;
+  actor: string;
+  createdAt: string;
+}
+
+// =====================================================
+// Phase 11A — AI Developer Cloud Platform Types (Version 8.1)
+// =====================================================
+
+export interface DeveloperOrganization {
+  id: string;
+  orgName: string;
+  slug: string;
+  billingPlan: string;
+  createdAt: string;
+}
+
+export interface DeveloperTeam {
+  id: string;
+  orgId: string;
+  teamName: string;
+  slug: string;
+  createdAt: string;
+}
+
+export interface Repository {
+  id: string;
+  orgId: string;
+  repoName: string;
+  slug: string;
+  defaultBranch: string;
+  isPrivate: boolean;
+  createdAt: string;
+}
+
+export interface RepositoryMember {
+  id: string;
+  repoId: string;
+  userId: string;
+  role: 'owner' | 'maintainer' | 'developer' | 'reporter';
+  addedAt: string;
+}
+
+export interface RepositoryPermission {
+  id: string;
+  repoId: string;
+  role: string;
+  canPush: boolean;
+  canMerge: boolean;
+  canAdmin: boolean;
+}
+
+export interface Branch {
+  id: string;
+  repoId: string;
+  branchName: string;
+  headCommitHash?: string;
+  isProtected: boolean;
+  createdAt: string;
+}
+
+export interface Commit {
+  id: string;
+  repoId: string;
+  commitHash: string;
+  authorName: string;
+  commitMessage: string;
+  committedAt: string;
+}
+
+export interface MergeRequest {
+  id: string;
+  repoId: string;
+  mrNumber: number;
+  title: string;
+  sourceBranch: string;
+  targetBranch: string;
+  status: 'open' | 'merged' | 'closed';
+  authorId: string;
+  createdAt: string;
+}
+
+export interface PipelineDefinition {
+  id: string;
+  repoId: string;
+  pipelineName: string;
+  configYaml: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+
+
+export interface PipelineJob {
+  id: string;
+  runId: string;
+  jobName: string;
+  status: 'pending' | 'running' | 'success' | 'failed';
+  logs?: string;
+  startedAt?: string;
+  finishedAt?: string;
+}
+
+export interface BuildRunner {
+  id: string;
+  runnerName: string;
+  runnerType: string;
+  status: 'online' | 'offline' | 'busy';
+  maxJobs: number;
+  createdAt: string;
+}
+
+export interface Artifact {
+  id: string;
+  runId: string;
+  artifactName: string;
+  fileSize: number;
+  downloadUrl: string;
+  createdAt: string;
+}
+
+export interface ArtifactRegistry {
+  id: string;
+  orgId: string;
+  packageName: string;
+  packageType: string;
+  version: string;
+  createdAt: string;
+}
+
+export interface ContainerRegistry {
+  id: string;
+  orgId: string;
+  registryName: string;
+  registryUrl: string;
+  createdAt: string;
+}
+
+export interface ContainerImage {
+  id: string;
+  registryId: string;
+  imageName: string;
+  tag: string;
+  sizeBytes: number;
+  pushedAt: string;
+}
+
+export interface DeploymentEnvironment {
+  id: string;
+  orgId: string;
+  envName: string;
+  envType: 'development' | 'staging' | 'production';
+  createdAt: string;
+}
+
+export interface DeploymentTarget {
+  id: string;
+  envId: string;
+  targetName: string;
+  targetType: string;
+  createdAt: string;
+}
+
+// =====================================================
+// Phase 11B — AI ModelOps Platform Types (Version 8.2)
+// =====================================================
+
+
+
+export interface DatasetVersion {
+  id: string;
+  datasetId: string;
+  versionTag: string;
+  storageUrl: string;
+  createdAt: string;
+}
+
+export interface DatasetAnnotation {
+  id: string;
+  versionId: string;
+  annotationLabel: string;
+  confidence: number;
+  createdAt: string;
+}
+
+export interface FeatureStore {
+  id: string;
+  storeName: string;
+  onlineEngine: string;
+  offlineEngine: string;
+  createdAt: string;
+}
+
+export interface FeatureGroup {
+  id: string;
+  storeId: string;
+  groupName: string;
+  entityKey: string;
+  createdAt: string;
+}
+
+export interface TrainingJob {
+  id: string;
+  jobName: string;
+  framework: string;
+  datasetVersionId: string;
+  status: 'created' | 'running' | 'completed' | 'failed';
+  createdAt: string;
+}
+
+export interface TrainingRun {
+  id: string;
+  jobId: string;
+  runNumber: number;
+  status: 'running' | 'completed' | 'failed';
+  startedAt: string;
+  finishedAt?: string;
+}
+
+export interface TrainingMetric {
+  id: string;
+  runId: string;
+  epoch: number;
+  loss: number;
+  accuracy: number;
+  recordedAt: string;
+}
+
+
+
+export interface ExperimentRun {
+  id: string;
+  experimentId: string;
+  runName: string;
+  metricsJson: Record<string, any>;
+  parametersJson: Record<string, any>;
+  createdAt: string;
+}
+
+export interface HyperparameterTrial {
+  id: string;
+  experimentRunId: string;
+  trialNumber: number;
+  hyperparamsJson: Record<string, any>;
+  score: number;
+  status: string;
+}
+
+export interface ModelRegistry {
+  id: string;
+  modelName: string;
+  taskType: string;
+  framework: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface ModelVersion {
+  id: string;
+  modelId: string;
+  versionTag: string;
+  stage: 'development' | 'staging' | 'production' | 'archived';
+  createdAt: string;
+}
+
+export interface ModelArtifact {
+  id: string;
+  modelVersionId: string;
+  artifactType: string;
+  storageUrl: string;
+  sizeBytes: number;
+  createdAt: string;
+}
+
+export interface ModelDeployment {
+  id: string;
+  modelVersionId: string;
+  deploymentName: string;
+  replicaCount: number;
+  status: 'healthy' | 'degraded' | 'scaling';
+  createdAt: string;
+}
+
+export interface DeploymentEndpoint {
+  id: string;
+  deploymentId: string;
+  endpointUrl: string;
+  authToken?: string;
+  createdAt: string;
+}
+
+export interface PredictionLog {
+  id: string;
+  endpointId: string;
+  latencyMs: number;
+  statusCode: number;
+  createdAt: string;
+}
+
+export interface ModelMonitoring {
+  id: string;
+  deploymentId: string;
+  requestsPerSec: number;
+  p99LatencyMs: number;
+  errorRatePct: number;
+  checkedAt: string;
+}
+
+export interface ModelDriftReport {
+  id: string;
+  deploymentId: string;
+  conceptDriftScore: number;
+  featureDriftScore: number;
+  hasDrift: boolean;
+  createdAt: string;
+}
+
+export interface InferenceRequest {
+  id: string;
+  endpointId: string;
+  promptTokens: number;
+  completionTokens: number;
+  createdAt: string;
+}
+
+// =====================================================
+// Phase 11C — AI Enterprise Automation Platform (Version 8.3)
+// =====================================================
+
+export interface AutomationWorkspace {
+  id: string;
+  workspaceName: string;
+  description?: string;
+  organizationId?: string;
+  ownerId: string;
+  status: 'active' | 'archived' | 'disabled';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AutomationProject {
+  id: string;
+  workspaceId: string;
+  projectName: string;
+  description?: string;
+  category?: string;
+  status: 'active' | 'archived';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AutomationWorkflow {
+  id: string;
+  projectId: string;
+  workflowName: string;
+  description?: string;
+  status: 'draft' | 'published' | 'paused' | 'archived';
+  triggerType: 'manual' | 'schedule' | 'webhook' | 'event';
+  executionMode: 'sequential' | 'parallel';
+  createdBy: string;
+  version: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkflowVersion {
+  id: string;
+  workflowId: string;
+  versionNumber: number;
+  definitionJson: string;
+  changelog?: string;
+  publishedBy: string;
+  isPublished: boolean;
+  createdAt: string;
+}
+
+export interface WorkflowExecution {
+  id: string;
+  workflowId: string;
+  versionId?: string;
+  status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+  triggeredBy: string;
+  inputData?: Record<string, any>;
+  outputData?: Record<string, any>;
+  errorMessage?: string;
+  startedAt?: string;
+  completedAt?: string;
+  durationMs: number;
+  createdAt: string;
+}
+
+export interface WorkflowStep {
+  id: string;
+  workflowId: string;
+  stepKey: string;
+  name: string;
+  stepName?: string;
+  stepType: string;
+  stepOrder?: number;
+  config?: any;
+  configuration?: Record<string, any>;
+  positionX: number;
+  positionY: number;
+  nextStepKeys?: string[];
+  nextStepId?: string;
+  onFailure?: 'stop' | 'continue' | 'retry' | string;
+  createdAt: string;
+}
+
+export interface WorkflowVariable {
+  id: string;
+  workflowId: string;
+  variableName: string;
+  variableType: 'string' | 'number' | 'boolean' | 'json';
+  defaultValue?: string;
+  isSecret: boolean;
+  createdAt: string;
+}
+
+export interface WorkflowSchedule {
+  id: string;
+  workflowId: string;
+  cronExpression: string;
+  timezone: string;
+  isEnabled: boolean;
+  lastRunAt?: string;
+  nextRunAt?: string;
+  createdAt: string;
+}
+
+export interface AutomationTrigger {
+  id: string;
+  workflowId: string;
+  triggerName: string;
+  triggerType: 'webhook' | 'schedule' | 'event_bus' | 'file';
+  eventPattern?: string;
+  config?: Record<string, any>;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface EventSubscription {
+  id: string;
+  triggerId: string;
+  eventType: string;
+  targetUrl?: string;
+  filterRules?: Record<string, any>;
+  status: 'active' | 'paused';
+  createdAt: string;
+}
+
+export interface BusinessRule {
+  id: string;
+  ruleName: string;
+  description?: string;
+  ruleGroup: string;
+  conditions: Record<string, any>;
+  actions: Record<string, any>;
+  priority: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DecisionTable {
+  id: string;
+  tableName: string;
+  description?: string;
+  inputsSchema: Record<string, any>[];
+  outputsSchema: Record<string, any>[];
+  rulesJson: Record<string, any>[];
+  hitPolicy: 'first' | 'collect' | 'rule_order';
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ApprovalWorkflow {
+  id: string;
+  workflowName: string;
+  description?: string;
+  approverRoles: string[];
+  requireAll: boolean;
+  autoRejectTimeoutHours: number;
+  createdAt: string;
+}
+
+export interface ApprovalRequest {
+  id: string;
+  approvalWorkflowId?: string;
+  workflowId: string;
+  requesterId: string;
+  approverId: string;
+  entityType?: string;
+  entityId?: string;
+  status: string;
+  title?: string;
+  details?: string;
+  requestedAt: string;
+  resolvedAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ApprovalAction {
+  id: string;
+  requestId: string;
+  approverId: string;
+  action: 'approved' | 'rejected' | 'commented';
+  comment?: string;
+  createdAt: string;
+}
+
+export interface RPABot {
+  id: string;
+  botName: string;
+  description?: string;
+  botType: 'attended' | 'unattended' | 'hybrid';
+  status: 'idle' | 'running' | 'error' | 'offline';
+  hostMachine?: string;
+  capabilities: string[];
+  lastHeartbeat?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RPAJob {
+  id: string;
+  botId: string;
+  workflowId?: string;
+  jobName: string;
+  status: 'queued' | 'running' | 'completed' | 'failed' | 'cancelled';
+  parameters?: Record<string, any>;
+  resultData?: Record<string, any>;
+  errorDetails?: string;
+  startedAt?: string;
+  completedAt?: string;
+  createdAt: string;
+}
+
+export interface AutomationIntegration {
+  id: string;
+  integrationName: string;
+  provider: string;
+  category: string;
+  authType: 'oauth2' | 'api_key' | 'basic' | 'custom';
+  baseUrl?: string;
+  isEnabled: boolean;
+  createdAt: string;
+}
+
+export interface IntegrationConnection {
+  id: string;
+  integrationId: string;
+  connectionName: string;
+  status: 'connected' | 'error' | 'disconnected';
+  createdBy: string;
+  lastVerified?: string;
+  createdAt: string;
+}
+
+export interface ExecutionMetric {
+  id: string;
+  workflowId: string;
+  totalExecutions: number;
+  successfulExecutions: number;
+  failedExecutions: number;
+  avgDurationMs: number;
+  lastExecutionAt?: string;
+  recordedDate: string;
+}
+
+export interface ProcessAnalytics {
+  id: string;
+  processName: string;
+  category: string;
+  totalRuns: number;
+  timeSavedHours: number;
+  costSavedUsd: number;
+  efficiencyScore: number;
+  updatedAt: string;
+}
+
+export interface WorkflowTemplate {
+  id: string;
+  templateName: string;
+  description?: string;
+  category: string;
+  definitionJson: string;
+  icon?: string;
+  usageCount: number;
+  createdAt: string;
+}
+
+export interface AutomationRecommendation {
+  id: string;
+  title: string;
+  description: string;
+  impactScore: number;
+  suggestedAction: string;
+  status: 'pending' | 'applied' | 'dismissed';
+  createdAt: string;
+}
+
+export interface EnterpriseAutomationAuditLog {
+  id: string;
+  userId: string;
+  action: string;
+  resourceType: string;
+  resourceId: string;
+  changesJson?: string;
+  ipAddress?: string;
+  createdAt: string;
+}
+
+/**
+ * Phase 11D - AI Collaboration Platform & Digital Workplace Types
+ */
+
+export interface Workspace {
+  id: string;
+  workspaceName: string;
+  slug: string;
+  description?: string;
+  ownerId: string;
+  isPrivate: boolean;
+  status: 'active' | 'archived' | 'suspended';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WorkspaceMember {
+  id: string;
+  workspaceId: string;
+  userId: string;
+  role: 'owner' | 'admin' | 'member' | 'guest';
+  joinedAt: string;
+  status: 'active' | 'invited' | 'removed';
+}
+
+export interface WorkspaceRoleInfo {
+  id: string;
+  workspaceId: string;
+  roleName: string;
+  permissions: string[];
+  createdAt: string;
+}
+
+export interface TeamChannel {
+  id: string;
+  workspaceId: string;
+  channelName: string;
+  channelType: 'public' | 'private' | 'read_only';
+  topic?: string;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface ChannelMessage {
+  id: string;
+  channelId: string;
+  senderId: string;
+  content: string;
+  messageType: 'text' | 'file' | 'system' | 'code';
+  attachments?: Record<string, any>[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MessageThread {
+  id: string;
+  parentMessageId: string;
+  senderId: string;
+  content: string;
+  createdAt: string;
+}
+
+export interface DirectMessage {
+  id: string;
+  senderId: string;
+  recipientId: string;
+  content: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface MeetingRoom {
+  id: string;
+  workspaceId: string;
+  roomName: string;
+  roomCode: string;
+  hostId: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface MeetingSession {
+  id: string;
+  roomId: string;
+  sessionTitle: string;
+  scheduledStart?: string;
+  scheduledEnd?: string;
+  actualStart?: string;
+  actualEnd?: string;
+  status: 'scheduled' | 'in_progress' | 'completed' | 'cancelled';
+  recordingUrl?: string;
+  transcriptText?: string;
+  createdAt: string;
+}
+
+export interface MeetingParticipant {
+  id: string;
+  sessionId: string;
+  userId: string;
+  role: 'host' | 'presenter' | 'attendee';
+  joinedAt?: string;
+  leftAt?: string;
+}
+
+export interface KnowledgeBase {
+  workspaceId?: string;
+  title?: string;
+  category?: string;
+  createdBy?: string;
+}
+
+export interface KnowledgeArticle {
+  id: string;
+  knowledgeBaseId: string;
+  title: string;
+  slug: string;
+  content: string;
+  authorId: string;
+  status: 'draft' | 'published' | 'archived';
+  viewsCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DocumentLibrary {
+  id: string;
+  workspaceId: string;
+  libraryName: string;
+  description?: string;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface DocumentVersion {
+  id: string;
+  documentId: string;
+  versionNumber: number;
+  filePath: string;
+  fileSize: number;
+  uploadedBy: string;
+  createdAt: string;
+}
+
+export interface SharedDocument {
+  id: string;
+  libraryId: string;
+  title: string;
+  fileType: string;
+  ownerId: string;
+  currentVersionId?: string;
+  permissions: 'view' | 'edit' | 'admin';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Whiteboard {
+  id: string;
+  workspaceId: string;
+  boardName: string;
+  createdBy: string;
+  isPublic: boolean;
+  canvasData?: Record<string, any>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WhiteboardObject {
+  id: string;
+  whiteboardId: string;
+  objectType: 'sticky' | 'shape' | 'text' | 'path' | 'image';
+  positionX: number;
+  positionY: number;
+  width?: number;
+  height?: number;
+  propertiesJson?: Record<string, any>;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface ProjectSpace {
+  id: string;
+  workspaceId: string;
+  projectName: string;
+  description?: string;
+  leadId: string;
+  status: 'active' | 'on_hold' | 'completed';
+  createdAt: string;
+}
+
+export interface ProjectTask {
+  id: string;
+  projectSpaceId: string;
+  title: string;
+  description?: string;
+  assigneeId?: string;
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  status: 'todo' | 'in_progress' | 'review' | 'done';
+  dueDate?: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectMilestone {
+  id: string;
+  projectSpaceId: string;
+  milestoneName: string;
+  dueDate?: string;
+  status: 'pending' | 'achieved' | 'missed';
+  createdAt: string;
+}
+
+export interface ActivityFeed {
+  id: string;
+  workspaceId: string;
+  actorId: string;
+  actionType: string;
+  targetType: string;
+  targetId: string;
+  summary: string;
+  createdAt: string;
+}
+
+export interface TeamNotification {
+  id: string;
+  recipientId: string;
+  title: string;
+  message: string;
+  notificationType: 'info' | 'warning' | 'alert' | 'success';
+  isRead: boolean;
+  linkUrl?: string;
+  createdAt: string;
+}
+
+export interface CollaborationAnalytics {
+  id: string;
+  workspaceId: string;
+  activeUsersDaily: number;
+  messagesSent: number;
+  meetingsHeld: number;
+  docsCreated: number;
+  recordedDate: string;
+  createdAt: string;
+}
+
+export interface KnowledgeRecommendation {
+  id: string;
+  userId: string;
+  articleId: string;
+  relevanceScore: number;
+  reason?: string;
+  createdAt: string;
+}
+
+export interface CollaborationAuditLog {
+  id: string;
+  workspaceId?: string;
+  userId: string;
+  action: string;
+  resourceType: string;
+  resourceId: string;
+  ipAddress?: string;
+  createdAt: string;
+}
+
+// ─── Phase 11E — NexoApps AI Enterprise Universe & Version 9.0 Release ───
+
+export interface EnterpriseRegistry {
+  id: string;
+  enterpriseName: string;
+  licenseTier: string;
+  status: 'active' | 'suspended' | 'maintenance';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface EnterpriseModule {
+  id: string;
+  moduleName: string;
+  moduleKey: string;
+  category: string;
+  version: string;
+  isEnabled: boolean;
+  createdAt: string;
+}
+
+export interface EnterpriseWorkspace {
+  id: string;
+  workspaceName: string;
+  slug: string;
+  description?: string;
+  ownerId: string;
+  status: 'active' | 'archived';
+  createdAt: string;
+}
+
+export interface EnterpriseService {
+  id: string;
+  serviceName: string;
+  serviceType: string;
+  endpointUrl?: string;
+  status: 'healthy' | 'degraded' | 'down';
+  createdAt: string;
+}
+
+export interface EnterpriseIntegration {
+  id: string;
+  integrationName: string;
+  provider: string;
+  status: 'connected' | 'disconnected' | 'error';
+  configJson?: Record<string, any>;
+  createdAt: string;
+}
+
+export interface EnterpriseWorkflow {
+  id: string;
+  workflowName: string;
+  description?: string;
+  status: 'active' | 'paused' | 'draft';
+  stepsJson?: Record<string, any>[];
+  createdAt: string;
+}
+
+export interface EnterprisePolicy {
+  id: string;
+  policyName: string;
+  policyType: string;
+  rulesJson: Record<string, any>;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface EnterpriseSetting {
+  id: string;
+  settingKey: string;
+  settingValue: string;
+  updatedAt: string;
+}
+
+export interface EnterpriseNotification {
+  id: string;
+  recipientId: string;
+  title: string;
+  message: string;
+  notificationType: 'info' | 'warning' | 'critical' | 'success';
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface EnterpriseActivity {
+  id: string;
+  actorId: string;
+  action: string;
+  details?: string;
+  createdAt: string;
+}
+
+export interface EnterpriseAIService {
+  id: string;
+  serviceName: string;
+  modelProvider: string;
+  status: 'active' | 'idle' | 'maintenance';
+  createdAt: string;
+}
+
+export interface EnterpriseAIAgent {
+  id: string;
+  agentName: string;
+  roleType: string;
+  status: 'active' | 'paused';
+  createdAt: string;
+}
+
+export interface EnterpriseHealth {
+  id: string;
+  subsystemName: string;
+  healthScore: number;
+  status: 'healthy' | 'degraded' | 'critical';
+  checkedAt: string;
+}
+
+export interface EnterpriseMetric {
+  id: string;
+  metricName: string;
+  metricValue: number;
+  recordedAt: string;
+}
+
+export interface EnterpriseUsage {
+  id: string;
+  resourceName: string;
+  usageCount: number;
+  recordedDate: string;
+}
+
+export interface EnterpriseCost {
+  id: string;
+  costCenter: string;
+  allocatedBudget: number;
+  actualSpend: number;
+  currency: string;
+  recordedMonth: string;
+}
+
+export interface EnterpriseBackup {
+  id: string;
+  backupName: string;
+  backupType: 'full' | 'incremental' | 'snapshot';
+  sizeBytes: number;
+  status: 'completed' | 'failed' | 'in_progress';
+  createdAt: string;
+}
+
+export interface EnterpriseRestorePoint {
+  id: string;
+  backupId: string;
+  snapshotTag: string;
+  createdAt: string;
+}
+
+export interface EnterpriseRelease {
+  id: string;
+  version: string;
+  releaseName: string;
+  changelog?: string;
+  releasedAt: string;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
