@@ -1,0 +1,28 @@
+import React from 'react';
+import Head from 'next/head';
+import { Navbar } from '../../components/Navbar';
+import { AdminSidebar } from '../../components/admin/AdminSidebar';
+import { NetworkingDashboard } from '../../components/networking/NetworkingDashboard';
+
+export default function AdminNetworkingPage() {
+  return (
+    <>
+      <Head>
+        <title>Networking Console | NexoApps Admin</title>
+        <meta name="description" content="Admin control center for API gateways, edge locations, load balancing, and network security." />
+      </Head>
+      <Navbar />
+      <main className="min-h-screen bg-background text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex flex-col lg:flex-row gap-8">
+            <AdminSidebar />
+            <div className="flex-1 min-w-0 space-y-8">
+              <h1 className="text-2xl font-display font-bold">Enterprise Networking & Edge Console</h1>
+              <NetworkingDashboard />
+            </div>
+          </div>
+        </div>
+      </main>
+    </>
+  );
+}

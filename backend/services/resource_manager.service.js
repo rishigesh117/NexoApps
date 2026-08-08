@@ -1,25 +1,18 @@
 /**
- * Resource Manager Service — NexoApps Phase 10B
- * Enterprise resource groups, allocation tracking, and resource tagging.
+ * Resource Manager Service — NexoApps Phase 12E (v9.5)
  */
 
 class ResourceManagerService {
   constructor() {
-    this.resourceGroups = [
-      { id: 'rg-prod-ai', tenantId: 'tnt-enterprise-01', name: 'Production AI Cluster Group', description: 'Core LLM inference and vision model resources', createdAt: new Date().toISOString() }
-    ];
-    this.allocations = [
-      { id: 'alloc-1', tenantId: 'tnt-enterprise-01', resourceType: 'compute', allocatedUnits: 128, unitName: 'vCPU', allocatedAt: new Date().toISOString() },
-      { id: 'alloc-2', tenantId: 'tnt-enterprise-01', resourceType: 'gpu', allocatedUnits: 16, unitName: 'NVIDIA H100 GPU', allocatedAt: new Date().toISOString() }
+    this.capacityEntries = [
+      { id: 'rcap-1', regionId: 'creg-1', totalCpuCores: 2500, usedCpuCores: 1120, totalMemoryGb: 10000, usedMemoryGb: 4400, updatedAt: new Date().toISOString() },
+      { id: 'rcap-2', regionId: 'creg-2', totalCpuCores: 1800, usedCpuCores: 820, totalMemoryGb: 7200, usedMemoryGb: 3100, updatedAt: new Date().toISOString() },
     ];
   }
 
-  async getResourceGroups(tenantId = 'tnt-enterprise-01') {
-    return this.resourceGroups.filter(rg => rg.tenantId === tenantId);
-  }
-
-  async getAllocations(tenantId = 'tnt-enterprise-01') {
-    return this.allocations.filter(a => a.tenantId === tenantId);
+  async getCapacity(regionId) {
+    if (regionId) return this.capacityEntries.filter((c) => c.regionId === regionId);
+    return this.capacityEntries;
   }
 }
 

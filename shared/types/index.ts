@@ -4206,9 +4206,15 @@ export interface TenantBilling {
 
 export interface CloudRegion {
   id: string;
-  name: string;
-  code: string;
-  location: string;
+  name?: string;
+  code?: string;
+  location?: string;
+  providerId?: string;
+  regionCode?: string;
+  regionName?: string;
+  locationLat?: number;
+  locationLng?: number;
+  status?: 'operational' | 'degraded' | 'outage';
   isActive: boolean;
   createdAt: string;
 }
@@ -4252,12 +4258,14 @@ export interface FirewallRule {
 
 export interface LoadBalancer {
   id: string;
-  tenantId: string;
-  vnetId: string;
+  tenantId?: string;
+  vnetId?: string;
   name: string;
-  type: 'application' | 'network';
-  dnsName: string;
-  status: 'active' | 'provisioning';
+  type: 'application' | 'network' | 'layer_4' | 'layer_7';
+  dnsName?: string;
+  virtualIp?: string;
+  algorithm?: 'round_robin' | 'least_connections' | 'weighted';
+  status: 'active' | 'provisioning' | 'inactive';
   createdAt: string;
 }
 
@@ -6179,6 +6187,720 @@ export interface CapacityForecast {
   predictedGrowthGb: number;
   forecastedAt: string;
 }
+
+/**
+ * NexoApps Phase 12C — Observability Platform (v9.3) Interfaces
+ */
+
+export interface ObservabilityProject {
+  id: string;
+  workspaceId?: string;
+  name: string;
+  description?: string;
+  environment: 'production' | 'staging' | 'development';
+  status: 'active' | 'archived' | 'inactive';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ObservabilityService {
+  id: string;
+  projectId: string;
+  serviceName: string;
+  serviceType: 'microservice' | 'monolith' | 'serverless' | 'database' | 'cache' | 'queue';
+  language: string;
+  healthStatus: 'healthy' | 'degraded' | 'critical' | 'unknown';
+  version: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ServiceInstance {
+  id: string;
+  serviceId: string;
+  instanceName: string;
+  hostIp: string;
+  port: number;
+  status: 'online' | 'offline' | 'unhealthy';
+  startedAt: string;
+  lastHeartbeat: string;
+}
+
+export interface ServiceDependency {
+  id: string;
+  sourceServiceId: string;
+  targetServiceId: string;
+  dependencyType: 'http_api' | 'grpc' | 'database' | 'redis' | 'rabbitmq';
+  healthStatus: 'healthy' | 'degraded' | 'critical';
+  latencyMs: number;
+  createdAt: string;
+}
+
+export interface MetricDefinition {
+  id: string;
+  metricName: string;
+  metricType: 'gauge' | 'counter' | 'histogram' | 'summary';
+  unit: string;
+  description?: string;
+  createdAt: string;
+}
+
+export interface MetricSample {
+  id: string;
+  metricId: string;
+  serviceId?: string;
+  value: number;
+  tags?: Record<string, string>;
+  timestamp: string;
+}
+
+export interface MetricAggregation {
+  id: string;
+  metricId: string;
+  aggregationPeriod: '1m' | '5m' | '1h' | '1d';
+  minVal: number;
+  maxVal: number;
+  avgVal: number;
+  sumVal: number;
+  countVal: number;
+  windowStart: string;
+  windowEnd: string;
+}
+
+export interface LogSource {
+  id: string;
+  sourceName: string;
+  sourceType: 'application' | 'container' | 'system' | 'cloud' | 'kubernetes';
+  status: 'active' | 'inactive';
+  createdAt: string;
+}
+
+export interface LogStream {
+  id: string;
+  sourceId: string;
+  streamName: string;
+  retentionDays: number;
+  createdAt: string;
+}
+
+export interface LogEntry {
+  id: string;
+  streamId: string;
+  serviceId?: string;
+  severity: 'INFO' | 'DEBUG' | 'WARN' | 'ERROR' | 'FATAL';
+  message: string;
+  structuredData?: Record<string, any>;
+  timestamp: string;
+}
+
+export interface TraceService {
+  id: string;
+  serviceName: string;
+  environment: string;
+  createdAt: string;
+}
+
+export interface TraceSpan {
+  id: string;
+  traceId: string;
+  spanId: string;
+  parentSpanId?: string;
+  serviceName: string;
+  operationName: string;
+  durationMs: number;
+  statusCode: 'OK' | 'ERROR' | 'UNSET';
+  timestamp: string;
+}
+
+export interface TraceEvent {
+  id: string;
+  spanId: string;
+  eventName: string;
+  attributes?: Record<string, any>;
+  timestamp: string;
+}
+
+export interface AlertRule {
+  id: string;
+  projectId?: string;
+  name: string;
+  severity: 'warning' | 'critical' | 'emergency';
+  isEnabled: boolean;
+  cooldownMinutes: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AlertCondition {
+  id: string;
+  ruleId: string;
+  metricName: string;
+  operator: '>' | '<' | '>=' | '<=' | '==';
+  threshold: number;
+  evaluationWindowMinutes: number;
+}
+
+export interface AlertEvent {
+  id: string;
+  ruleId: string;
+  title: string;
+  message: string;
+  severity: 'warning' | 'critical' | 'emergency';
+  status: 'triggered' | 'acknowledged' | 'resolved';
+  triggeredAt: string;
+  resolvedAt?: string;
+}
+
+export interface IncidentRecord {
+  id: string;
+  title: string;
+  description?: string;
+  severity: 'SEV1' | 'SEV2' | 'SEV3' | 'SEV4';
+  status: 'DETECTED' | 'ACKNOWLEDGED' | 'INVESTIGATING' | 'MITIGATING' | 'RESOLVED' | 'CLOSED';
+  assignedTo?: string;
+  createdAt: string;
+  resolvedAt?: string;
+}
+
+export interface IncidentEvent {
+  id: string;
+  incidentId: string;
+  eventType: 'state_change' | 'note_added' | 'alert_linked';
+  note?: string;
+  createdBy?: string;
+  createdAt: string;
+}
+
+export interface IncidentAssignment {
+  id: string;
+  incidentId: string;
+  assigneeId: string;
+  role: string;
+  assignedAt: string;
+}
+
+export interface UptimeCheck {
+  id: string;
+  checkName: string;
+  targetUrl: string;
+  checkIntervalSeconds: number;
+  expectedStatusCode: number;
+  status: 'passing' | 'failing' | 'degraded';
+  latencyMs: number;
+  lastCheckAt: string;
+}
+
+export interface SyntheticMonitor {
+  id: string;
+  monitorName: string;
+  scriptType: string;
+  frequencyMinutes: number;
+  status: 'active' | 'paused' | 'failing';
+  successRatePct: number;
+  createdAt: string;
+}
+
+export interface PerformanceProfile {
+  id: string;
+  serviceName: string;
+  cpuAvgPct: number;
+  memoryAvgMb: number;
+  p95LatencyMs: number;
+  errorRatePct: number;
+  recordedAt: string;
+}
+
+export interface ObservabilityDashboard {
+  id: string;
+  title: string;
+  description?: string;
+  layoutConfig?: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ObservabilityAnnotation {
+  id: string;
+  dashboardId?: string;
+  title: string;
+  description?: string;
+  category: 'deployment' | 'config_change' | 'incident';
+  timestamp: string;
+}
+
+export interface AIOperationalRecommendation {
+  id: string;
+  detectedIssue: string;
+  affectedService: string;
+  evidence: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  confidence: number;
+  recommendedAction: string;
+  createdAt: string;
+}
+
+/**
+ * NexoApps Phase 12D — Enterprise Networking & Edge Infrastructure (v9.4) Interfaces
+ */
+
+export interface ApiGateway {
+  id: string;
+  gatewayName: string;
+  environment: 'production' | 'staging' | 'development';
+  listenPort: number;
+  status: 'active' | 'degraded' | 'maintenance' | 'offline';
+  mode: 'reverse_proxy' | 'api_mesh' | 'ingress';
+  version: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GatewayInstance {
+  id: string;
+  gatewayId: string;
+  instanceName: string;
+  hostIp: string;
+  port: number;
+  region: string;
+  status: 'online' | 'offline' | 'unhealthy';
+  startedAt: string;
+  lastHeartbeat: string;
+}
+
+export interface GatewayRoute {
+  id: string;
+  gatewayId: string;
+  routePath: string;
+  methods: string;
+  upstreamId?: string;
+  stripPath: boolean;
+  status: 'active' | 'disabled';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface GatewayUpstream {
+  id: string;
+  gatewayId: string;
+  upstreamName: string;
+  algorithm: 'round_robin' | 'least_conn' | 'ip_hash';
+  healthCheckPath: string;
+  createdAt: string;
+}
+
+export interface UpstreamTarget {
+  id: string;
+  upstreamId: string;
+  targetHost: string;
+  targetPort: number;
+  weight: number;
+  status: 'healthy' | 'unhealthy' | 'draining';
+  createdAt: string;
+}
+
+
+
+export interface LoadBalancerTarget {
+  id: string;
+  loadBalancerId: string;
+  targetIp: string;
+  targetPort: number;
+  weight: number;
+  healthStatus: 'healthy' | 'unhealthy';
+}
+
+export interface TrafficPolicy {
+  id: string;
+  policyName: string;
+  policyType: 'canary' | 'blue_green' | 'mirror';
+  trafficSplitPct: number;
+  primaryUpstreamId?: string;
+  secondaryUpstreamId?: string;
+  status: 'active' | 'paused';
+  createdAt: string;
+}
+
+export interface RateLimitPolicy {
+  id: string;
+  policyName: string;
+  requestsPerSecond: number;
+  burstLimit: number;
+  scope: 'ip_address' | 'api_key' | 'tenant';
+  action: 'reject_429' | 'queue_delay';
+  createdAt: string;
+}
+
+export interface ApiPolicy {
+  id: string;
+  policyName: string;
+  policyType: 'jwt_validation' | 'cors' | 'header_transform' | 'mock_response';
+  configuration?: string;
+  isEnabled: boolean;
+  createdAt: string;
+}
+
+export interface NetworkPolicy {
+  id: string;
+  policyName: string;
+  description?: string;
+  action: 'allow' | 'deny';
+  cidrBlock: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface EdgeLocation {
+  id: string;
+  locationCode: string;
+  locationName: string;
+  region: string;
+  status: 'operational' | 'degraded' | 'maintenance';
+  latencyMs: number;
+  createdAt: string;
+}
+
+export interface EdgeNode {
+  id: string;
+  edgeLocationId: string;
+  nodeName: string;
+  publicIp: string;
+  status: 'online' | 'offline';
+  requestsPerSec: number;
+  lastHeartbeat: string;
+}
+
+export interface GlobalRoute {
+  id: string;
+  domainName: string;
+  routingStrategy: 'latency_based' | 'geo_dns' | 'failover';
+  primaryRegion: string;
+  fallbackRegion: string;
+  status: 'active' | 'failover_triggered';
+  createdAt: string;
+}
+
+export interface DnsZone {
+  id: string;
+  zoneName: string;
+  zoneType: 'private' | 'public';
+  recordsCount: number;
+  status: 'active' | 'pending';
+  createdAt: string;
+}
+
+export interface DnsRecord {
+  id: string;
+  zoneId: string;
+  recordName: string;
+  recordType: 'A' | 'AAAA' | 'CNAME' | 'TXT' | 'MX';
+  recordValue: string;
+  ttl: number;
+  status: 'active' | 'disabled';
+  createdAt: string;
+}
+
+export interface SslCertificate {
+  id: string;
+  domainName: string;
+  issuer: string;
+  status: 'valid' | 'expiring_soon' | 'expired';
+  validFrom: string;
+  expiresAt: string;
+  createdAt: string;
+}
+
+export interface CertificateBinding {
+  id: string;
+  certificateId: string;
+  gatewayId: string;
+  port: number;
+  boundAt: string;
+}
+
+export interface WafPolicy {
+  id: string;
+  policyName: string;
+  mode: 'prevention' | 'detection';
+  status: 'active' | 'disabled';
+  createdAt: string;
+}
+
+export interface WafRule {
+  id: string;
+  wafPolicyId: string;
+  ruleName: string;
+  category: 'sqli' | 'xss' | 'rce' | 'bot_control';
+  action: 'block_403' | 'log_only' | 'challenge';
+  isEnabled: boolean;
+  createdAt: string;
+}
+
+export interface FirewallPolicy {
+  id: string;
+  policyName: string;
+  direction: 'inbound' | 'outbound';
+  protocol: 'tcp' | 'udp' | 'icmp';
+  sourceCidr: string;
+  destinationPort: number;
+  action: 'allow' | 'deny';
+  priority: number;
+  status: 'active' | 'disabled';
+  createdAt: string;
+}
+
+export interface NetworkHealth {
+  id: string;
+  componentName: string;
+  componentType: 'gateway' | 'load_balancer' | 'edge_node' | 'dns';
+  status: 'healthy' | 'degraded' | 'critical';
+  packetLossPct: number;
+  latencyP95Ms: number;
+  recordedAt: string;
+}
+
+export interface GatewayMetric {
+  id: string;
+  gatewayId: string;
+  requestsPerSec: number;
+  latencyP95Ms: number;
+  error5xxPct: number;
+  timestamp: string;
+}
+
+export interface TrafficStatistic {
+  id: string;
+  region: string;
+  bytesIn: number;
+  bytesOut: number;
+  totalRequests: number;
+  recordedAt: string;
+}
+
+/**
+ * NexoApps Phase 12E — Global Cloud Control Plane (v9.5) Interfaces
+ */
+
+export interface CloudProvider {
+  id: string;
+  providerName: string;
+  providerType: 'public_cloud' | 'private_cloud' | 'on_prem';
+  status: 'active' | 'inactive';
+  createdAt: string;
+}
+
+export interface CloudAccount {
+  id: string;
+  providerId: string;
+  accountName: string;
+  accountIdNumber: string;
+  environment: 'production' | 'staging' | 'development';
+  status: 'connected' | 'error' | 'disconnected';
+  createdAt: string;
+}
+
+
+
+export interface CloudZone {
+  id: string;
+  regionId: string;
+  zoneCode: string;
+  zoneName: string;
+  status: 'available' | 'full' | 'maintenance';
+  createdAt: string;
+}
+
+export interface ResourceType {
+  id: string;
+  typeName: string;
+  category: 'compute' | 'database' | 'storage' | 'k8s_cluster' | 'serverless';
+  createdAt: string;
+}
+
+export interface CloudResource {
+  id: string;
+  accountId: string;
+  regionId: string;
+  resourceTypeId: string;
+  resourceName: string;
+  providerResourceId: string;
+  status: 'running' | 'stopped' | 'terminated' | 'provisioning';
+  createdAt: string;
+}
+
+export interface ResourceInstance {
+  id: string;
+  resourceId: string;
+  instanceType: string;
+  cpuCores: number;
+  memoryGb: number;
+  privateIp?: string;
+  publicIp?: string;
+  status: 'active' | 'draining' | 'stopped';
+  createdAt: string;
+}
+
+export interface RegionCapacity {
+  id: string;
+  regionId: string;
+  totalCpuCores: number;
+  usedCpuCores: number;
+  totalMemoryGb: number;
+  usedMemoryGb: number;
+  updatedAt: string;
+}
+
+export interface RegionHealth {
+  id: string;
+  regionId: string;
+  status: 'healthy' | 'degraded' | 'critical';
+  latencyP95Ms: number;
+  errorRatePct: number;
+  recordedAt: string;
+}
+
+export interface GlobalServiceRegistry {
+  id: string;
+  serviceName: string;
+  serviceType: string;
+  version: string;
+  status: 'active' | 'deprecated';
+  createdAt: string;
+}
+
+export interface ServiceRegionBinding {
+  id: string;
+  serviceId: string;
+  regionId: string;
+  replicaCount: number;
+  routingWeight: number;
+  status: 'deployed' | 'deploying' | 'failed';
+  boundAt: string;
+}
+
+export interface GlobalTrafficRule {
+  id: string;
+  ruleName: string;
+  routingMode: 'geo_latency' | 'weighted' | 'failover';
+  primaryRegionId: string;
+  secondaryRegionId?: string;
+  status: 'active' | 'paused';
+  createdAt: string;
+}
+
+export interface RegionFailoverPolicy {
+  id: string;
+  policyName: string;
+  primaryRegionId: string;
+  failoverRegionId: string;
+  healthThresholdPct: number;
+  autoFailover: boolean;
+  status: 'active' | 'triggered' | 'disabled';
+  createdAt: string;
+}
+
+export interface EdgeWorkload {
+  id: string;
+  workloadName: string;
+  containerImage: string;
+  targetScope: 'all_edge_pops' | 'regional_edge' | 'custom_pops';
+  replicasPerPop: number;
+  status: 'active' | 'paused';
+  createdAt: string;
+}
+
+export interface EdgeDeployment {
+  id: string;
+  workloadId: string;
+  edgeLocationCode: string;
+  deployedStatus: 'running' | 'pending' | 'failed';
+  deployedAt: string;
+}
+
+export interface InfrastructureStack {
+  id: string;
+  stackName: string;
+  environment: 'production' | 'staging' | 'development';
+  templateType: 'terraform' | 'cloudformation' | 'pulumi' | 'helm';
+  status: 'deployed' | 'provisioning' | 'failed';
+  createdAt: string;
+}
+
+export interface InfrastructureResource {
+  id: string;
+  stackId: string;
+  resourceName: string;
+  resourceType: string;
+  status: 'active' | 'creating' | 'deleting';
+}
+
+export interface ProvisioningJob {
+  id: string;
+  stackId: string;
+  action: 'apply' | 'destroy' | 'update';
+  status: 'completed' | 'running' | 'failed';
+  startedAt: string;
+  completedAt?: string;
+}
+
+export interface ProvisioningLog {
+  id: string;
+  jobId: string;
+  logLevel: 'info' | 'warn' | 'error';
+  message: string;
+  timestamp: string;
+}
+
+export interface CloudCostProfile {
+  id: string;
+  accountId: string;
+  monthlyBudgetUsd: number;
+  currentSpendUsd: number;
+  forecastSpendUsd: number;
+  currency: string;
+  updatedAt: string;
+}
+
+export interface ResourceCostUsage {
+  id: string;
+  resourceId: string;
+  dailyCostUsd: number;
+  recordedDate: string;
+}
+
+export interface DisasterRecoveryPlan {
+  id: string;
+  planName: string;
+  primaryRegionId: string;
+  drRegionId: string;
+  rpoSeconds: number;
+  rtoMinutes: number;
+  status: 'ready' | 'testing' | 'active_dr';
+  createdAt: string;
+}
+
+export interface DisasterRecoveryExecution {
+  id: string;
+  planId: string;
+  executionType: 'drill' | 'real_failover';
+  status: 'completed' | 'in_progress' | 'failed';
+  startedAt: string;
+  completedAt?: string;
+}
+
+export interface InfrastructureRecommendation {
+  id: string;
+  category: 'cost_optimization' | 'capacity' | 'security' | 'performance';
+  title: string;
+  description: string;
+  potentialSavingsUsd: number;
+  confidencePct: number;
+  isDismissed: boolean;
+  createdAt: string;
+}
+
+
+
 
 
 

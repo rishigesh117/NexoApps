@@ -1,34 +1,56 @@
 /**
- * Cloud Controller — NexoApps Phase 10B
+ * Cloud Control Controller — NexoApps Phase 12E (v9.5)
  */
 
-const cloudRegionService = require('../services/cloud_region.service');
-const cloudMonitorService = require('../services/cloud_monitor.service');
-const capacityPlannerService = require('../services/capacity_planner.service');
+const cloudControlPlaneService = require('../services/cloud_control_plane.service');
+const cloudProviderService = require('../services/cloud_provider.service');
+const cloudAccountService = require('../services/cloud_account.service');
 
 class CloudController {
-  async getRegions(req, res) {
+  async getOverview(req, res) {
     try {
-      const regions = await cloudRegionService.getRegions();
-      res.json({ success: true, data: regions });
+      const overview = await cloudControlPlaneService.getOverview();
+      res.json({ success: true, data: overview });
     } catch (err) {
       res.status(500).json({ success: false, error: err.message });
     }
   }
 
-  async getHealth(req, res) {
+  async getProviders(req, res) {
     try {
-      const health = await cloudMonitorService.getHealth();
-      res.json({ success: true, data: health });
+      const providers = await cloudProviderService.getProviders();
+      res.json({ success: true, data: providers });
     } catch (err) {
       res.status(500).json({ success: false, error: err.message });
     }
   }
 
-  async getCapacityPlans(req, res) {
+  async createProvider(req, res) {
     try {
-      const plans = await capacityPlannerService.getPlans();
-      res.json({ success: true, data: plans });
+      const { providerName } = req.body;
+      if (!providerName) return res.status(400).json({ success: false, error: 'providerName is required' });
+      const provider = await cloudProviderService.createProvider(req.body);
+      res.status(201).json({ success: true, data: provider });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  async getAccounts(req, res) {
+    try {
+      const accounts = await cloudAccountService.getAccounts();
+      res.json({ success: true, data: accounts });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  async createAccount(req, res) {
+    try {
+      const { accountName } = req.body;
+      if (!accountName) return res.status(400).json({ success: false, error: 'accountName is required' });
+      const account = await cloudAccountService.createAccount(req.body);
+      res.status(201).json({ success: true, data: account });
     } catch (err) {
       res.status(500).json({ success: false, error: err.message });
     }

@@ -1,106 +1,50 @@
 /**
- * Gateway Controller — NexoApps Phase 9A
- * Unified gateway routing, health probes, fallback management, token telemetry, multimodal & speech capabilities.
+ * Gateway Controller — NexoApps Phase 12D (v9.4)
  */
 
-const modelRouterService = require('../services/model_router.service');
-const tokenMeterService = require('../services/token_meter.service');
-const providerHealthService = require('../services/provider_health.service');
-const fallbackService = require('../services/fallback.service');
-const multimodalService = require('../services/multimodal.service');
-const imageGenerationService = require('../services/image_generation.service');
-const speechService = require('../services/speech.service');
+const apiGatewayService = require('../services/api_gateway.service');
+const gatewayInstanceService = require('../services/gateway_instance.service');
 
-const gatewayController = {
-  async routeModel(req, res) {
+class GatewayController {
+  async getGateways(req, res) {
     try {
-      const selectedModel = await modelRouterService.routeRequest(req.body);
-      res.json({ success: true, data: selectedModel });
-    } catch (err) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  },
-
-  async getModelComparison(req, res) {
-    try {
-      const metrics = await modelRouterService.getComparisonMetrics();
-      res.json({ success: true, data: metrics });
-    } catch (err) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  },
-
-  async getTokenAnalytics(req, res) {
-    try {
-      const analytics = await tokenMeterService.getTokenAnalytics();
-      res.json({ success: true, data: analytics });
-    } catch (err) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  },
-
-  async getProviderHealthGrid(req, res) {
-    try {
-      const health = await providerHealthService.getHealthGrid();
-      res.json({ success: true, data: health });
-    } catch (err) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  },
-
-  async getFallbackPolicies(req, res) {
-    try {
-      const policies = await fallbackService.listPolicies();
-      res.json({ success: true, data: policies });
-    } catch (err) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  },
-
-  async createFallbackPolicy(req, res) {
-    try {
-      const policy = await fallbackService.createPolicy(req.body);
-      res.status(201).json({ success: true, data: policy });
-    } catch (err) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  },
-
-  async processMultimodal(req, res) {
-    try {
-      const request = await multimodalService.processRequest(req.body);
-      res.json({ success: true, data: request });
-    } catch (err) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  },
-
-  async generateImage(req, res) {
-    try {
-      const image = await imageGenerationService.generateImage(req.body);
-      res.json({ success: true, data: image });
-    } catch (err) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  },
-
-  async processSpeech(req, res) {
-    try {
-      const speech = await speechService.processSpeech(req.body);
-      res.json({ success: true, data: speech });
-    } catch (err) {
-      res.status(500).json({ success: false, error: err.message });
-    }
-  },
-
-  async processTranslation(req, res) {
-    try {
-      const translation = await speechService.processTranslation(req.body);
-      res.json({ success: true, data: translation });
+      const gateways = await apiGatewayService.getGateways();
+      res.json({ success: true, data: gateways });
     } catch (err) {
       res.status(500).json({ success: false, error: err.message });
     }
   }
-};
 
-module.exports = gatewayController;
+  async getGatewayById(req, res) {
+    try {
+      const gateway = await apiGatewayService.getGatewayById(req.params.id);
+      if (!gateway) return res.status(404).json({ success: false, error: 'Gateway not found' });
+      const instances = await gatewayInstanceService.getInstances(req.params.id);
+      res.json({ success: true, data: { ...gateway, instances } });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  async createGateway(req, res) {
+    try {
+      const { gatewayName } = req.body;
+      if (!gatewayName) return res.status(400).json({ success: false, error: 'gatewayName is required' });
+      const gateway = await apiGatewayService.createGateway(req.body);
+      res.status(201).json({ success: true, data: gateway });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  async getInstances(req, res) {
+    try {
+      const instances = await gatewayInstanceService.getInstances(req.query.gatewayId);
+      res.json({ success: true, data: instances });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+}
+
+module.exports = new GatewayController();

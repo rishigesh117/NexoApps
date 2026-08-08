@@ -424,6 +424,59 @@ router.use('/database-platform/restores', phase12bRestoreRoutes);
 router.use('/database-platform/replication', phase12bReplicationRoutes);
 router.use('/database-platform/storage-clusters', phase12bStorageClusterRoutes);
 
+// Phase 12C NexoApps Observability Platform Mounted Routes (Version 9.3)
+const phase12cObservabilityRoutes = require('./observability.routes');
+const phase12cMetricsRoutes = require('./metrics.routes');
+const phase12cLoggingRoutes = require('./logging.routes');
+const phase12cTracingRoutes = require('./tracing.routes');
+const phase12cAlertingRoutes = require('./alerting.routes');
+const phase12cIncidentRoutes = require('./incident.routes');
+const phase12cUptimeRoutes = require('./uptime.routes');
+
+router.use('/observability/core', phase12cObservabilityRoutes);
+router.use('/observability/metrics', phase12cMetricsRoutes);
+router.use('/observability/logs', phase12cLoggingRoutes);
+router.use('/observability/traces', phase12cTracingRoutes);
+router.use('/observability/alerts', phase12cAlertingRoutes);
+router.use('/observability/incidents', phase12cIncidentRoutes);
+router.use('/observability/uptime', phase12cUptimeRoutes);
+
+// Phase 12D NexoApps Enterprise Networking & Edge Platform Mounted Routes (Version 9.4)
+const phase12dNetworkingRoutes = require('./networking.routes');
+const phase12dGatewayRoutes = require('./gateway.routes');
+const phase12dRoutingRoutes = require('./routing.routes');
+const phase12dLoadBalancerRoutes = require('./load_balancer.routes');
+const phase12dEdgeRoutes = require('./edge.routes');
+const phase12dDnsRoutes = require('./dns.routes');
+const phase12dNetworkSecurityRoutes = require('./network_security.routes');
+
+router.use('/networking/core', phase12dNetworkingRoutes);
+router.use('/networking/gateways', phase12dGatewayRoutes);
+router.use('/networking/routes', phase12dRoutingRoutes);
+router.use('/networking/load-balancers', phase12dLoadBalancerRoutes);
+router.use('/networking/edge', phase12dEdgeRoutes);
+router.use('/networking/dns', phase12dDnsRoutes);
+router.use('/networking/security', phase12dNetworkSecurityRoutes);
+
+// Phase 12E NexoApps Global Cloud Control Plane Mounted Routes (Version 9.5)
+const phase12eCloudRoutes = require('./cloud.routes');
+const phase12eRegionRoutes = require('./region.routes');
+const phase12eResourceRoutes = require('./resource.routes');
+const phase12eGlobalTrafficRoutes = require('./global_traffic.routes');
+const phase12eEdgeWorkloadRoutes = require('./edge_workload.routes');
+const phase12eInfrastructureRoutes = require('./infrastructure.routes');
+const phase12eCloudCostRoutes = require('./cloud_cost.routes');
+const phase12eDisasterRecoveryRoutes = require('./disaster_recovery.routes');
+
+router.use('/cloud-control/core', phase12eCloudRoutes);
+router.use('/cloud-control/regions', phase12eRegionRoutes);
+router.use('/cloud-control/resources', phase12eResourceRoutes);
+router.use('/cloud-control/global-traffic', phase12eGlobalTrafficRoutes);
+router.use('/cloud-control/edge', phase12eEdgeWorkloadRoutes);
+router.use('/cloud-control/infrastructure', phase12eInfrastructureRoutes);
+router.use('/cloud-control/cost', phase12eCloudCostRoutes);
+router.use('/cloud-control/disaster-recovery', phase12eDisasterRecoveryRoutes);
+
 module.exports = router;
 
 

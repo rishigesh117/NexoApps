@@ -1,23 +1,35 @@
 /**
- * Resource Controller — NexoApps Phase 10B
+ * Resource Controller — NexoApps Phase 12E (v9.5)
  */
 
-const resourceManagerService = require('../services/resource_manager.service');
+const cloudResourceService = require('../services/cloud_resource.service');
+const resourceRegistryService = require('../services/resource_registry.service');
 
 class ResourceController {
-  async getResourceGroups(req, res) {
+  async getResources(req, res) {
     try {
-      const groups = await resourceManagerService.getResourceGroups();
-      res.json({ success: true, data: groups });
+      const resources = await cloudResourceService.getResources();
+      res.json({ success: true, data: resources });
     } catch (err) {
       res.status(500).json({ success: false, error: err.message });
     }
   }
 
-  async getAllocations(req, res) {
+  async createResource(req, res) {
     try {
-      const allocations = await resourceManagerService.getAllocations();
-      res.json({ success: true, data: allocations });
+      const { resourceName } = req.body;
+      if (!resourceName) return res.status(400).json({ success: false, error: 'resourceName is required' });
+      const resource = await cloudResourceService.createResource(req.body);
+      res.status(201).json({ success: true, data: resource });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  async getResourceTypes(req, res) {
+    try {
+      const types = await resourceRegistryService.getResourceTypes();
+      res.json({ success: true, data: types });
     } catch (err) {
       res.status(500).json({ success: false, error: err.message });
     }

@@ -2,14 +2,14 @@ import React from 'react';
 import Head from 'next/head';
 import { Navbar } from '../../components/Navbar';
 import { AdminSidebar } from '../../components/admin/AdminSidebar';
-import { ObservabilityDashboard } from '../../components/super-platform/ObservabilityDashboard';
+import { ObservabilityDashboard } from '../../components/observability/ObservabilityDashboard';
 
 export default function AdminObservabilityPage() {
   return (
     <>
       <Head>
-        <title>Admin Observability | NexoApps Admin</title>
-        <meta name="description" content="Admin console for system telemetry and distributed traces." />
+        <title>Admin Observability Console | NexoApps Admin</title>
+        <meta name="description" content="Administrative console for system telemetry, logging, metrics, and intelligent operations." />
       </Head>
       <Navbar />
       <main className="min-h-screen bg-background text-white">

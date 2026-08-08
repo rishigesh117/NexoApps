@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const resourceController = require('../controllers/resource.controller');
 
-router.get('/groups', (req, res) => resourceController.getResourceGroups(req, res));
-router.get('/allocations', (req, res) => resourceController.getAllocations(req, res));
+router.get('/', (req, res) => resourceController.getResources(req, res));
+router.post('/', (req, res) => resourceController.createResource(req, res));
+router.get('/types', (req, res) => resourceController.getResourceTypes(req, res));
 
 module.exports = router;
