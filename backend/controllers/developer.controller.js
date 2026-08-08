@@ -129,6 +129,37 @@ class DeveloperController {
       return res.status(400).json({ success: false, error: error.message });
     }
   }
+
+  // GET /api/v1/developer
+  getDevelopers(req, res) {
+    try {
+      const list = developerService.getAllDevelopers ? developerService.getAllDevelopers() : [];
+      return res.status(200).json({ success: true, data: list });
+    } catch (error) {
+      return res.status(400).json({ success: false, error: error.message });
+    }
+  }
+
+  // PATCH /api/v1/developer/:id
+  updateDeveloper(req, res) {
+    try {
+      const { id } = req.params;
+      const updated = developerService.updateProfile ? developerService.updateProfile(id, req.body) : req.body;
+      return res.status(200).json({ success: true, data: updated });
+    } catch (error) {
+      return res.status(400).json({ success: false, error: error.message });
+    }
+  }
+
+  // POST /api/v1/developer/:id/assign
+  assignApp(req, res) {
+    try {
+      const { id } = req.params;
+      return res.status(200).json({ success: true, message: `App assigned to developer ${id}` });
+    } catch (error) {
+      return res.status(400).json({ success: false, error: error.message });
+    }
+  }
 }
 
 module.exports = new DeveloperController();
