@@ -110,27 +110,27 @@ export const Navbar: React.FC = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden md:flex items-center gap-1 lg:gap-2">
-              {navLinks.map((link) => (
+            <nav className="hidden xl:flex items-center gap-1 lg:gap-2 overflow-x-auto max-w-[50vw] scrollbar-none">
+              {navLinks.slice(0, 10).map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="px-3.5 py-2 rounded-xl text-xs font-semibold text-text-secondary hover:text-white hover:bg-white/5 transition-all duration-200"
+                  className="px-3 py-2 rounded-xl text-xs font-semibold text-text-secondary hover:text-white hover:bg-white/5 transition-all duration-200 whitespace-nowrap"
                 >
                   {link.name}
                 </Link>
               ))}
             </nav>
 
-            {/* Action Buttons: Search (UI), Login (UI), Sign Up */}
-            <div className="hidden sm:flex items-center gap-2 lg:gap-3">
+            {/* Action Buttons: Search, Login, Sign Up - Always Visible & Shrink-Proof */}
+            <div className="flex items-center gap-2 lg:gap-3 shrink-0 ml-auto z-10">
               <button
                 onClick={() => setIsSearchOpen(true)}
                 className="p-2.5 rounded-xl bg-surface-100 border border-white/10 text-text-secondary hover:text-white hover:border-brand-cyan/40 transition-all flex items-center gap-2 text-xs font-medium"
                 aria-label="Search Apps"
               >
                 <Search className="w-4 h-4 text-brand-cyan" />
-                <span className="hidden lg:inline text-text-muted">Search apps...</span>
+                <span className="hidden lg:inline text-text-muted">Search...</span>
               </button>
 
               {isAuthenticated ? (
@@ -139,22 +139,22 @@ export const Navbar: React.FC = () => {
                     <>
                       <Link
                         href="/admin/upload"
-                        className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-blue text-white text-xs font-bold hover:shadow-glow-cyan transition-all flex items-center gap-1.5 shadow-sm"
+                        className="px-3 py-2 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-blue text-white text-xs font-bold hover:shadow-glow-cyan transition-all flex items-center gap-1.5 shadow-sm"
                       >
                         <Rocket className="w-3.5 h-3.5" />
                         <span className="hidden md:inline">Upload App</span>
                       </Link>
                       <Link
                         href="/admin"
-                        className="px-3 py-1.5 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-300 text-xs font-bold hover:bg-purple-500/30 transition-all flex items-center gap-1.5"
+                        className="px-3 py-2 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-300 text-xs font-bold hover:bg-purple-500/30 transition-all flex items-center gap-1.5"
                       >
                         <ShieldCheck className="w-3.5 h-3.5" />
-                        <span className="hidden md:inline">Admin Dashboard</span>
+                        <span className="hidden md:inline">Admin</span>
                       </Link>
                     </>
                   )}
                   <NotificationCenter />
-                  <span className="text-xs font-semibold text-white px-3 py-1.5 rounded-xl bg-surface-100 border border-white/10 flex items-center gap-1.5">
+                  <span className="text-xs font-semibold text-white px-3 py-2 rounded-xl bg-surface-100 border border-white/10 flex items-center gap-1.5">
                     <User className="w-3.5 h-3.5 text-brand-cyan" />
                     {user?.username}
                   </span>
@@ -168,21 +168,21 @@ export const Navbar: React.FC = () => {
                 </div>
               ) : (
                 <>
-                  <button
-                    onClick={() => setIsLoginOpen(true)}
-                    className="px-4 py-2.5 rounded-xl bg-surface-100 hover:bg-surface-200 border border-white/10 text-white text-xs font-semibold transition-all flex items-center gap-1.5"
+                  <Link
+                    href="/login"
+                    className="px-4 py-2.5 rounded-xl bg-brand-cyan/20 hover:bg-brand-cyan/30 border border-brand-cyan/50 text-white font-bold text-xs transition-all flex items-center gap-1.5 shadow-glow-cyan"
                   >
                     <User className="w-3.5 h-3.5 text-brand-cyan" />
                     <span>Login</span>
-                  </button>
+                  </Link>
 
-                  <button
-                    onClick={() => setIsSignupOpen(true)}
-                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-blue text-white text-xs font-semibold shadow-glow-cyan hover:opacity-95 transition-all flex items-center gap-1.5"
+                  <Link
+                    href="/signup"
+                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-blue text-white font-bold text-xs shadow-glow-cyan hover:opacity-95 transition-all flex items-center gap-1.5"
                   >
                     <UserPlus className="w-3.5 h-3.5" />
                     <span>Sign Up</span>
-                  </button>
+                  </Link>
                 </>
               )}
             </div>
