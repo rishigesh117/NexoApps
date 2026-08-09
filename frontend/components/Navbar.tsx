@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Layers, Menu, X, Search, User, UserPlus, LogOut, Sparkles, Activity } from 'lucide-react';
+import Link from 'next/link';
+import {
+  Layers,
+  Search,
+  Activity,
+  User,
+  LogOut,
+  UserPlus,
+  Menu,
+  X,
+  Rocket,
+  ShieldCheck,
+} from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { NotificationCenter } from './ai-os/NotificationCenter';
 import { SearchModal } from './SearchModal';
 import { LoginModal } from './LoginModal';
 import { SignupModal } from './SignupModal';
-import { NotificationCenter } from './community/NotificationCenter';
-import { useAuth } from '../context/AuthContext';
 
 export const Navbar: React.FC = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -124,14 +135,23 @@ export const Navbar: React.FC = () => {
 
               {isAuthenticated ? (
                 <div className="flex items-center gap-2">
-                  {user?.role === 'OWNER' && (
-                    <Link
-                      href="/admin/testing"
-                      className="px-3 py-1.5 rounded-xl bg-amber-400/20 border border-amber-400/40 text-amber-300 text-xs font-bold hover:bg-amber-400/30 transition-all flex items-center gap-1.5 shadow-glow-cyan"
-                    >
-                      <Activity className="w-3.5 h-3.5" />
-                      <span className="hidden md:inline">Testing Dashboard</span>
-                    </Link>
+                  {(user?.role === 'ADMIN' || user?.role === 'OWNER') && (
+                    <>
+                      <Link
+                        href="/admin/upload"
+                        className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-blue text-white text-xs font-bold hover:shadow-glow-cyan transition-all flex items-center gap-1.5 shadow-sm"
+                      >
+                        <Rocket className="w-3.5 h-3.5" />
+                        <span className="hidden md:inline">Upload App</span>
+                      </Link>
+                      <Link
+                        href="/admin"
+                        className="px-3 py-1.5 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-300 text-xs font-bold hover:bg-purple-500/30 transition-all flex items-center gap-1.5"
+                      >
+                        <ShieldCheck className="w-3.5 h-3.5" />
+                        <span className="hidden md:inline">Admin Dashboard</span>
+                      </Link>
+                    </>
                   )}
                   <NotificationCenter />
                   <span className="text-xs font-semibold text-white px-3 py-1.5 rounded-xl bg-surface-100 border border-white/10 flex items-center gap-1.5">
@@ -213,13 +233,35 @@ export const Navbar: React.FC = () => {
 
               <div className="pt-2 border-t border-white/10 flex flex-col gap-2">
                 {isAuthenticated ? (
-                  <button
-                    onClick={() => { setIsMobileMenuOpen(false); logout(); }}
-                    className="w-full py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-semibold flex items-center justify-center gap-2"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    <span>Logout ({user?.username})</span>
-                  </button>
+                  <>
+                    {(user?.role === 'ADMIN' || user?.role === 'OWNER') && (
+                      <div className="flex flex-col gap-2 pb-2 border-b border-white/10">
+                        <Link
+                          href="/admin/upload"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="w-full py-3 rounded-xl bg-gradient-to-r from-brand-cyan to-brand-blue text-white text-xs font-bold flex items-center justify-center gap-2 shadow-glow-cyan"
+                        >
+                          <Rocket className="w-4 h-4" />
+                          <span>Upload App Portal</span>
+                        </Link>
+                        <Link
+                          href="/admin"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="w-full py-3 rounded-xl bg-purple-500/20 border border-purple-500/40 text-purple-300 text-xs font-bold flex items-center justify-center gap-2"
+                        >
+                          <ShieldCheck className="w-4 h-4" />
+                          <span>Admin Dashboard</span>
+                        </Link>
+                      </div>
+                    )}
+                    <button
+                      onClick={() => { setIsMobileMenuOpen(false); logout(); }}
+                      className="w-full py-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-semibold flex items-center justify-center gap-2"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Logout ({user?.username})</span>
+                    </button>
+                  </>
                 ) : (
                   <>
                     <button
