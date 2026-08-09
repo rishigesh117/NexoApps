@@ -4,9 +4,6 @@
  */
 
 const getApiBaseUrl = () => {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL;
-  }
   if (typeof window !== 'undefined') {
     const protocol = window.location.protocol;
     const hostname = window.location.hostname;
@@ -14,6 +11,7 @@ const getApiBaseUrl = () => {
     if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.') || hostname.startsWith('10.')) {
       return `${protocol}//${hostname}:5000/api/v1`;
     }
+    // On production (Vercel, etc.), use relative path to hit Next.js serverless API routes
     return '/api/v1';
   }
   return 'http://localhost:5000/api/v1';

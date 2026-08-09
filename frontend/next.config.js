@@ -6,17 +6,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  async rewrites() {
-    if (process.env.BACKEND_URL && process.env.BACKEND_URL !== 'http://localhost:5000') {
-      return [
-        {
-          source: '/api/v1/:path*',
-          destination: `${process.env.BACKEND_URL}/api/v1/:path*`,
-        },
-      ];
-    }
-    return [];
-  },
 };
 
 module.exports = nextConfig;
