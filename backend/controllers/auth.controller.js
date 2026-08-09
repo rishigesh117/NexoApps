@@ -73,14 +73,61 @@ exports.refresh = async (req, res, next) => {
   }
 };
 
+/**
+ * Verify a user's email address using a cryptographic verification token.
+ * Accepts `token` in the request body (sent via email link or "Verify Now" button).
+ * On success, returns a fresh session (access + refresh tokens) with updated user data
+ * so the frontend can immediately reflect the verified status without stale data.
+ */
 exports.verifyEmail = async (req, res, next) => {
   try {
-    const { email } = req.body;
-    const verified = await authService.verifyEmailToken(email);
-    if (!verified) {
-      return errorResponse(res, 'Invalid or expired verification request', 400);
+    const { token } = req.body;
+
+    if (!token) {
+      return errorResponse(res, 'Verification token is required', 400);
     }
-    return successResponse(res, null, 'Email verified successfully! All features are unlocked.');
+
+    const verifiedUser = await authService.verifyEmailToken(token);
+
+    if (!verifiedUser) {
+      return errorResponse(res, 'Invalid or expired verification token. Please request a new verification email.', 400);
+    }
+
+    // Issue a fresh session with updated user data (emailVerified: true)
+    // This ensures the frontend gets a new JWT that reflects the verified status
+    const session = await authService.createSession(verifiedUser);
+
+    return successResponse(res, {
+      accessToken: session.accessToken,
+      refreshToken: session.refreshToken,
+      user: session.user,
+      message: 'Email verified successfully! All features are unlocked.',
+    }, 'Email verified successfully! All features are unlocked.');
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * Resend a verification email to the user.
+ * Requires the user's email address. Generates a new verification token.
+ */
+exports.resendVerificationEmail = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return errorResponse(res, 'Email address is required', 400);
+    }
+
+    const token = await authService.generateVerificationTokenForUser(email.trim());
+
+    if (!token) {
+      // Don't reveal whether the email exists or is already verified
+      return successResponse(res, null, 'If this email is registered and unverified, a verification email has been sent.');
+    }
+
+    return successResponse(res, null, 'Verification email sent successfully! Please check your inbox.');
   } catch (err) {
     next(err);
   }

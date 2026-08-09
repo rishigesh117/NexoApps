@@ -81,7 +81,8 @@ export default function OwnerUploadPage() {
   };
 
   // Grant access if user is authenticated and has OWNER or ADMIN role
-  const isAuthorized = isAuthenticated && (role === 'OWNER' || role === 'ADMIN' || user?.email?.toLowerCase() === 'rishigesh720@gmail.com');
+  // SECURITY: Never check email addresses for authorization — rely solely on the role from the JWT token
+  const isAuthorized = isAuthenticated && (role === 'OWNER' || role === 'ADMIN');
 
   if (!isAuthorized) {
     return <OwnerAccessDenied />;

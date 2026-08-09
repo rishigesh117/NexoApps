@@ -12,11 +12,13 @@ export interface AuthResponse {
   refreshToken: string;
   user: User;
   bannerMessage?: string;
+  message?: string;
 }
 
 const ACCESS_TOKEN_KEY = 'nexoapps_access_token';
 const REFRESH_TOKEN_KEY = 'nexoapps_refresh_token';
 const USER_KEY = 'nexoapps_user';
+const VERIFICATION_TOKEN_KEY = 'nexoapps_verification_token';
 
 export const AuthService = {
   getStoredAccessToken: (): string | null => {
@@ -34,26 +36,27 @@ export const AuthService = {
     const userJson = localStorage.getItem(USER_KEY);
     try {
       if (!userJson) return null;
-      const parsed: User = JSON.parse(userJson);
-      if (parsed && parsed.email && parsed.email.toLowerCase() === 'rishigesh720@gmail.com') {
-        parsed.role = 'OWNER';
-        parsed.emailVerified = true;
-      }
-      return parsed;
+      return JSON.parse(userJson) as User;
     } catch (e) {
       return null;
     }
   },
 
+  /**
+   * Get the stored email verification token (sent by backend during signup).
+   */
+  getStoredVerificationToken: (): string | null => {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem(VERIFICATION_TOKEN_KEY);
+  },
+
   saveSession: (data: AuthResponse) => {
     if (typeof window === 'undefined') return;
-    if (data.user && data.user.email && data.user.email.toLowerCase() === 'rishigesh720@gmail.com') {
-      data.user.role = 'OWNER';
-      data.user.emailVerified = true;
-    }
     localStorage.setItem(ACCESS_TOKEN_KEY, data.accessToken);
     localStorage.setItem(REFRESH_TOKEN_KEY, data.refreshToken);
     localStorage.setItem(USER_KEY, JSON.stringify(data.user));
+    // Clear any stored verification token after session update
+    localStorage.removeItem(VERIFICATION_TOKEN_KEY);
   },
 
   clearSession: () => {
@@ -61,6 +64,7 @@ export const AuthService = {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
+    localStorage.removeItem(VERIFICATION_TOKEN_KEY);
   },
 
   signup: async (payload: { username: string; email: string; password: string }): Promise<AuthResponse> => {
@@ -139,21 +143,39 @@ export const AuthService = {
     return AuthService.getStoredUser();
   },
 
-  verifyEmailToken: async (email: string): Promise<boolean> => {
+  /**
+   * Verify the user's email using a cryptographic verification token.
+   * On success, the backend returns a fresh session (new access + refresh tokens)
+   * with updated user data (emailVerified: true), which we save locally.
+   *
+   * This prevents stale session data and ensures the user's role/permissions
+   * are correctly reflected after verification.
+   */
+  verifyEmailToken: async (verificationToken: string): Promise<AuthResponse | null> => {
     try {
-      const response = await fetchApi<{ success: boolean }>('/auth/verify-email', {
+      const response = await fetchApi<{ success: boolean; data: AuthResponse }>('/auth/verify-email', {
         method: 'POST',
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ token: verificationToken }),
       });
-      return response.success;
+      if (response.data && response.data.accessToken) {
+        // Save the fresh session returned by the backend
+        AuthService.saveSession(response.data);
+        return response.data;
+      }
+      return null;
     } catch (e) {
-      return false;
+      return null;
     }
   },
 
+  /**
+   * Request the backend to resend a verification email.
+   * This is separate from verifyEmailToken — it generates a new token
+   * and sends it to the user's email.
+   */
   resendVerificationEmail: async (email: string): Promise<{ success: boolean; message: string }> => {
     try {
-      const response = await fetchApi<{ success: boolean; message?: string }>('/auth/verify-email', {
+      const response = await fetchApi<{ success: boolean; message?: string }>('/auth/resend-verification', {
         method: 'POST',
         body: JSON.stringify({ email: email.trim() }),
       });

@@ -84,11 +84,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             <button
               onClick={async () => {
                 try {
-                  await AuthService.verifyEmailToken(user?.email || '');
-                  await refreshUser();
-                  setBannerMessage('Email verified successfully! All features unlocked.');
+                  // Use the stored verification token (received during signup)
+                  const storedToken = AuthService.getStoredVerificationToken();
+                  if (!storedToken) {
+                    // If no stored token, ask user to check email or resend
+                    setBannerMessage('Please check your email for the verification link, or click "Resend Verification Email".');
+                    return;
+                  }
+
+                  // Send the cryptographic token to the backend for verification
+                  // Backend returns a fresh session with updated user data
+                  const result = await AuthService.verifyEmailToken(storedToken);
+                  if (result && result.user) {
+                    // Update local state with the fresh user data from the new session
+                    setUser(result.user);
+                    setBannerMessage('Email verified successfully! All features unlocked.');
+                  } else {
+                    setBannerMessage('Verification failed. The token may have expired. Please click "Resend Verification Email".');
+                  }
                 } catch (err: any) {
-                  setBannerMessage('Email verification process triggered.');
+                  setBannerMessage('Email verification failed. Please try again or request a new verification email.');
                 }
               }}
               className="px-3 py-1 rounded-lg bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition-all text-[11px] shadow-sm"

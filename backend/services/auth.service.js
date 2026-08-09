@@ -51,24 +51,20 @@ const AuthService = {
   findUserByEmail: async (email) => {
     if (!email) return null;
     const clean = email.trim().toLowerCase();
-    let user = usersDb.get(clean) || null;
-    if (user && clean === 'rishigesh720@gmail.com') {
-      user.role = 'OWNER';
-      user.emailVerified = true;
-      user.status = 'ACTIVE';
-    }
-    return user;
+    return usersDb.get(clean) || null;
   },
 
   findUserByUsername: async (username) => {
     if (!username) return null;
-    const user = usernamesDb.get(username.trim().toLowerCase()) || null;
-    if (user && user.email && user.email.toLowerCase() === 'rishigesh720@gmail.com') {
-      user.role = 'OWNER';
-      user.emailVerified = true;
-      user.status = 'ACTIVE';
+    return usernamesDb.get(username.trim().toLowerCase()) || null;
+  },
+
+  findUserById: async (id) => {
+    if (!id) return null;
+    for (const u of usersDb.values()) {
+      if (u.id === id) return u;
     }
-    return user;
+    return null;
   },
 
   createUser: async ({ username, email, password }) => {
@@ -89,28 +85,33 @@ const AuthService = {
     }
 
     const hashedPassword = await hashPassword(password);
-    const isPlatformOwner = cleanEmail === 'rishigesh720@gmail.com';
 
     const newUser = {
       id: `usr-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
       username: cleanUsername,
       email: cleanEmail,
       passwordHash: hashedPassword,
-      role: isPlatformOwner ? 'OWNER' : 'MEMBER',
-      emailVerified: isPlatformOwner ? true : false,
-      status: isPlatformOwner ? 'ACTIVE' : 'PENDING_VERIFICATION',
+      role: 'MEMBER',
+      emailVerified: false,
+      status: 'PENDING_VERIFICATION',
       createdAt: new Date().toISOString(),
       lastLogin: null,
     };
 
     usersDb.set(cleanEmail, newUser);
     usernamesDb.set(lowerUsername, newUser);
-    await emailService.sendVerificationEmail(newUser.email, 'stub-verification-token');
+
+    // Generate a cryptographic verification token tied to this specific user
+    const verificationToken = tokenService.generateEmailVerificationToken(newUser);
+    await emailService.sendVerificationEmail(newUser.email, verificationToken);
+
     return newUser;
   },
 
   authenticateUser: async (email, password) => {
     const cleanEmail = (email || '').trim().toLowerCase();
+
+    // Ensure seed accounts exist (for in-memory store restarts)
     if (!usersDb.has('rishigesh720@gmail.com') || !usersDb.has('admin@nexoapps.com')) {
       const adminPasswordHash = await hashPassword('Admin123!');
       const ownerPasswordHash = await hashPassword('Owner123!');
@@ -152,23 +153,11 @@ const AuthService = {
     const isMatch = await comparePassword(password, user.passwordHash);
     if (!isMatch) return null;
 
-    if (user.email.toLowerCase() === 'rishigesh720@gmail.com') {
-      user.role = 'OWNER';
-      user.emailVerified = true;
-      user.status = 'ACTIVE';
-    }
-
     user.lastLogin = new Date().toISOString();
     return user;
   },
 
   createSession: async (user, deviceInfo = 'Browser', ipAddress = '127.0.0.1') => {
-    if (user.email && user.email.toLowerCase() === 'rishigesh720@gmail.com') {
-      user.role = 'OWNER';
-      user.emailVerified = true;
-      user.status = 'ACTIVE';
-    }
-
     const accessToken = tokenService.generateAccessToken(user);
     const refreshToken = tokenService.generateRefreshToken(user);
 
@@ -202,13 +191,7 @@ const AuthService = {
       throw new Error('Invalid Refresh Token signature');
     }
 
-    let userFound = null;
-    for (const u of usersDb.values()) {
-      if (u.id === decoded.id) {
-        userFound = u;
-        break;
-      }
-    }
+    const userFound = await AuthService.findUserById(decoded.id);
 
     if (!userFound) {
       throw new Error('Associated user account no longer exists');
@@ -223,14 +206,54 @@ const AuthService = {
     return true;
   },
 
-  verifyEmailToken: async (email) => {
-    const user = await AuthService.findUserByEmail(email);
-    if (user) {
-      user.emailVerified = true;
-      user.status = 'ACTIVE';
-      return true;
+  /**
+   * Verify a user's email using a cryptographic JWT verification token.
+   * The token encodes the user's ID and email, ensuring only the correct user
+   * can verify their own email.
+   *
+   * Returns the verified user object (with emailVerified: true) on success,
+   * or null if the token is invalid/expired or user not found.
+   */
+  verifyEmailToken: async (verificationToken) => {
+    // Decode and validate the cryptographic verification token
+    const decoded = tokenService.verifyEmailVerificationToken(verificationToken);
+    if (!decoded || !decoded.id || !decoded.email) {
+      return null;
     }
-    return false;
+
+    // Find the user by ID (not email alone) to prevent cross-user verification
+    const user = await AuthService.findUserById(decoded.id);
+    if (!user) return null;
+
+    // Double-check that the token's email matches the user's current email
+    if (user.email.toLowerCase() !== decoded.email.toLowerCase()) {
+      return null;
+    }
+
+    // Don't re-verify an already verified user
+    if (user.emailVerified) {
+      return user;
+    }
+
+    // Mark the user as verified
+    user.emailVerified = true;
+    user.status = 'ACTIVE';
+
+    return user;
+  },
+
+  /**
+   * Generate a new email verification token for a user.
+   * Used for "Resend Verification Email" functionality.
+   */
+  generateVerificationTokenForUser: async (email) => {
+    const user = await AuthService.findUserByEmail(email);
+    if (!user) return null;
+    if (user.emailVerified) return null; // Already verified
+
+    const verificationToken = tokenService.generateEmailVerificationToken(user);
+    await emailService.sendVerificationEmail(user.email, verificationToken);
+    return verificationToken;
   },
 };
 

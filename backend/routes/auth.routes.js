@@ -15,6 +15,7 @@ router.post('/login', validateLoginPayload, checkAccountLock, authController.log
 router.post('/logout', authController.logout);
 router.post('/refresh', authController.refresh);
 router.post('/verify-email', authController.verifyEmail);
+router.post('/resend-verification', authController.resendVerificationEmail);
 router.post('/forgot-password', authController.forgotPassword);
 router.post('/reset-password', authController.resetPassword);
 
