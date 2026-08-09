@@ -32,13 +32,16 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
       headers,
     });
 
-    // If relative proxy returns 404 (e.g. Next.js dev server hasn't reloaded rewrites), retry with direct port 5000
+    // If relative proxy returns 404 on local dev, retry with direct port 5000
     if (response.status === 404 && baseUrl === '/api/v1' && typeof window !== 'undefined') {
-      const fallbackUrl = `${window.location.protocol}//${window.location.hostname}:5000/api/v1`;
-      response = await fetch(`${fallbackUrl}${endpoint}`, {
-        ...options,
-        headers,
-      });
+      const hostname = window.location.hostname;
+      if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname.startsWith('192.168.') || hostname.startsWith('10.')) {
+        const fallbackUrl = `${window.location.protocol}//${hostname}:5000/api/v1`;
+        response = await fetch(`${fallbackUrl}${endpoint}`, {
+          ...options,
+          headers,
+        });
+      }
     }
 
     if (!response.ok) {
