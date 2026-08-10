@@ -24,7 +24,7 @@ export const DownloadsTab: React.FC = () => {
             iconUrl: FEATURED_BATLYTICS_APP.iconUrl,
             tagline: FEATURED_BATLYTICS_APP.tagline,
             version: FEATURED_BATLYTICS_APP.version,
-            fileSize: FEATURED_BATLYTICS_APP.fileSize || '24.5 MB',
+            fileSize: FEATURED_BATLYTICS_APP.fileSize || '42 MB',
             downloadToken: 'token-initial-001',
             deviceInfo: 'Chrome on Windows',
             browser: 'Chrome',

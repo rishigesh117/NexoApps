@@ -65,7 +65,7 @@ export default function DownloadProgressPage() {
             iconUrl: fetchedApp?.iconUrl || '🏏',
             tagline: fetchedApp?.tagline || 'Real-Time Cricket Scoring Engine',
             version: fetchedApp?.version || '1.0.0-beta',
-            fileSize: fetchedApp?.fileSize || '24.5 MB',
+            fileSize: fetchedApp?.fileSize || '42 MB',
             downloadToken: `token-${Date.now()}`,
             deviceInfo: 'Chrome Browser',
             browser: 'Chrome',
@@ -163,7 +163,7 @@ export default function DownloadProgressPage() {
 
                 <div className="space-y-1">
                   <h1 className="text-2xl font-extrabold text-white">{app.title}</h1>
-                  <p className="text-xs text-brand-cyan font-medium">v{app.version} • {app.fileSize || '24.5 MB'}</p>
+                  <p className="text-xs text-brand-cyan font-medium">v{app.version} • {app.fileSize || '42 MB'}</p>
                   <p className="text-xs text-text-muted">Developed by {app.developer?.name || 'NexoApps Platform'}</p>
                 </div>
 

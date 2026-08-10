@@ -3,6 +3,8 @@
  * NexoApps Platform
  */
 
+const path = require('path');
+const fs = require('fs');
 const { successResponse, errorResponse } = require('../utils/responseHandler');
 const downloadService = require('../services/download.service');
 
@@ -55,14 +57,27 @@ exports.streamDownloadFile = async (req, res, next) => {
 
     downloadService.updateStatus(record.id, 'Completed');
 
+    // Resolve the APK filename from the download record
+    const apkFileName = record.downloadUrl
+      ? record.downloadUrl.replace(/^\/downloads\//, '')
+      : `${record.appSlug}-v${record.version}.apk`;
+    const filePath = path.join(__dirname, '..', 'uploads', apkFileName);
+
     // Headers for secure file download stream
     res.setHeader('Content-Type', 'application/vnd.android.package-archive');
-    res.setHeader('Content-Disposition', `attachment; filename="${record.appSlug}-v${record.version}.apk"`);
-    
-    // Send standard mock APK buffer payload
-    const mockApkBuffer = Buffer.from(`NEXOAPPS_APK_BINARY_STREAM_V${record.version}_${record.appSlug}`);
-    return res.send(mockApkBuffer);
+    res.setHeader('Content-Disposition', `attachment; filename="${apkFileName}"`);
+
+    // Stream the actual APK file from uploads directory
+    if (fs.existsSync(filePath)) {
+      const stat = fs.statSync(filePath);
+      res.setHeader('Content-Length', stat.size);
+      return fs.createReadStream(filePath).pipe(res);
+    } else {
+      // APK file not found on server — return clear error
+      return errorResponse(res, 'APK file not found on server. Please contact support or re-upload the APK file.', 404);
+    }
   } catch (err) {
     next(err);
   }
 };
+

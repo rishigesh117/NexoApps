@@ -12,7 +12,7 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
-  allowedRoles = ['MEMBER', 'ADMIN'],
+  allowedRoles = ['MEMBER', 'DEVELOPER', 'ADMIN', 'OWNER'],
   fallback,
 }) => {
   const { isAuthenticated, role } = useAuth();

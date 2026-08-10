@@ -29,7 +29,7 @@ export const DownloadPanel: React.FC<DownloadPanelProps> = ({ app, onDownloadCli
 
         <div className="flex items-center justify-between">
           <span className="text-text-muted">File Size</span>
-          <span className="font-bold text-white">{app.fileSize || app.apkSize || '24.5 MB'}</span>
+          <span className="font-bold text-white">{app.fileSize || app.apkSize || '42 MB'}</span>
         </div>
 
         <div className="flex items-center justify-between">
@@ -49,7 +49,7 @@ export const DownloadPanel: React.FC<DownloadPanelProps> = ({ app, onDownloadCli
         className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-brand-emerald via-brand-cyan to-brand-blue text-slate-950 font-extrabold text-xs shadow-glow-emerald hover:opacity-95 transition-all flex items-center justify-center gap-2"
       >
         <Download className="w-4 h-4" />
-        <span>Download APK ({app.fileSize || '24.5 MB'})</span>
+        <span>Download APK ({app.fileSize || '42 MB'})</span>
       </a>
 
       <p className="text-[10px] text-text-muted text-center leading-tight">

@@ -31,7 +31,7 @@ const authorizeRole = (...allowedRoles) => {
 };
 
 const requireAdmin = authorizeRole('ADMIN');
-const requireMember = authorizeRole('MEMBER', 'ADMIN');
+const requireMember = authorizeRole('MEMBER', 'DEVELOPER', 'ADMIN', 'OWNER');
 
 module.exports = {
   authorizeRole,

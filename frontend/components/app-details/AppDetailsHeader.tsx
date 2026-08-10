@@ -83,7 +83,7 @@ export const AppDetailsHeader: React.FC<AppDetailsHeaderProps> = ({
             className="flex-1 md:flex-none py-3 px-6 rounded-2xl bg-gradient-to-r from-brand-cyan via-brand-blue to-brand-violet text-slate-950 font-extrabold text-xs shadow-glow-cyan hover:opacity-95 transition-all flex items-center justify-center gap-2"
           >
             <Download className="w-4 h-4" />
-            <span>Download APK ({app.fileSize || app.apkSize || '24.5 MB'})</span>
+            <span>Download APK ({app.fileSize || app.apkSize || '42 MB'})</span>
           </a>
 
           <button

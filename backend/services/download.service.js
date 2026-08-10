@@ -35,7 +35,7 @@ class DownloadService {
       iconUrl: app.iconUrl,
       tagline: app.tagline,
       version: app.version,
-      fileSize: app.fileSize || app.apkSize || '24.5 MB',
+      fileSize: app.fileSize || app.apkSize || '42 MB',
       downloadToken,
       deviceInfo: metadata.deviceInfo || 'Chrome on Desktop',
       browser: metadata.browser || 'Chrome',
